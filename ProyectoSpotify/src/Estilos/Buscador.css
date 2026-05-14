@@ -1,0 +1,25 @@
+.BuscadorBox{
+
+     -fx-background-color: #2A2A2A;
+    -fx-background-radius: 25;
+    -fx-padding: 6 12 6 12;
+    -fx-alignment: center-left;
+    -fx-spacing: 10;
+}
+
+
+
+.Buscardor{
+
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: #B3B3B3;
+
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+
+    -fx-padding: 0;
+}

@@ -1,0 +1,29 @@
+.VolumeSlider{
+
+    -fx-accent: #1DB954;
+}
+
+.VolumeSlider .track{
+
+    -fx-background-color: #4D4D4D;
+    -fx-pref-height: 4;
+    -fx-background-radius: 10;
+}
+
+.VolumeSlider .thumb{
+
+    -fx-background-color: white;
+    -fx-pref-width: 12;
+    -fx-pref-height: 12;
+    -fx-background-radius: 10;
+}
+
+.VolumeSlider:hover .track{
+
+    -fx-background-color: #5A5A5A;
+}
+
+.VolumeSlider:hover .thumb{
+
+    -fx-background-color: #1DB954;
+}

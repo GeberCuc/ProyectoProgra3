@@ -1,0 +1,9 @@
+.BotonPlay{
+    -fx-background-color: transparent;
+    -fx-background-radius: 30;
+}
+
+.BotonPlay:hover{
+    -fx-background-color:#2A2A2A;
+    -fx-effect:dropshadow(gaussian,rgba(30,215,96,0.4),10,0.3,0,0);
+}

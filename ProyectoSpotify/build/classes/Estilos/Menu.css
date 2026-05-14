@@ -1,0 +1,17 @@
+.MenuBoton{
+    -fx-background-color:transparent;
+    -fx-text-fill: #B3B3B3;
+    -fx-font-size:14;
+    -fx-background-radius:10;
+}
+.MenuBotonActivo{
+
+    -fx-background-color: #2A2A2A;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+}
+.MenuBoton:hover{
+    -fx-background-color:#2A2A2A;
+    -fx-text-fill: white;
+    -fx-effect:dropshadow(gaussian,rgba(30,215,96,0.4),10,0.3,0,0);
+}
