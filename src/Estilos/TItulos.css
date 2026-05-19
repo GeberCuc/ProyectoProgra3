@@ -1,0 +1,6 @@
+.Titulos{
+ -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-padding: 7 0 14 9;
+}

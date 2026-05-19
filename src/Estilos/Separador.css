@@ -1,0 +1,10 @@
+
+.separador {
+    -fx-background-color: transparent;
+    -fx-padding: 10 0 10 0; 
+}
+
+.separador .line {
+    -fx-border-color: linear-gradient(to right, transparent, #3E3E3E, transparent);
+    -fx-border-width: 1 0 0 0; /* Solo la línea superior */
+}

@@ -1,0 +1,31 @@
+.MusicSlider{
+
+    -fx-background-color: transparent;
+}
+
+
+
+.MusicSlider .track{
+    -fx-background-color: #4D4D4D;
+    -fx-pref-height: 4;
+    -fx-background-radius: 10;
+}
+
+
+
+
+
+.MusicSlider .thumb{
+    -fx-background-color: #1DB954;
+    -fx-pref-width: 10;
+    -fx-pref-height: 10;
+    -fx-background-radius: 20;
+}
+
+
+.MusicSlider:hover .thumb{
+    -fx-background-color: #1ED760;
+}
+.MusicSlider:pressed .thumb{
+    -fx-background-color: white;
+}

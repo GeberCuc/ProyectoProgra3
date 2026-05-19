@@ -1,0 +1,19 @@
+
+
+.foto {
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 15, 0, 0, 8);
+    -fx-overflow: hidden; 
+}
+.portada {
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+    -fx-border-color: #2A2A2A;
+    -fx-border-width: 2;
+}
+.portada-reproduciendo {
+    -fx-background-radius: 20;
+    /* Un resplandor verde muy sutil que combina con tu botón de Play */
+    -fx-effect: dropshadow(gaussian, rgba(29, 185, 84, 0.2), 20, 0.5, 0, 0);
+}

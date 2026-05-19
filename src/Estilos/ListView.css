@@ -1,0 +1,32 @@
+.ListaMusic{
+
+    -fx-background-color: #121212;
+    -fx-control-inner-background: #121212;
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+    -fx-padding: 8;
+}
+
+.ListaMusic .listaCeldas{
+
+  -fx-background-color: transparent;
+   -fx-text-fill: white;
+   -fx-padding: 10;
+   -fx-font-size: 14px;
+   -fx-background-radius: 12;
+}
+.ListaMusic .listaCeldas:hover{
+
+   
+    -fx-background-color: #2A2A2A;
+    -fx-background-radius: 12;
+}
+
+.ListaMusic .listaCeldas:selected{
+
+  -fx-background-color: #1DB954;
+
+    -fx-text-fill: white;
+
+    -fx-background-radius: 12;
+}
