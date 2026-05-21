@@ -21,7 +21,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" prefHeight="750.0" prefWidth="1484.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyectospotify.PrincipalController">
+<AnchorPane id="AnchorPane" prefHeight="750.0" prefWidth="1484.0" style="-fx-background-color: #282828;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyectospotify.PrincipalController">
    <children>
       <BorderPane prefHeight="700.0" prefWidth="1200.0" stylesheets="@../Estilos/Menu.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
@@ -81,23 +81,23 @@
             </VBox>
          </left>
          <bottom>
-            <HBox prefHeight="110.0" prefWidth="1210.0" spacing="25.0" style="-fx-background-color: #282828;;" stylesheets="@../Estilos/Avanzar.css" BorderPane.alignment="CENTER">
+            <HBox prefHeight="66.0" prefWidth="1522.0" spacing="25.0" style="-fx-background-color: #282828;;" stylesheets="@../Estilos/Avanzar.css" BorderPane.alignment="CENTER">
                <children>
-                  <HBox prefWidth="524.0" stylesheets="@../Estilos/Imagen.css">
+                  <HBox prefHeight="87.0" prefWidth="524.0" stylesheets="@../Estilos/Imagen.css">
                      <children>
-                        <ImageView fx:id="Imgbotm" fitHeight="112.0" fitWidth="142.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="Imgbotm" fitHeight="98.0" fitWidth="142.0" pickOnBounds="true" preserveRatio="true">
                            <styleClass>
                               <String fx:value="foto" />
                               <String fx:value="portadaw" />
                               <String fx:value="portada-reproduciendo" />
                            </styleClass></ImageView>
-                        <Separator orientation="VERTICAL" prefHeight="112.0" prefWidth="18.0" stylesheets="@../Estilos/Separador.css">
+                        <Separator orientation="VERTICAL" prefHeight="84.0" prefWidth="18.0" stylesheets="@../Estilos/Separador.css">
                            <styleClass>
                               <String fx:value="separador" />
                               <String fx:value="line" />
                            </styleClass>
                         </Separator>
-                        <VBox prefHeight="112.0" prefWidth="308.0" spacing="5.0">
+                        <VBox prefHeight="81.0" prefWidth="308.0" spacing="5.0">
                            <children>
                               <Label fx:id="Can" style="-fx-text-fill: white;" />
                               <Label fx:id="Art" style="-fx-text-fill: #B3B3B3;" />
@@ -111,7 +111,7 @@
                         </VBox>
                      </children>
                   </HBox>
-                  <VBox prefHeight="102.0" prefWidth="510.0" stylesheets="@../Estilos/Progreso.css">
+                  <VBox prefHeight="88.0" prefWidth="510.0" stylesheets="@../Estilos/Progreso.css">
                      <children>
                         <Slider fx:id="Progreso" prefHeight="31.0" prefWidth="490.0">
                            <styleClass>
@@ -188,7 +188,7 @@
                   </VBox>
                   <HBox prefWidth="188.0" stylesheets="@../Estilos/Volumen.css">
                      <children>
-                        <Pane>
+                        <Pane prefHeight="79.0" prefWidth="179.0">
                            <children>
                               <ImageView fitHeight="26.0" fitWidth="25.0" layoutX="14.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -483,7 +483,7 @@
                            <children>
                               <HBox prefHeight="33.0" styleClass="BuscadorBox" stylesheets="@../Estilos/Buscador.css">
                                  <children>
-                                    <Button mnemonicParsing="false" prefHeight="29.0" prefWidth="146.0" style="-fx-background-color: transparent;" styleClass="MenuBoton">
+                                    <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="134.0" style="-fx-background-color: transparent;" styleClass="MenuBoton">
                                        <graphic>
                                           <ImageView fitHeight="15.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
@@ -515,15 +515,16 @@
                                           <Image url="@../IconosFX/buscar.png" />
                                        </image>
                                     </ImageView>
-                                    <TextField fx:id="BuscadorPB1" prefHeight="33.0" prefWidth="543.0" styleClass="Buscardor">
+                                    <TextField fx:id="BuscadorPB1" prefHeight="25.0" prefWidth="585.0" styleClass="Buscardor">
                                        <HBox.margin>
                                           <Insets top="5.0" />
                                        </HBox.margin>
                                     </TextField>
+                                    <Label fx:id="TiempoAVL" prefHeight="18.0" prefWidth="171.0" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Label" />
                                  </children>
                               </HBox>
                               <Label prefHeight="52.0" prefWidth="278.0" styleClass="Titulos" text="Tu biblioteca" />
-                              <FlowPane hgap="15.0" prefHeight="538.0" prefWidth="1350.0" style="-fx-background-color: #181818;" vgap="15.0" VBox.vgrow="ALWAYS">
+                              <FlowPane hgap="15.0" prefHeight="538.0" prefWidth="1350.0" style="-fx-background-color: #181818;" vgap="15.0">
                                  <children>
                                     <VBox prefHeight="528.0" prefWidth="1320.0" spacing="20.0">
                                        <children>
@@ -534,65 +535,11 @@
                                                 <String fx:value="scroll-bar" />
                                              </styleClass>
                                           </ListView>
-                                          <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0" VBox.vgrow="ALWAYS">
-                                             <children>
-                                                <VBox fx:id="CardArt51" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
-                                                   <children>
-                                                      <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
-                                                      <Label style="-fx-text-fill: white;" text="art" />
-                                                      <Label style="-fx-text-fill: white;" text="pendiente" />
-                                                   </children>
-                                                   <styleClass>
-                                                      <String fx:value="TargetaMusical" />
-                                                      <String fx:value="music" />
-                                                   </styleClass>
-                                                </VBox>
-                                                <VBox fx:id="CardArt511" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
-                                                   <children>
-                                                      <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
-                                                      <Label style="-fx-text-fill: white;" text="art" />
-                                                      <Label style="-fx-text-fill: white;" text="pendiente" />
-                                                   </children>
-                                                   <styleClass>
-                                                      <String fx:value="TargetaMusical" />
-                                                      <String fx:value="music" />
-                                                   </styleClass>
-                                                </VBox>
-                                                <VBox fx:id="CardArt5111" layoutX="181.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
-                                                   <children>
-                                                      <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
-                                                      <Label style="-fx-text-fill: white;" text="art" />
-                                                      <Label style="-fx-text-fill: white;" text="pendiente" />
-                                                   </children>
-                                                   <styleClass>
-                                                      <String fx:value="TargetaMusical" />
-                                                      <String fx:value="music" />
-                                                   </styleClass>
-                                                </VBox>
-                                                <VBox fx:id="CardArt51111" layoutX="352.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
-                                                   <children>
-                                                      <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
-                                                      <Label style="-fx-text-fill: white;" text="art" />
-                                                      <Label style="-fx-text-fill: white;" text="pendiente" />
-                                                   </children>
-                                                   <styleClass>
-                                                      <String fx:value="TargetaMusical" />
-                                                      <String fx:value="music" />
-                                                   </styleClass>
-                                                </VBox>
-                                                <VBox fx:id="CardArt511111" layoutX="524.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
-                                                   <children>
-                                                      <ImageView fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
-                                                      <Label style="-fx-text-fill: white;" text="art" />
-                                                      <Label style="-fx-text-fill: white;" text="pendiente" />
-                                                   </children>
-                                                   <styleClass>
-                                                      <String fx:value="TargetaMusical" />
-                                                      <String fx:value="music" />
-                                                   </styleClass>
-                                                </VBox>
-                                             </children>
-                                          </HBox>
+                                          <ScrollPane fx:id="ScrollG" prefHeight="186.0" prefWidth="1320.0" style="-fx-background-color: #282828;" styleClass="scroll-bar" stylesheets="@../Estilos/Scroll.css">
+                                             <content>
+                                                <HBox fx:id="ContenedorAL" prefHeight="140.0" prefWidth="1315.0" spacing="20.0" style="-fx-background-color: #282828;" stylesheets="@../Estilos/Targetas.css" />
+                                             </content>
+                                          </ScrollPane>
                                        </children>
                                     </VBox>
                                  </children>

@@ -24,11 +24,13 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -84,6 +86,12 @@ private AnchorPane PanelBiblioteca;
 private AnchorPane PanelPlaylist;
 
 
+//TextFields
+
+@FXML
+private TextField BuscadorPB1;
+
+
 //Labels
 @FXML
 private Label Estado;
@@ -105,6 +113,10 @@ private Label CantidadM ;
 private Label DuracionP ;
 @FXML
 private Label AutorP;
+@FXML
+private Label TiempoAVL;
+
+
 
 //slider
 @FXML
@@ -119,7 +131,10 @@ private ListView<Playlist> ListaPlaylist;
 private ListView<Archivomp3> ListaCanciones;
 @FXML
 private ListView<Archivomp3>ListaVBIblioteca;
+//Scroll
 
+@FXML
+private ScrollPane ScrollG;
 //Botones
 @FXML
 private Button Play;
@@ -140,6 +155,9 @@ private Button EliminarE;
 @FXML
 private Button CrearPT;
 
+//HBox
+@FXML
+private HBox ContenedorAL;
 
 
  @FXML
@@ -233,7 +251,127 @@ private Button CrearPT;
    }
     
   
+   
+   
+   @FXML
+   public void Buscar(){
+       
+      String Buscado=BuscadorPB1.getText();
+    
+     if(Buscado.isEmpty()){
+         
+         ListaVBIblioteca.getItems().setAll(Arbol2.InOrden());
+     return;
+     }
+      
+     Archivomp3 Resultado=Arbol2.Buscar(Buscado);
+     
+      long tiempo=Arbol2.Tiempo(Buscado);
+      
+       ListaVBIblioteca.getItems().clear();
+      
+       if(Resultado!=null){
+           
+           ListaVBIblioteca.getItems().add(Resultado);
+           
+           TiempoAVL.setText("Encontrado: "+tiempo+" ns");
+       }else{
+           
+           TiempoAVL.setText("No encontrado: "+tiempo+" ns");
+       }
+     
+   }
         
+   @FXML
+   public void GenerosM(){
+       
+       ContenedorAL.getChildren().clear();
+       
+       HashMap<String,ArrayList<Archivomp3>> Generos=new HashMap<>();
+       
+      ArrayList<Archivomp3>canciones=Arbol2.InOrden();
+      
+      
+      for(Archivomp3 can:canciones){
+          
+          String genero=can.getGenero();
+           if(genero==null||genero.isEmpty()){
+               
+           genero="Desconocido";
+           }
+       if(!Generos.containsKey(genero)){
+           Generos.put(genero, new ArrayList<>());
+      
+       }
+      Generos.get(genero).add(can);    
+      }
+      
+      for(String genero:Generos.keySet()){
+          
+          ArrayList<Archivomp3> lista=Generos.get(genero);
+          
+          VBox tarjetas=Crear(genero,lista);
+          
+          ContenedorAL.getChildren().add(tarjetas);
+      }
+      
+      
+    
+      
+   }
+   
+   
+   public VBox Crear(String genero,ArrayList<Archivomp3> canciones){
+
+
+       VBox tarjeta=new VBox(10);
+       
+       tarjeta.getStyleClass().addAll("music,TarjetaMusical");
+       
+       ImageView imagen=new ImageView();
+       
+       imagen.setFitHeight(120);
+       imagen.setFitWidth(120);
+       
+       
+       if(!canciones.isEmpty()){
+           
+           imagen.setImage(CacheImagenes.ObtenerImagen(canciones.get(0).getImagen()));
+           
+       }
+       Label generoT=new Label(genero);
+       Label Cantidad= new Label(canciones.size()+" Canciones");
+       
+       
+       tarjeta.getChildren().addAll(imagen,generoT,Cantidad);
+
+       tarjeta.setOnMouseClicked(eventito->{
+           
+           ListaCanciones.getItems().setAll(canciones);
+           PlaylistActual=new Playlist(genero);
+           
+           for(Archivomp3 musica:canciones){
+               
+               PlaylistActual.InsertarFin(musica);
+               
+           }
+           
+           
+           
+       });
+   return tarjeta; 
+   }
+   
+   
+   
+
+   
+   
+   
+   
+   
+   
+   
     
     
  @FXML
@@ -297,8 +435,10 @@ public void ImportarMusica(){
         }
         
         ActualizarBiblioteca();
+        
+        GenerosM();
+       
         Alert alerta=new Alert(Alert.AlertType.INFORMATION);
-
         
         alerta.setHeaderText(null);
         alerta.setContentText(Resultado);
@@ -936,7 +1076,24 @@ Volumen.setValue(50);
 });
     
 
+ 
+ BuscadorPB1.setOnKeyPressed(eventito->{
+     
+     if(eventito.getCode()==KeyCode.ENTER){
+        
+         Buscar();
+     }
+     
+     
+     
+ });
+ 
+ 
+ 
 
+ ScrollG.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+ ScrollG.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+ ScrollG.setFitToHeight(true);
 }
     
 }
