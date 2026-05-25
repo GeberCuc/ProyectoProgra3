@@ -102,7 +102,7 @@ public class CargarCanciones{
                                 fos.write(imagenBytes);
                             }
                             
-                            rutaImagen=salidaImagen.getPath();
+                            rutaImagen=salidaImagen.getAbsolutePath();
                         }
                     } 
                   

@@ -1,9 +1,6 @@
 
 package proyectospotify;
 
-import java.util.ArrayList;
-
-
 public class Playlist {
 
     public void setNombre(String Nombre) {
@@ -334,26 +331,23 @@ public class Playlist {
 
     
     
-
-    public ArrayList<Archivomp3>ObtenerCanciones(){
-
-        
-        ArrayList<Archivomp3>ListaCanciones=new ArrayList<>();
-
+    
+    public NodoDoble BuscarCancion(Archivomp3 buscado){
         
         NodoDoble Actual=Inicio;
-
         
         while(Actual!=null){
-
-            ListaCanciones.add(Actual.getCancion() );
-
-            Actual=Actual.getSiguiente();
+            if(Actual.getCancion().equals(buscado)){
+                return Actual;
+            }
+            Actual=Actual.Siguiente;
         }
-
-        
-        return ListaCanciones;
+        return null;
     }
+    
+    
+
+
 
     
     

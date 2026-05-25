@@ -1,7 +1,6 @@
 
 package proyectospotify;
 
-import java.util.ArrayList;
 
 public class ImportarFx {
 
@@ -29,25 +28,18 @@ public class ImportarFx {
         this.Cargador = Cargador;
     }
 
-    
-    
+
     
     private  MetodosABB ABB;
     private MetodosAVL AVL;
     private CargarCanciones Cargador;
 
-    private ArrayList<Playlist> Playlists;
- 
- 
-    public ArrayList<Playlist> getPlaylists() {
-        return Playlists;
-    }
-    
     
 
-    public void setPlaylists(ArrayList<Playlist> Playlists) {
-        this.Playlists = Playlists;
-    }
+  
+ 
+ 
+ 
    
     
     
@@ -57,23 +49,20 @@ public class ImportarFx {
         ABB= new MetodosABB();
         AVL=new MetodosAVL();
         Cargador= new CargarCanciones();
-        Playlists=new ArrayList<>();
+        
     }
     
    
-    
-   public String Importar(String Ruta,String NombrePlaylist){
+    //pendiente 
+   public Playlist Importar(String Ruta,String NombrePlaylist){
 
-    Playlist NuevaPlaylist=new Playlist(NombrePlaylist);
-
-    
-    String Resultado=Cargador.Canciones(Ruta,ABB,AVL,NuevaPlaylist );
-
-    
-    Playlists.add(NuevaPlaylist);
+       
+       Playlist NuevaPlaylist=new Playlist(NombrePlaylist);
  
-    
-    return Resultado;
+       Cargador.Canciones(Ruta,ABB,AVL,NuevaPlaylist );
+
+      
+    return NuevaPlaylist;
 }
    
    
@@ -93,29 +82,21 @@ public class ImportarFx {
         
     }
 
-    ArrayList<Archivomp3>canciones=play.ObtenerCanciones();
-
-    if(canciones==null||canciones.isEmpty()){
-
-        
-        return "Canciones: 0     Duracion total: 00:00";
-    }
 
     StringBuilder informacion=new StringBuilder();
 
-    informacion.append("Canciones: ").append(canciones.size()).append("     ");
+    informacion.append("Canciones: ").append(play.getSize()).append("     ");
 
     int total=0;
 
-    for(Archivomp3 p:canciones){
+    NodoDoble Actual=play.getInicio();
+    while(Actual!=null){
 
+        Archivomp3 ar=Actual.getCancion();
         
         try{
 
-            
-            
-            
-            String[] partes=p.getDuracion().split(":");
+            String[] partes=ar.getDuracion().split(":");
 
             int minutos=Integer.parseInt(partes[0]);
 
@@ -126,17 +107,14 @@ public class ImportarFx {
             
         }catch(Exception e){
 
-            
-            
         }
+        Actual=Actual.Siguiente;
     }
 
     int minutosFinal=total/60;
     int segundosFinal=total%60;
     informacion.append("Duracion total: ").append(minutosFinal).append(":").append(String.format("%02d", segundosFinal));
 
-    
-    
     
     return informacion.toString();
 }

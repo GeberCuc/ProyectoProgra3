@@ -64,7 +64,7 @@ private BooleanProperty CrearP=new SimpleBooleanProperty(false);
 private boolean EliminadoB=false;
 private boolean reproduciendo=false;
 private boolean modoCola=false;
-private int IndiceActual=-1;
+private NodoDoble Actual=null;
 private Playlist PlaylistActual;
 private MediaPlayer reproductor;
 private Archivomp3 CancionActual;
@@ -131,6 +131,9 @@ private ListView<Playlist> ListaPlaylist;
 private ListView<Archivomp3> ListaCanciones;
 @FXML
 private ListView<Archivomp3>ListaVBIblioteca;
+@FXML
+private ListView<Archivomp3>ListaAlbum;
+
 //Scroll
 
 @FXML
@@ -233,14 +236,18 @@ private HBox ContenedorAL;
    public void Favoritos(){
        
      favoritos.Vaciar();
+//pendiente
+    Playlist canciones=Import.getAVL().InOrden();
 
-    ArrayList<Archivomp3>canciones=Import.getAVL().InOrden();
+    NodoDoble nodito=canciones.getInicio();
+    
+    while(nodito!=null){
 
-    for(Archivomp3 p :canciones){
-
-        if(p.isFav()){
-            favoritos.InsertarFin(p);
+        if(nodito.getCancion().isFav()){
+            if(favoritos.BuscarCancion(nodito.getCancion())==null)
+            favoritos.InsertarFin(nodito.getCancion());
         }
+        nodito=nodito.Siguiente;
     }
        if(!ListaPlaylist.getItems().contains(favoritos)){
            
@@ -259,8 +266,8 @@ private HBox ContenedorAL;
       String Buscado=BuscadorPB1.getText();
     
      if(Buscado.isEmpty()){
-         
-         ListaVBIblioteca.getItems().setAll(Arbol2.InOrden());
+         //pendiente
+         ListaVBIblioteca.getItems().setAll(Arbol2.PostOrden());
      return;
      }
       
@@ -288,8 +295,8 @@ private HBox ContenedorAL;
        ContenedorAL.getChildren().clear();
        
        HashMap<String,ArrayList<Archivomp3>> Generos=new HashMap<>();
-       
-      ArrayList<Archivomp3>canciones=Arbol2.InOrden();
+       //pendiente
+      ArrayList<Archivomp3>canciones=Arbol2.PostOrden();
       
       
       for(Archivomp3 can:canciones){
@@ -326,12 +333,12 @@ private HBox ContenedorAL;
 
        VBox tarjeta=new VBox(10);
        
-       tarjeta.getStyleClass().addAll("music,TarjetaMusical");
+       tarjeta.getStyleClass().addAll("music");
        
        ImageView imagen=new ImageView();
        
-       imagen.setFitHeight(120);
-       imagen.setFitWidth(120);
+       imagen.setFitHeight(85);
+       imagen.setFitWidth(85);
        
        
        if(!canciones.isEmpty()){
@@ -343,11 +350,15 @@ private HBox ContenedorAL;
        Label Cantidad= new Label(canciones.size()+" Canciones");
        
        
+       
+       
        tarjeta.getChildren().addAll(imagen,generoT,Cantidad);
 
        tarjeta.setOnMouseClicked(eventito->{
            
+           
            ListaCanciones.getItems().setAll(canciones);
+           ListaAlbum.getItems().setAll(canciones);
            PlaylistActual=new Playlist(genero);
            
            for(Archivomp3 musica:canciones){
@@ -361,18 +372,7 @@ private HBox ContenedorAL;
        });
    return tarjeta; 
    }
-   
-   
-   
 
-   
-   
-   
-   
-   
-   
-   
-    
     
  @FXML
 public void CrearPlaylist(){
@@ -409,7 +409,7 @@ public void CrearPlaylist(){
     
 
 
- @FXML
+ @FXML//pendiente
 public void ImportarMusica(){
 
     
@@ -423,16 +423,23 @@ public void ImportarMusica(){
     
     if(Carpeta!=null){
         
-        String Resultado=Import.Importar(Carpeta.getAbsolutePath(),Carpeta.getName());
-
+        Playlist NPlaylist=Import.Importar(Carpeta.getAbsolutePath(),Carpeta.getName());
+        boolean duplicado=false;
         
-        for(Playlist p:Import.getPlaylists()){
+        
+        for(Playlist p: playlists){
             
-            if(!playlists.contains(p)){
-                playlists.add(p);
-             
+            if(p.getNombre().equalsIgnoreCase(NPlaylist.getNombre())){
+                duplicado=true;
+                break;
             }
         }
+        
+        if(!duplicado){
+            playlists.add(NPlaylist);
+            
+        }
+       
         
         ActualizarBiblioteca();
         
@@ -441,7 +448,7 @@ public void ImportarMusica(){
         Alert alerta=new Alert(Alert.AlertType.INFORMATION);
         
         alerta.setHeaderText(null);
-        alerta.setContentText(Resultado);
+        alerta.setContentText("Carpeta "+Carpeta.getName()+"Cargada con exito");
         alerta.showAndWait();
     }
 }
@@ -643,16 +650,15 @@ public void ReproducirPlaylist(){
 
     ColaReproduccion=new MetodoCola();
 
-    ArrayList<Archivomp3>canciones=PlaylistActual.ObtenerCanciones();
-
-    for(Archivomp3 c :canciones){
+  
+    NodoDoble nodito=PlaylistActual.getInicio();
+        while(nodito!=null){
+        ColaReproduccion.Entrante(nodito.getCancion());
+        nodito=nodito.Siguiente;
         
-        
-        ColaReproduccion.Entrante(c);
-    }
+        }
 
     Archivomp3 primera=ColaReproduccion.Salida();
-
     if(primera!=null){
 
         ReproducirCancion(primera);
@@ -696,46 +702,35 @@ public void Siguiente(){
     
     
   try{
-
-        
-        if(modoCola){
+       if(modoCola){
             
-        AvanzarCola();
-        
-        
+        AvanzarCola();   
           return;
         }
 
-        
-        
-        if(PlaylistActual==null){
+       if(PlaylistActual==null||PlaylistActual.vacio()){
             return;
         }
 
+        if(Actual==null){
+            Actual=PlaylistActual.getInicio();
+        }else{
+            Actual=Actual.getSiguiente();
         
-        
-        ArrayList<Archivomp3> Canciones=PlaylistActual.ObtenerCanciones();
-
-        if(Canciones.isEmpty()){
-
-            return;
+            if(Actual==null){
+                Actual=PlaylistActual.getInicio();
+            }
         }
-
-        IndiceActual++;
-
-        if(IndiceActual>=Canciones.size()){
-
-            IndiceActual=0;
+        
+        if(Actual!=null){
+            Archivomp3 SiguienteC=Actual.getCancion();
+            CancionActual=SiguienteC;
+            ReproducirCancion(SiguienteC);
+            
+            ListaCanciones.getSelectionModel().select(SiguienteC);
         }
-
         
         
-        Archivomp3 siguiente=Canciones.get(IndiceActual);
-
-        ReproducirCancion(siguiente);
-
-        ListaCanciones.getSelectionModel().select(IndiceActual);
-
     }catch(Exception e){
 
          Estado.setText("Error siguiente");
@@ -750,43 +745,43 @@ public void Anterior(){
 
         if(modoCola){
 
+            if(Historial!=null&&!Historial.vacio()){
             Historial.Pop();
-
             Archivomp3 anterior=Historial.Pop();
-
             if(anterior!=null){
-
                 ReproducirCancion(anterior);
+                
             }
+            
+            }
+            return;
+        }
+
+        
+        
+        if(PlaylistActual==null||PlaylistActual.vacio()){
 
             return;
         }
 
-        if(PlaylistActual==null){
+       if(Actual==null){
+           Actual=PlaylistActual.getInicio();
+       }else{
+           Actual=Actual.getAnterior();
+       if(Actual==null){
 
-            return;
+            Actual=PlaylistActual.getFin();
         }
-
-        ArrayList<Archivomp3>Canciones=PlaylistActual.ObtenerCanciones();
-
-        if(Canciones.isEmpty()){
-
-            return;
-        }
-
-        IndiceActual--;
-
-        if(IndiceActual<0){
-
-            IndiceActual=Canciones.size()-1;
-        }
-
-        Archivomp3 anterior=Canciones.get(IndiceActual);
-
-        ReproducirCancion(anterior);
-
-        ListaCanciones.getSelectionModel().select(IndiceActual);
-
+       
+       }
+        
+       if(Actual!=null){
+           Archivomp3 AnteriorC=Actual.getCancion();
+           CancionActual=AnteriorC;
+           ReproducirCancion(AnteriorC);
+           
+           ListaCanciones.getSelectionModel().select(AnteriorC);
+       }
     }catch(Exception e){
 
          Estado.setText("Error anterior" );
@@ -800,18 +795,19 @@ public void ActualizarBiblioteca(){
 
     for(Playlist lista:ListaPlaylist.getItems()){
 
-        for(Archivomp3 p:lista.ObtenerCanciones()){
+        NodoDoble nodo=lista.getInicio();
+        while(nodo!=null){
 
+            Archivomp3 p=nodo.getCancion();
             if(Arbol2.Buscar(p.getAudio())==null){
-
                 Arbol2.Insertar(p);
             }
+             nodo=nodo.Siguiente;
         }
     }
 
-    DatosBiblioteca.setAll( Arbol2.InOrden());
-            
-    ListaVBIblioteca.getItems().setAll(Arbol2.InOrden());
+    DatosBiblioteca.setAll( Arbol2.PostOrden());         
+    ListaVBIblioteca.getItems().setAll(Arbol2.PreOrden());
 }
 
 
@@ -832,21 +828,25 @@ public void recorreCanciones(){
         if(cancion.isEstado()){
 
             
-            if(!PlaylistActual.ObtenerCanciones().contains(cancion)){
+            if(PlaylistActual.BuscarCancion(cancion)==null){
 
                 PlaylistActual.InsertarFin(cancion);
+                agregado=true;
             }
+            
             cancion.setEstado(false);
-
-            agregado=true;
         }
     }
 
     ListaVBIblioteca.refresh();
-
     
-    ListaCanciones.getItems().setAll(PlaylistActual.ObtenerCanciones());
-
+    ListaCanciones.getItems().clear();
+    NodoDoble todoNodo=PlaylistActual.getInicio();
+    while(todoNodo!=null){
+         ListaCanciones.getItems().add(todoNodo.getCancion());
+         todoNodo=todoNodo.Siguiente;
+    }
+   
     if(agregado){
 
         Estado.setText("Canciones agregadas a "+PlaylistActual.getNombre());
@@ -883,11 +883,42 @@ public void chek(){
     if(actual!=null){
 
         PlaylistActual=actual;
+        
+        ListaCanciones.getItems().clear();
+        NodoDoble nodo=actual.getInicio();
 
-        ListaCanciones.getItems().setAll(actual.ObtenerCanciones());
+        while(nodo!=null){
+        ListaCanciones.getItems().add(nodo.getCancion());
+        nodo=nodo.Siguiente;
+        }
     }
 });
   
+   ListaVBIblioteca.setOnMouseClicked(evento ->{
+   
+   if(evento.getClickCount()==1){
+       
+       modoCola=false;
+       
+       Archivomp3 c=ListaVBIblioteca.getSelectionModel().getSelectedItem();
+       
+       if(c!=null){
+           
+           CancionActual=c;
+         if(PlaylistActual!=null){
+             
+             Actual=PlaylistActual.BuscarCancion(c);
+         }
+         ReproducirCancion(c);
+       }
+       
+   }
+   
+  
+   
+   });
+   
+   
    ListaCanciones.setOnMouseClicked(event->{
 
     if(event.getClickCount()==2){
@@ -900,7 +931,9 @@ public void chek(){
 
             CancionActual=Cancion;
 
-            IndiceActual=ListaCanciones.getSelectionModel().getSelectedIndex();
+            if(PlaylistActual!=null){
+                Actual=PlaylistActual.BuscarCancion(Cancion);
+            }
 
             ReproducirCancion(Cancion);
         }

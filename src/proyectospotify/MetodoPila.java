@@ -59,4 +59,10 @@ public class MetodoPila {
     return peek.getCancion();
 }
     
+    
+    public boolean vacio(){
+        
+        return peek==null;
+    }
+    
 }

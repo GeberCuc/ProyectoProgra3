@@ -317,28 +317,28 @@ public class MetodosAVL {
     
     
     
-    public ArrayList<Archivomp3> InOrden(){
+    public Playlist InOrden(){
         
-        ArrayList<Archivomp3> Lista= new ArrayList<>();
+        Playlist Lista= new Playlist();
         
         InOrdenP(Raiz,Lista);
      
         return Lista;
     }
     
-    private void InOrdenP(NodoAVL Actual,ArrayList<Archivomp3> Lista){
+    private void InOrdenP(NodoAVL Actual,Playlist Lista){
         
         if(Actual!=null){
        
             InOrdenP(Actual.Izq,Lista);
-            Lista.add(Actual.Cancion);
+            Lista.InsertarFin(Actual.Cancion);
             InOrdenP(Actual.Der,Lista);
             
         }
      
     }
     
-    
+    //pendiente
     public ArrayList<Archivomp3> PreOrden(){
     
     ArrayList<Archivomp3> lista=new ArrayList<>();
@@ -349,7 +349,7 @@ public class MetodosAVL {
 
 
 
-
+//pendiente
 
 private void PreOrdenP(NodoAVL Actual,ArrayList<Archivomp3>lista){
     if(Actual!=null){
