@@ -448,7 +448,7 @@
                         </VBox>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="PanelBuscar" style="-fx-background-color: #181818;" visible="false">
+                  <AnchorPane fx:id="PanelBuscar" style="-fx-background-color: #181818;">
                      <children>
                         <VBox layoutX="-3.0" layoutY="-3.0" spacing="5.0" stylesheets="@../Estilos/TItulos.css" AnchorPane.bottomAnchor="3.2000000000000455" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="5.399999999999977" AnchorPane.topAnchor="-3.0">
                            <children>
@@ -474,18 +474,26 @@
                                        </HBox.margin>
                                     </TextField>
                                  </children>
+                                 <VBox.margin>
+                                    <Insets top="9.0" />
+                                 </VBox.margin>
                               </HBox>
                               <Label styleClass="Titulos" text="Resultados" />
-                              <ListView stylesheets="@../Estilos/ListView.css" VBox.vgrow="ALWAYS">
+                              <ListView fx:id="ListBusquedaParcial" VBox.vgrow="ALWAYS">
                                  <styleClass>
                                     <String fx:value="ListaMusic" />
-                                    <String fx:value="listaCeldas" />
+                                    <String fx:value="scroll-bar" />
                                  </styleClass>
+                                 <stylesheets>
+                                    <URL value="@../Estilos/ListView.css" />
+                                    <URL value="@../Estilos/Scroll.css" />
+                                    <URL value="@../Estilos/toggle.css" />
+                                 </stylesheets>
                               </ListView>
                            </children>
                         </VBox>
                      </children></AnchorPane>
-                  <AnchorPane fx:id="PanelBiblioteca" prefHeight="641.0" prefWidth="1332.0" style="-fx-background-color: #181818;" stylesheets="@../Estilos/toggle.css">
+                  <AnchorPane fx:id="PanelBiblioteca" prefHeight="641.0" prefWidth="1332.0" style="-fx-background-color: #181818;" stylesheets="@../Estilos/toggle.css" visible="false">
                      <children>
                         <VBox layoutX="1.0" layoutY="-6.0" spacing="3.0" stylesheets="@../Estilos/TItulos.css" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="0.7999999999999545" AnchorPane.rightAnchor="1.3999999999999773" AnchorPane.topAnchor="0.0">
                            <children>

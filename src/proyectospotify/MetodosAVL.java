@@ -150,6 +150,42 @@ public class MetodosAVL {
     
     
     
+    public Playlist BusquedaParcial(String Buscado){
+        
+        Playlist Resultados=new Playlist("Busqueda");
+        
+        BusquedaParcialPriv(Raiz,Buscado,Resultados);
+        
+        
+        return Resultados;
+    }
+    
+    
+    private void BusquedaParcialPriv(NodoAVL Actual,String Buscado,Playlist Resultado){
+        
+
+        if(Actual==null){
+            
+            return;
+        }
+        
+        BusquedaParcialPriv(Actual.Izq,Buscado,Resultado);
+        
+        String Coincidencia=Actual.Cancion.getNombre().toLowerCase();
+        
+        
+        if(Coincidencia.contains(Buscado)){
+            
+            Resultado.InsertarFin(Actual.Cancion);
+        }
+        
+        
+        BusquedaParcialPriv(Actual.Der,Buscado,Resultado);
+        
+    }
+    
+    
+    
     public Archivomp3 Buscar(String Nombre){
         
   

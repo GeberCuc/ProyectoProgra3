@@ -74,7 +74,8 @@ private Playlist favoritos= new Playlist("Favoritos");
 private MetodoPila Historial=new MetodoPila();
 private ObservableList<Playlist> playlists=FXCollections.observableArrayList();
 private ObservableList<Archivomp3>DatosBiblioteca=FXCollections.observableArrayList();
- 
+private ObservableList<Archivomp3>Busquedas=FXCollections.observableArrayList();
+
  //Paneles
 @FXML
 private AnchorPane PanelInicio;
@@ -88,6 +89,8 @@ private AnchorPane PanelPlaylist;
 
 //TextFields
 
+@FXML
+private TextField BuscadorPB;
 @FXML
 private TextField BuscadorPB1;
 
@@ -133,9 +136,11 @@ private ListView<Archivomp3> ListaCanciones;
 private ListView<Archivomp3>ListaVBIblioteca;
 @FXML
 private ListView<Archivomp3>ListaAlbum;
+@FXML
+private ListView<Archivomp3>ListBusquedaParcial;
+
 
 //Scroll
-
 @FXML
 private ScrollPane ScrollG;
 //Botones
@@ -266,8 +271,7 @@ private HBox ContenedorAL;
       String Buscado=BuscadorPB1.getText();
     
      if(Buscado.isEmpty()){
-         //pendiente
-         ListaVBIblioteca.getItems().setAll(Arbol2.PostOrden());
+         
      return;
      }
       
@@ -808,8 +812,36 @@ public void ActualizarBiblioteca(){
 
     DatosBiblioteca.setAll( Arbol2.PostOrden());         
     ListaVBIblioteca.getItems().setAll(Arbol2.PreOrden());
+    
 }
 
+
+@FXML
+public void BusquedaP(){
+    
+    ListBusquedaParcial.getItems().addAll(Import.getAVL().PreOrden());
+    String Buscado=BuscadorPB.getText().trim();
+    
+    if(Buscado.isEmpty()){
+        
+       return; 
+    }
+    
+    Playlist ResultadosV=Import.getAVL().BusquedaParcial(Buscado);
+    
+    ListBusquedaParcial.getItems().clear();
+    
+    NodoDoble nod=ResultadosV.getInicio();
+    while(nod!=null){
+        
+        ListBusquedaParcial.getItems().add(nod.getCancion());
+        nod=nod.Siguiente;
+        
+
+    }
+    
+    ListBusquedaParcial.refresh();
+}
 
 @FXML
 public void recorreCanciones(){
@@ -896,7 +928,7 @@ public void chek(){
   
    ListaVBIblioteca.setOnMouseClicked(evento ->{
    
-   if(evento.getClickCount()==1){
+   if(evento.getClickCount()==2){
        
        modoCola=false;
        
@@ -940,7 +972,30 @@ public void chek(){
     }
 });
    
-   
+   ListBusquedaParcial.setOnMouseClicked(evento->{
+           
+           if(evento.getClickCount()==2){
+               
+            modoCola=false;
+        
+        Archivomp3 Cancion=ListBusquedaParcial.getSelectionModel().getSelectedItem();
+
+        if(Cancion!=null){
+
+            CancionActual=Cancion;
+
+            if(PlaylistActual!=null){
+                Actual=PlaylistActual.BuscarCancion(Cancion);
+            }
+
+            ReproducirCancion(Cancion);
+        }
+       
+               
+           }
+           
+           
+           });
    
    
   ListaPlaylist.setCellFactory(parametros-> {
@@ -1064,7 +1119,7 @@ ListaVBIblioteca.setCellFactory(parametros->new CancionCell(CrearP,()-> Favorito
    
  ListaCanciones.setCellFactory(parametro->new CancionCell(CrearP,()->Favoritos()));
   
-  
+  ListBusquedaParcial.setCellFactory(Parametros->new CancionCell(CrearP,()->Favoritos()));
   
    
    Progreso.setOnMousePressed(e -> {
@@ -1121,8 +1176,14 @@ Volumen.setValue(50);
      
  });
  
+ BuscadorPB.setOnKeyPressed(eventito->{
+     
+     if(eventito.getCode()==KeyCode.ENTER){
+        
+         BusquedaP();
+     }
  
- 
+ });
 
  ScrollG.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
  ScrollG.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
