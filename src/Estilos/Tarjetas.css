@@ -16,3 +16,8 @@
     -fx-scale-y: 1.03;
     -fx-cursor: hand;
 }
+
+.letrita{
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+}

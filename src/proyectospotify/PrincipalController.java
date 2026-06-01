@@ -331,7 +331,7 @@ private HBox Artistas;
      
    }
    
-   
+    
    public VBox Crear(String genero,ArrayList<Archivomp3> canciones){
 
 
@@ -353,8 +353,8 @@ private HBox Artistas;
        Label generoT=new Label(genero);
        Label Cantidad= new Label(canciones.size()+" Canciones");
        
-       
-       
+       generoT.getStyleClass().add("letrita");
+       Cantidad.getStyleClass().add("letrita");
        
        tarjeta.getChildren().addAll(imagen,generoT,Cantidad);
 
@@ -371,7 +371,7 @@ private HBox Artistas;
                
            }
            
-           
+           MostrarPlaylis();
            
        });
    return tarjeta; 
@@ -426,7 +426,8 @@ private HBox Artistas;
        }
        Label letrica=new Label(Cancion.getNombre());
        Label letrica2=new Label(Cancion.getArtista());
-       
+       letrica.getStyleClass().addAll("letrita");
+       letrica2.getStyleClass().addAll("letrita");
        tarjetica.getChildren().addAll(portada,letrica,letrica2);
        
        
@@ -446,7 +447,7 @@ private HBox Artistas;
    public void ArtistasI(){
        
        Artistas.getChildren().clear();
-       HashMap<String,ArrayList<String>> Arti= new HashMap<>();
+       HashMap<String,ArrayList<Archivomp3>> Arti= new HashMap<>();
        
        ArrayList<Archivomp3> info=Import.getAVL().PostOrden();
        
@@ -456,17 +457,17 @@ private HBox Artistas;
            if(Artis==null||Artis.isEmpty()){
                Artis="Desconocido";
            }
-           if(!Arti.containsKey(art)){
+           if(!Arti.containsKey(Artis)){
                Arti.put(Artis, new ArrayList());
                
            }
-           Arti.get(Artis).add(art.getArtista());
+           Arti.get(Artis).add(art);
        }
        
        for(String art:Arti.keySet()){
            
-           ArrayList<String> lista=Arti.get(art);
-           VBox tarjetaA=null;
+           ArrayList<Archivomp3> lista=Arti.get(art);
+           VBox tarjetaA=TarjetaA(art,lista);
            
            Artistas.getChildren().add(tarjetaA);
        }
@@ -475,7 +476,43 @@ private HBox Artistas;
    
        }
    
-   
+  public VBox TarjetaA(String artista,ArrayList<Archivomp3>art ){
+       VBox tarjeta=new VBox(10);
+       
+       tarjeta.getStyleClass().addAll("music");
+       
+       ImageView imagen=new ImageView();
+       
+       imagen.setFitHeight(100);
+       imagen.setFitWidth(100);
+       
+       if(!art.isEmpty()){
+           imagen.setImage(CacheImagenes.ObtenerImagen(art.get(0).getImagen()));
+           
+       }
+       
+       Label lab=new Label(artista);
+       
+       lab.getStyleClass().addAll("letrita");
+       
+       tarjeta.getChildren().addAll(imagen,lab);
+       
+       tarjeta.setOnMouseClicked(evento->{
+           
+           ListaCanciones.getItems().setAll(art);
+           PlaylistActual =new Playlist(artista);
+           
+           for(Archivomp3 cancion: art){
+               if(cancion.getArtista().equalsIgnoreCase(artista)){
+                   PlaylistActual.InsertarFin(cancion);
+               }
+               
+           }
+           MostrarPlaylis();
+       });
+       
+       return tarjeta;
+   }
    
     
  @FXML
@@ -511,8 +548,8 @@ public void CrearPlaylist(){
     
     
     
-
-@FXML//pendiente
+//busquedas artistas y genero por tablas hash 
+@FXML//pendiente 
 public void ImportarMusica(){
 
     
@@ -548,10 +585,11 @@ public void ImportarMusica(){
         
         GenerosM();
         RecomendaG();
+        ArtistasI();
         Alert alerta=new Alert(Alert.AlertType.INFORMATION);
         
         alerta.setHeaderText(null);
-        alerta.setContentText("Carpeta "+Carpeta.getName()+"Cargada con exito");
+        alerta.setContentText("Carpeta "+Carpeta.getName()+" Cargada con exito");
         alerta.showAndWait();
     }
 }
@@ -713,6 +751,7 @@ public void Play(){
             return;
         }
 
+        
         if(!reproduciendo){
 
             if(reproductor==null){
@@ -735,6 +774,7 @@ public void Play(){
 
     }catch(Exception e){
         Estado.setText("Error Play");
+            System.out.println(e);
     }
 }
 
@@ -791,9 +831,11 @@ public void Stop(){
      
         reproductor.stop();
 
+        reproductor.setOnEndOfMedia(null);
+        reproductor.dispose();
         reproductor=null;
-
-        
+        reproduciendo=false;
+        Icono.setImage(PlayImagen);
         Estado.setText("Reproduccion detenida");
  }
 }

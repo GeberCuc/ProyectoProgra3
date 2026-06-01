@@ -268,16 +268,12 @@
                                           <Label prefHeight="52.0" prefWidth="1200.0" styleClass="Titulos" text="Recomendaciones" />
                                           <HBox fx:id="Recomendados" prefHeight="146.0" prefWidth="1270.0" spacing="15.0" />
                                           <Label layoutX="13.0" layoutY="10.0" prefHeight="52.0" prefWidth="1150.0" styleClass="Titulos" text="Artistas" />
-                                          <HBox prefHeight="100.0" prefWidth="354.0">
+                                          <HBox style="-fx-background-color: #181818;" stylesheets="@../Estilos/Tarjetas.css">
                                              <children>
-                                                <ScrollPane prefHeight="100.0" prefWidth="368.0">
-                                                  <content>
-                                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="102.0" prefWidth="337.0">
-                                                         <children>
-                                                            <HBox fx:id="Artistas" layoutX="-1.0" prefHeight="98.0" prefWidth="339.0" />
-                                                         </children>
-                                                      </AnchorPane>
-                                                  </content>
+                                                <ScrollPane fitToHeight="true" style="-fx-background-color: #181818;" HBox.hgrow="ALWAYS">
+                                                   <content>
+                                                      <HBox fx:id="Artistas" prefHeight="159.0" prefWidth="1300.0" spacing="15.0" style="-fx-background-color: #181818;" />
+                                                   </content>
                                                 </ScrollPane>
                                              </children>
                                           </HBox>
