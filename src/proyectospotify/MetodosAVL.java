@@ -362,6 +362,26 @@ public class MetodosAVL {
         return Lista;
     }
     
+ 
+    
+    public ArrayList<Archivomp3> InordeP(){
+        
+         ArrayList<Archivomp3> lista=new ArrayList<>();
+         InordenP(Raiz,lista);
+         
+         return lista;
+    }
+    
+    
+    private void InordenP(NodoAVL Actual,ArrayList<Archivomp3>Lista){
+        
+        if(Actual!=null){
+           InordenP(Actual.Izq,Lista);
+            Lista.add(Actual.Cancion);
+            InordenP(Actual.Der,Lista);
+        }
+        
+    }
     private void InOrdenP(NodoAVL Actual,Playlist Lista){
         
         if(Actual!=null){

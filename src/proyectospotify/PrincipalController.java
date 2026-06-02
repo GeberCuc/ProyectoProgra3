@@ -10,17 +10,22 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
+import java.util.Random;
 import java.util.ResourceBundle;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -34,9 +39,12 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.shape.Circle;
 import javafx.stage.DirectoryChooser;
 import javafx.util.Duration;
 
@@ -58,12 +66,15 @@ private ImageView Imgbotm;
 
 //globales
 
-
+private Timeline Animacion;
+private double Movimiento;
 private double VolumenI=0.5;
 private BooleanProperty CrearP=new SimpleBooleanProperty(false);
 private boolean EliminadoB=false;
 private boolean reproduciendo=false;
 private boolean modoCola=false;
+private boolean modoCircular=false;
+private boolean modoAleatorio=false;
 private NodoDoble Actual=null;
 private Playlist PlaylistActual;
 private MediaPlayer reproductor;
@@ -86,6 +97,8 @@ private AnchorPane PanelBuscar;
 private AnchorPane PanelBiblioteca;
 @FXML
 private AnchorPane PanelPlaylist;
+@FXML
+private StackPane  PanePortada;
 
 
 //TextFields
@@ -150,10 +163,6 @@ private ScrollPane ScrollG;
 @FXML
 private Button Play;
 @FXML
-private Button Pausa;
-@FXML
-private Button Stop;
-@FXML
 private Button Siguiente;
 @FXML
 private Button Anterior;
@@ -166,6 +175,11 @@ private Button EliminarE;
 @FXML
 private Button CrearPT;
 
+//ComboBox
+
+@FXML
+private ComboBox orden;
+
 //HBox
 @FXML
 private HBox ContenedorAL;
@@ -173,6 +187,8 @@ private HBox ContenedorAL;
 private HBox Recomendados;
 @FXML
 private HBox Artistas;
+
+
 
  @FXML
     public void MostrarInicio(){
@@ -595,6 +611,13 @@ public void ImportarMusica(){
 }
 
 
+private void AnimacionHbox(HBox cajitasinH){
+    
+    if(Animacion!=null){
+        
+        Animacion.stop();
+    }
+}
 
 
 
@@ -605,6 +628,40 @@ public void ImportarMusica(){
 
 
 
+
+
+
+private void Colores(Archivomp3 si){
+    
+    
+    if(si==null||si.getNombre()==null){
+        return;
+    }
+    
+    PanePortada.getStyleClass().clear();
+    
+   
+    PanePortada.getStyleClass().addAll("foto","portada");
+    
+    int ColorR=Math.abs(si.getNombre().hashCode())%3;
+    
+    switch(ColorR){
+        case 0:PanePortada.getStyleClass().add("portada-verde");
+            Can.setStyle("-fx-text-fill: #1DB954; -fx-font-weight: bold;");
+            break;
+            
+        case 1:
+            PanePortada.getStyleClass().add("portada-azul");
+            Can.setStyle("-fx-text-fill: #00D2FF; -fx-font-weight: bold;");
+            break;
+            
+        case 2: 
+            PanePortada.getStyleClass().add("portada-magenta");
+            Can.setStyle("-fx-text-fill: #E91E63; -fx-font-weight: bold;");
+            break;
+        
+    }
+}
 
 
 
@@ -658,50 +715,35 @@ public void ImportarMusica(){
                    try{
     
                        String rutaImagenCancion=Cancion.getImagen(); 
-                       File archivoImagen=new File(rutaImagenCancion);
+                       Image ImgCancion=CacheImagenes.ObtenerImagen(rutaImagenCancion);
+                       
+                       this.Imgbotm.setImage(ImgCancion);
+                       
+                     
+                       Can.setText("Nombre: "+Cancion.getNombre());
+                       Art.setText("Artista: "+Cancion.getArtista());
+                       Alb.setText("Album: "+Cancion.getAlbum());
+                       Gen.setText("Genero: "+Cancion.getGenero());
+                       Anio.setText("Año: "+Cancion.getAño());
+                       
+                      
 
-        
-                       if(rutaImagenCancion!=null&&!rutaImagenCancion.isEmpty()&&archivoImagen.exists()){
-            
-                    
-                           Image imgCancion=new Image(archivoImagen.toURI().toString());
-                    
-                           this.Imgbotm.setImage(imgCancion);
-                    
-                    
-                
-                       }else{
-                
-                    
-                           InputStream pre=getClass().getResourceAsStream("/resources/imagenes/disco-vinilo.jpg");
-                   
-                           if(pre!=null){
-                        
-                               this.Imgbotm.setImage(new Image(pre));
-                    
-                           }
-                    
-                  
-                    
-                           Rectangle clip=new Rectangle( this.Imgbotm.getFitWidth(),this.Imgbotm.getFitHeight());
-        
-                           clip.setArcWidth(30);  
-                           clip.setArcHeight(30);
-                    
-                           this.Imgbotm.setClip(clip);
-                    
-               
-                       }
+
+                       Bounds yaporfas=Imgbotm.getLayoutBounds();
+                       
+                       Rectangle yaquequedeno=new Rectangle(yaporfas.getWidth(),yaporfas.getHeight());
+   
+    
+                       yaquequedeno.setArcWidth(30);yaquequedeno.setArcHeight(30);
+                       Imgbotm.setClip(yaquequedeno);
+
+                       Colores(Cancion);
                    } 
                    catch (Exception e){
                    }
 
         
-            Can.setText("Nombre: "+Cancion.getNombre());
-            Art.setText("Artista: "+Cancion.getArtista());
-            Alb.setText("Album: "+Cancion.getAlbum());
-            Gen.setText("Genero: "+Cancion.getGenero());
-            Anio.setText("Año: "+Cancion.getAño());
+            
         });
              
             reproductor.setOnEndOfMedia(()->{
@@ -710,9 +752,13 @@ public void ImportarMusica(){
 
         AvanzarCola();
         
-
+    }else if(modoCircular){
+               
+        Siguiente();
+     
     }else{
 
+        
         Siguiente();
     }
 
@@ -807,6 +853,74 @@ public void ReproducirPlaylist(){
         ReproducirCancion(primera);
     }
 }
+@FXML
+public void averquepsa(){
+    modoAleatorio=!modoAleatorio;
+    
+    if(modoAleatorio){
+        Estado.setText("Modo Aleatorio Activado");
+        Aleatorio();
+        
+    }else{
+        Estado.setText("Modo Aleatorio desactivado");
+    }
+    
+    
+}
+
+@FXML
+public void Aleatorio(){
+    
+    try{
+        if(PlaylistActual==null||PlaylistActual.vacio()){
+            Estado.setText("Seleccione una Playlist");
+            return;
+        }
+        
+        
+        
+    
+    int tam=PlaylistActual.getSize();
+   
+    Random r=new Random();
+    int aleatorio=r.nextInt(tam);
+   
+    NodoDoble actual=PlaylistActual.getFin();
+    for(int i=0;i<aleatorio;i++){
+        if(actual!=null){
+            actual=actual.Anterior;
+        }
+        
+    }
+    if(actual!=null){
+        Actual=actual;
+        CancionActual=Actual.getCancion();
+        
+        modoCola=false;
+        ReproducirCancion(CancionActual);
+        
+        ListaCanciones.getSelectionModel().select(CancionActual);
+    }
+    
+   
+    }catch(Exception e){
+        Estado.setText("Error en el modo aleatorio");
+    }
+}
+
+
+
+
+@FXML
+public void repito(){
+    modoCircular=!modoCircular;
+    
+    if(modoCircular){
+        Estado.setText("Modo indinito Activado");
+    }else{
+        Estado.setText("Modo Infinito Desactivado");
+    }
+}
 
 
 @FXML
@@ -835,6 +949,11 @@ public void Stop(){
         reproductor.dispose();
         reproductor=null;
         reproduciendo=false;
+        
+        modoCola=false;
+        modoCircular=false; 
+        modoAleatorio=false;
+        
         Icono.setImage(PlayImagen);
         Estado.setText("Reproduccion detenida");
  }
@@ -857,13 +976,26 @@ public void Siguiente(){
             return;
         }
 
+       if(modoAleatorio){
+           Aleatorio();
+           return;
+       }
         if(Actual==null){
+            
             Actual=PlaylistActual.getInicio();
         }else{
             Actual=Actual.getSiguiente();
         
             if(Actual==null){
-                Actual=PlaylistActual.getInicio();
+                if(modoCircular){
+                    Actual=PlaylistActual.getInicio();
+                }else{
+                    
+                    Stop();
+                    Actual=null;
+                    Estado.setText("Fin de la playlist");
+                    return;
+                }
             }
         }
         
@@ -950,7 +1082,7 @@ public void ActualizarBiblioteca(){
         }
     }
 
-    DatosBiblioteca.setAll( Import.getAVL().PreOrden());         
+    DatosBiblioteca.setAll( Import.getAVL().InordeP());         
     
 }
 
@@ -1018,12 +1150,14 @@ public void recorreCanciones(){
     if(agregado){
 
         Estado.setText("Canciones agregadas a "+PlaylistActual.getNombre());
+        chek();
 
     }else{
 
         Estado.setText("No selecciono canciones");
     }
 }
+
 
      
 public void chek(){
@@ -1038,6 +1172,8 @@ public void chek(){
 @FXML
 @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+      
      MostrarInicio();
      ListaPlaylist.setItems(playlists);
      
@@ -1048,6 +1184,14 @@ public void chek(){
      Icono.setFitWidth(30);
      Icono.setFitHeight(23);
      Play.setGraphic(Icono);
+     
+     orden.getItems().addAll(
+                             "A-Z",
+                             "Fecha de publicacion",
+                             "Invertido"
+                             );
+     
+     orden.getSelectionModel().selectFirst();
      
      ListaPlaylist.getSelectionModel().selectedItemProperty().addListener((obs,anterior,actual)->{
 
@@ -1287,7 +1431,7 @@ Progreso.setOnMouseDragged(a-> {
 Volumen.setMin(0);
 Volumen.setMax(100);
 Volumen.setValue(50);
-
+ TxtV.setText(String.format("Volumen: 50"));
 
  Volumen.valueProperty().addListener((espiado,antes,actual)->{
            
@@ -1324,6 +1468,36 @@ Volumen.setValue(50);
  
  });
 
+ 
+ orden.valueProperty().addListener((espiado,antes,nuevo)->{
+        
+       if(nuevo==null||Import.getAVL()==null){
+           return;
+           
+       } 
+        
+       ListaCanciones.getItems().clear();
+       
+       switch(nuevo.toString()){
+            case "A-Z" ->{ DatosBiblioteca.setAll(Import.getAVL().InordeP());
+            
+            }
+            case "Fecha de publicacion" -> {
+               DatosBiblioteca.setAll(Import.getAVL().PreOrden());
+                
+             }
+                
+            case "Invertido" -> {
+               DatosBiblioteca.setAll(Import.getAVL().PostOrden());
+               
+             }
+        }
+        
+    });
+ 
+ 
+ 
+ 
  ScrollG.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
  ScrollG.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
  ScrollG.setFitToHeight(true);

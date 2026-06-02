@@ -259,8 +259,7 @@ public class Playlist {
     
 
     
-    public Archivomp3 BuscarCancion(
-            String NombreCancion){
+    public Archivomp3 BuscarCancion(String NombreCancion){
         NodoDoble Actual=Inicio;
 
         
