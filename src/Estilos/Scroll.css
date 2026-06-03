@@ -15,6 +15,15 @@
     -fx-background-radius: 5;
 }
 
+
+.scroll-bar:horizontal {
+    -fx-max-height: 0;
+    -fx-min-height: 0;
+    -fx-pref-height: 0;
+    -fx-opacity: 0;
+    -fx-padding: 0;
+}
+
 .scroll-bar .thumb:hover{
 
     -fx-background-color: #909090;

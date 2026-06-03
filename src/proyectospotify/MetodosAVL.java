@@ -32,22 +32,22 @@ public class MetodosAVL {
             
         }
         
-        return Niveles(Nodo.Izq)- Niveles(Nodo.Der);
+        return Niveles(Nodo.Izq)-Niveles(Nodo.Der);
     }
     
     
     private NodoAVL RotacionD(NodoAVL NodoRO){
+        if(NodoRO==null||NodoRO.Izq==null){
+            return NodoRO;
+        }
         
         NodoAVL NuevaR=NodoRO.Izq;
-        
         NodoAVL Solin=NuevaR.Der;
         
         NuevaR.Der=NodoRO;
-        
         NodoRO.Izq=Solin;
         
         NodoRO.altura=Math.max(Niveles(NodoRO.Izq),Niveles(NodoRO.Der))+1;
-        
         NuevaR.altura=Math.max(Niveles(NuevaR.Izq),Niveles(NuevaR.Der))+1;
         
         
@@ -59,14 +59,17 @@ public class MetodosAVL {
     
     private NodoAVL RotacionI(NodoAVL NodoRO){
         
-        NodoAVL NuevaR= NodoRO.Der;
+        if(NodoRO==null||NodoRO.Der==null){
+            return NodoRO;
+        }
         
+        NodoAVL NuevaR= NodoRO.Der;
         NodoAVL Solin=NuevaR.Izq;
         
         NuevaR.Izq=Solin;
+        NodoRO.Der=Solin;
         
         NodoRO.altura=Math.max(Niveles(NodoRO.Izq),Niveles(NodoRO.Der))+1;
-        
         NuevaR.altura=Math.max(Niveles(NuevaR.Izq),Niveles(NuevaR.Der))+1;
         
         return NuevaR;
@@ -108,42 +111,31 @@ public class MetodosAVL {
             
             int FactorB=Balance(Actual);
             
-            if(FactorB>1&&Cancion.getNombre().compareToIgnoreCase(Actual.Cancion.getNombre())<0){
-                
-                
-                return RotacionD(Actual);
-                
-            }
-            
-            
-            if(FactorB<-1&&Cancion.getNombre().compareToIgnoreCase(Actual.Cancion.getNombre())>0){
-                
-                return RotacionI(Actual);
-                
-            }
-            
-            
-            
-            
-            
-            if(FactorB>1&&Cancion.getNombre().compareToIgnoreCase(Actual.Cancion.getNombre())>0){
-                
-                
-                Actual.Izq=RotacionI(Actual.Izq);
-                
-                return RotacionD(Actual);
-            }
-            
-         
-            if(FactorB<-1&&Cancion.getNombre().compareToIgnoreCase(Actual.Cancion.getNombre())<0){
-                
-                Actual.Der=RotacionD(Actual.Der);
-                
-                return RotacionI(Actual);
-                
-            }
+            if(FactorB>1&&Actual.Izq!=null){
         
+        if(Cancion.getNombre().compareToIgnoreCase(Actual.Izq.Cancion.getNombre())<0){
+            return RotacionD(Actual);
+        }
         
+        if(Cancion.getNombre().compareToIgnoreCase(Actual.Izq.Cancion.getNombre())>0){
+            Actual.Izq=RotacionI(Actual.Izq);
+            return RotacionD(Actual);
+        }
+    }
+    
+            
+ 
+    if(FactorB<-1&&Actual.Der!=null){
+        
+        if(Cancion.getNombre().compareToIgnoreCase(Actual.Der.Cancion.getNombre())>0){
+            return RotacionI(Actual);
+        }
+      
+        if(Cancion.getNombre().compareToIgnoreCase(Actual.Der.Cancion.getNombre())<0){
+            Actual.Der=RotacionD(Actual.Der);
+            return RotacionI(Actual);
+        }
+    }
         
         return Actual;
     }

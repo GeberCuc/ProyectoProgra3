@@ -7,45 +7,45 @@ import javafx.scene.image.Image;
 
 public class CacheImagenes{
 
-    private static HashMap<String,Image>cache=new HashMap<>();
-
-
+    //elimina las imagenes de la ram al scrollear en listview
+    private static final HashMap<String,Image>cache=new HashMap<>();
+    
+    private static Image imgDefault=null;
+    private static Image imgCorazon=null;
+    private static Image imgCorazonCheck=null;
 
     public static Image ObtenerImagen(String ruta){
-
         try{
-
             if(ruta==null||ruta.isEmpty()){
 
                 return ObtenerDefault();
             }
-
-
-
+            //reusar la imagen si todavia no ha sido limpiado por el recolector
             if(cache.containsKey(ruta)){
-
-                return cache.get(ruta);
+                Image enCache=cache.get(ruta);
+                if(enCache!=null){
+                return enCache;    
+                }
+                
             }
 
 
 
             File archivo=new File(ruta);
             Image img;
+            
             if(archivo.exists()){
-
                 img=new Image(archivo.toURI().toString(),80,80,true,true,true);
+                cache.put(ruta, img);
 
             }else{
 
                 img=ObtenerDefault();
             }
 
-            cache.put(ruta,img);
-
             return img;
 
         }catch(Exception e){
-            
             return ObtenerDefault();
         }
     }
@@ -56,19 +56,12 @@ public class CacheImagenes{
 
 
     public static Image ObtenerDefault(){
-
-        String rutaDefault="Predeterminado";
-
-        if(cache.containsKey(rutaDefault)){
-
-            return cache.get(rutaDefault);
+        
+        if(imgDefault==null){
+            
+            imgDefault=new Image(CacheImagenes.class.getResourceAsStream("/resources/imagenes/disco-vinilo.png"),80,80,true,true);
         }
-
-        Image img=new Image(CacheImagenes.class.getResourceAsStream("/resources/imagenes/disco-vinilo.png"),80,80,true,true);
-
-        cache.put(rutaDefault, img);
-
-        return img;
+        return imgDefault;
     }
 
 
@@ -77,18 +70,12 @@ public class CacheImagenes{
 
 
     public static Image ObtenerCorazon(){
-
-        String key="Corazon";
-
-        if(cache.containsKey(key)){
-
-            return cache.get(key);
+    
+        if(imgCorazon==null){
+            
+            imgCorazon= new Image(CacheImagenes.class.getResourceAsStream("/IconosFX/favorite.png"),20,20,true,true);
         }
-
-        Image img=new Image(CacheImagenes.class.getResourceAsStream("/IconosFX/favorite.png"),20,20,true,true);
-        cache.put(key, img);
-        
-        return img;
+        return imgCorazon;
     }
 
 
@@ -97,18 +84,17 @@ public class CacheImagenes{
 
 
     public static Image ObtenerCorazonCheck(){
-
-        String key="CorazonCheck";
-
-        if(cache.containsKey(key)){
-            
-            return cache.get(key);
+    if (imgCorazonCheck==null) {
+            imgCorazonCheck =new Image(CacheImagenes.class.getResourceAsStream("/IconosFX/addfavorite.png"),20,20,true,true);
         }
-
-        Image img=new Image(CacheImagenes.class.getResourceAsStream( "/IconosFX/addfavorite.png"),20,20,true,true);
-
-        cache.put(key, img);
-
-        return img;
+        return imgCorazonCheck;
     }
+
+    public static void Limpiar(){
+
+        cache.clear();
+        System.gc();
 }
+}
+
+

@@ -15,24 +15,25 @@ import javafx.scene.layout.VBox;
 
 public class CancionCell extends ListCell<Archivomp3>{
 
-    private CheckBox check=new CheckBox();
-    private ImageView imagen=new ImageView();
+    private final CheckBox check=new CheckBox();
+    private final ImageView imagen=new ImageView();
 
-    private Label nombre=new Label();
-    private Label artista=new Label();
-    private Label album=new Label();
-    private Label tiempo=new Label();
+    private final Label nombre=new Label();
+    private final Label artista=new Label();
+    private final Label album=new Label();
+    private final Label tiempo=new Label();
 
-    private ToggleButton fav=new ToggleButton();
+    private final ToggleButton fav=new ToggleButton();
+    private final ImageView iconoFav= new ImageView();
 
-    private VBox texto=new VBox(nombre,artista,album, tiempo);
-    private HBox contenido=new HBox(10,check,fav, imagen, texto );
+    private final VBox texto=new VBox(nombre,artista,album, tiempo);
+    private final HBox contenido=new HBox(10,check,fav, imagen, texto );
 
-   private BooleanProperty CrearP;;
-    private Runnable actualizarFavoritos;
+   private final BooleanProperty CrearP;;
+    private final Runnable actualizarFavoritos;
    
-    private static Image corazon=CacheImagenes.ObtenerCorazon();
-    private static Image corazonCheck=CacheImagenes.ObtenerCorazonCheck();
+    private static final Image corazon=CacheImagenes.ObtenerCorazon();
+    private static final Image corazonCheck=CacheImagenes.ObtenerCorazonCheck();
 
 
 
@@ -43,9 +44,14 @@ public class CancionCell extends ListCell<Archivomp3>{
         this.actualizarFavoritos=actualizarFavoritos;
 
         fav.getStyleClass().add("boton-favorito");
+        iconoFav.setFitWidth(20);
+        iconoFav.setFitHeight(20);
+        fav.setGraphic(iconoFav);
 
         imagen.setFitWidth(50);
         imagen.setFitHeight(50);
+        check.visibleProperty().bind(CrearP);
+        check.managedProperty().bind(CrearP);
     }
 
 
@@ -54,7 +60,6 @@ public class CancionCell extends ListCell<Archivomp3>{
     protected void updateItem(Archivomp3 item,boolean empty){
 
         super.updateItem(item,empty);
-
         if(empty||item==null){
 
             setGraphic(null);
@@ -62,67 +67,31 @@ public class CancionCell extends ListCell<Archivomp3>{
 
             return;
         }
-
-
-
-       
-        check.setVisible(CrearP.get());
-        check.setManaged(CrearP.get());
+        
+        check.setOnAction(null);
+        fav.setOnAction(null);
         
         check.setSelected(item.isEstado());
-
-        check.setOnAction(e ->{
-            
-            item.setEstado(check.isSelected());
+        check.setOnAction(ecento->item.setEstado(check.isSelected()));
         
-        });
-
-
-
-        ImageView iconoFav=new ImageView();
-
-        iconoFav.setFitWidth(20);
-        iconoFav.setFitHeight(20);
-
-        fav.setGraphic(iconoFav);
+        
         fav.setSelected(item.isFav());
-
-        if(fav.isSelected()){
-            iconoFav.setImage(corazonCheck);
-
-        }else{
-            iconoFav.setImage(corazon);
-        }
-
-
-
-
-
-
-        fav.setOnAction(e ->{
-
+        iconoFav.setImage(item.isFav() ?corazonCheck : corazon);
+        
+        fav.setOnAction(evento->{
+            
             item.setFav(fav.isSelected());
-
-            if(fav.isSelected()){
-
-                iconoFav.setImage(corazonCheck);
-
-            }else{
-                iconoFav.setImage(corazon);
-            }
-
-            if(actualizarFavoritos != null){
-
+            iconoFav.setImage(item.isFav() ?corazonCheck :corazon);
+            
+            if(actualizarFavoritos!=null){
                 actualizarFavoritos.run();
             }
         });
         
+       
         
         imagen.setImage(CacheImagenes.ObtenerImagen(item.getImagen()));
         
-
-
-
         nombre.setText(item.getNombre());
         artista.setText(item.getArtista());
         album.setText(item.getAlbum() );

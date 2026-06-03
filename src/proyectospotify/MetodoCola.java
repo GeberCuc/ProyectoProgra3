@@ -57,7 +57,6 @@ public class MetodoCola {
     public Archivomp3 Frente(){
 
     if(Salida==null){
-
         return null;
     }
 

@@ -1,9 +1,3 @@
-@font-face {
-    font-family: 'Montserrat';
-    /* El punto (.) indica la carpeta actual, luego entra a resources */
-    src: url('./resources/Montserrat-Regular.ttf');
-}
-
 .root {
     -fx-font-family: 'Montserrat';
 }

@@ -1,0 +1,16 @@
+.time-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #b3b3b3; 
+    -fx-padding: 2px 6px;
+}
+
+
+.time-current {
+    -fx-text-fill: #ffffff; 
+}
+
+
+.time-duration {
+    -fx-text-fill: #a7a7a7; 
+}
