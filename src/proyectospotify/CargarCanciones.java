@@ -45,6 +45,7 @@ public class CargarCanciones{
         }
 
         Subcarpetas(Carpeta,carpetaImagenes,Arbol, ArbolAvl,Play, mensaje);
+        
         mensaje.append("Canciones Cargadas: ").append(i).append("\n");
 
     } catch(Exception e){
@@ -164,6 +165,7 @@ private void Subcarpetas(File carpeta,File CarpetaImagenes,MetodosABB arbolabb,M
 
                 i++;
 
+               
             }catch(Exception e){ 
                 mensaje.append("Error en: ").append(archivo.getName()).append(" - ").append(e.getMessage()).append("\n");
             }

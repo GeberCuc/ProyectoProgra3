@@ -66,7 +66,7 @@ public class MetodosAVL {
         NodoAVL NuevaR= NodoRO.Der;
         NodoAVL Solin=NuevaR.Izq;
         
-        NuevaR.Izq=Solin;
+        NuevaR.Izq=NodoRO;
         NodoRO.Der=Solin;
         
         NodoRO.altura=Math.max(Niveles(NodoRO.Izq),Niveles(NodoRO.Der))+1;
@@ -101,6 +101,7 @@ public class MetodosAVL {
                     Actual.Der=InsertarP(Actual.Der,Cancion);
                     
                 }else{
+                     
                     Actual.repetido++;
                     
                     return Actual;

@@ -22,8 +22,6 @@ public class MetodosABB {
     
     private NodoABB InsertarP(NodoABB Actual,Archivomp3 Cancion){
         
-        
-                
         if(Actual==null){
             return new NodoABB(Cancion);
         }
@@ -33,8 +31,10 @@ public class MetodosABB {
            
            Actual.Izq=InsertarP(Actual.Izq,Cancion);
            
-       }else{
+       }else if(Cancion.getNombre().compareToIgnoreCase(Actual.Cancion.getNombre())>0){
            
+           Actual.Der=InsertarP(Actual.Der,Cancion);
+       }else{
            Actual.Repetido++;
        }
        

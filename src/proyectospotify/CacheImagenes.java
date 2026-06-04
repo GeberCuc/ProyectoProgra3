@@ -35,7 +35,7 @@ public class CacheImagenes{
             Image img;
             
             if(archivo.exists()){
-                img=new Image(archivo.toURI().toString(),80,80,true,true,true);
+                img=new Image(archivo.toURI().toString(),200,200,true,true,true);
                 cache.put(ruta, img);
 
             }else{
@@ -59,7 +59,7 @@ public class CacheImagenes{
         
         if(imgDefault==null){
             
-            imgDefault=new Image(CacheImagenes.class.getResourceAsStream("/resources/imagenes/disco-vinilo.png"),80,80,true,true);
+            imgDefault=new Image(CacheImagenes.class.getResourceAsStream("/resources/imagenes/disco-vinilo.png"),200,200,true,true);
         }
         return imgDefault;
     }

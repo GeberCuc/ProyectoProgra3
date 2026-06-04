@@ -252,11 +252,11 @@
          <center>
             <StackPane BorderPane.alignment="CENTER">
                <children>
-                  <AnchorPane fx:id="PanelInicio" prefHeight="297.0" prefWidth="1100.0" style="-fx-background-color: #181818;">
+                  <AnchorPane fx:id="PanelInicio" prefHeight="668.0" prefWidth="1284.0" style="-fx-background-color: #181818;">
                      <children>
-                        <VBox layoutY="-1.0" prefHeight="636.0" prefWidth="1099.0" style="-fx-background-color: #181818;" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0">
+                        <VBox layoutY="-1.0" prefHeight="700.0" prefWidth="1099.0" style="-fx-background-color: #181818;" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <ScrollPane fitToWidth="true" prefHeight="638.0" prefWidth="1250.0" style="-fx-background-color: #181818;" stylesheets="@../Estilos/Scroll.css" VBox.vgrow="ALWAYS">
+                              <ScrollPane fitToWidth="true" prefHeight="667.0" prefWidth="1283.0" style="-fx-background-color: #181818;" stylesheets="@../Estilos/Scroll.css" VBox.vgrow="ALWAYS">
                                  <content>
                                     <FlowPane hgap="15.0" style="-fx-background-color: #181818;" vgap="15.0">
                                        <children>
@@ -308,12 +308,22 @@
                                                 </ScrollPane>
                                              </children>
                                           </HBox>
-                                          <Label layoutX="13.0" layoutY="308.0" prefHeight="45.0" prefWidth="1150.0" styleClass="Titulos" text="Albumes" />
+                                          <Label layoutX="13.0" layoutY="308.0" prefHeight="45.0" prefWidth="1150.0" styleClass="Titulos" text="Mas Escuchados" />
                                           <HBox style="-fx-background-color: #181818;">
                                              <children>
-                                                <ScrollPane fx:id="ScrollAl" fitToHeight="true" style="-fx-background-color: #181818;" HBox.hgrow="ALWAYS">
+                                                <ScrollPane fx:id="ScrollT" fitToHeight="true" style="-fx-background-color: #181818;" HBox.hgrow="ALWAYS">
                                                    <content>
-                                                      <HBox fx:id="Albumes" prefHeight="159.0" prefWidth="1300.0" spacing="15.0" style="-fx-background-color: #181818;" />
+                                                      <HBox fx:id="Top" prefHeight="170.0" prefWidth="1300.0" spacing="15.0" style="-fx-background-color: #181818;" />
+                                                   </content>
+                                                </ScrollPane>
+                                             </children>
+                                          </HBox>
+                                          <Label styleClass="Titulos" text="Genero" />
+                                          <HBox style="-fx-background-color: #181818;">
+                                             <children>
+                                                <ScrollPane fx:id="ScrollGn" fitToHeight="true" style="-fx-background-color: #181818;" HBox.hgrow="ALWAYS">
+                                                   <content>
+                                                      <HBox fx:id="Gnr" prefHeight="170.0" prefWidth="1300.0" spacing="15.0" style="-fx-background-color: #181818;" />
                                                    </content>
                                                 </ScrollPane>
                                              </children>

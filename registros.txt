@@ -1,0 +1,112 @@
+Nombre;Reproducciones;Tiempo
+City Circuit;8;275.34
+We Are the Champions (Live Aid);19;853.14
+Don’t Stop Me Now (…revisited);13;383.14
+Who Wants to Live Forever;4;71.78
+Hammer to Fall (Live Aid);2;14.78
+Radio Ga Ga (Live Aid);1;8.52
+Somebody to Love;2;12.08
+Bohemian Rhapsody;1;10.34
+Fat Bottomed Girls (live in Paris);1;13.25
+SOLITUDE;4;132.77
+5OUL ON D!SPLAY;14;793.39
+The Son of Flynn;4;211.40
+Solar Sailer;1;11.87
+Sunrise Prelude;1;2.24
+Rinzler;1;21.11
+Round One;1;40.27
+Flynn Lives;1;13.78
+The Game Has Changed;1;5.09
+Nocturne;4;121.10
+Rectifier;1;6.30
+Encom Part I;2;463.36
+Derezzed (Ntebint);2;270.34
+TRON Legacy (End Titles);1;136.36
+Crimson Cloud;2;40.59
+Crimson Cloud (Game Edit);1;8.13
+Devil May Cry 5 Titlescreen;2;24.98
+ReBirth;2;163.31
+Bury the Light;1;6.01
+Devil May Cry 5 SE Titlescreen;1;20.55
+Let's just see (Devil May Cry 5 SE Edit);1;9.84
+Beowulf Battle;1;121.45
+Peaceful Sleep;1;10.50
+Alien Manifestation;1;17.48
+A Beautiful Song;4;340.86
+The Grid (Alcala Remix);1;4.17
+The Temper Trap - Sweet Disposition (Official Video);1;6.26
+Significance - Nothing;3;158.69
+Beyond Defeat;1;20.19
+Sea of Simulation;1;2.78
+As Alive As You Need Me To Be;2;239.67
+Abyssal Time;2;486.30
+Linkin Park - Unreleased Beat 1 (HQ Redone);2;124.30
+A Question Of Trust;2;161.34
+Drain You Instrumental (2020 Fan Remaster);1;83.48
+Xero - Pictureboard (Mark Wakefield Fan Remaster) 2021 Edit;1;4.13
+Linkin Park - Unreleased Beat 3 (HQ Redone);1;133.35
+Shadow Over Me;4;940.24
+20th Century Fox Fanfare;1;26.01
+Under Pressure;1;244.48
+A Sword Shatters To Pieces;1;52.49
+Wave Street;1;180.11
+The Blood Soaked Ground;1;137.67
+Pascal;1;98.96
+Devil Trigger (Instrumental Edit);1;108.82
+America-A Horse With No Name (Extended);2;178.55
+Blissful Death;1;155.32
+Much Too Soon;1;71.41
+Longest Play - Disc 2;1;8.44
+Overture;2;125.78
+Mourning;1;2.83
+Forked Reality;2;115.07
+Lucky Fall;1;7.64
+Devil Trigger (Opening Remix);1;88.09
+Day To Live;2;12.96
+Linkin Park - Unreleased Beat 2 (HQ Redone);1;96.73
+Dante's Dance Music;1;33.62
+WINDS;1;238.07
+Mysterious Stranger;1;84.36
+Stupify (Nu Metal Mix);1;38.14
+El Baile del Sapito - Las Canciones Dela Granja - Canciones infantiles dela granja;18;660.99
+Breakneck Predator;1;20.42
+Gate to Hell;1;15.05
+Caballo Homosexual De Las Montañas;7;671.60
+Target Identified;2;408.48
+Who Wants To Live Forever?;1;242.82
+Daemonize;2;442.23
+Out In The World;3;196.62
+New Directive;1;42.07
+Nemesis;1;52.71
+8va Curves;2;174.99
+Still Remains;1;114.58
+Building Better Worlds;4;404.61
+No Going Back;1;115.38
+Infiltrator;1;167.32
+What Have You Done?;1;134.10
+Init;1;127.95
+This Changes Everything;1;179.96
+Empathetic Response;1;116.99
+Collapse;5;129.74
+I'd Also Like to Jump;1;210.29
+Sword Fight;1;169.35
+Grandma - Destruction;1;328.39
+Anarchy In The U.W. (DMC5 Remix Intro);1;39.36
+Lunatic Ray;1;242.86
+I'm Not Crying!;1;74.62
+The Demon's Face;1;41.71
+BATTLE-1 (VERGIL) from Devil May Cry 3 SE;1;235.25
+radiotire;1;266.61
+Behind The Mask;1;302.76
+Unbearable Pressure (Rush Percussion Ver.);1;93.42
+Birth of a Wish;1;278.67
+Special Music Outro (Dante);1;13.93
+7 days reminiscence;1;6.21
+Wake your fury and wait in hell (Vergil Mission Start);1;3.81
+Linkin Park - Ashes (Concept);1;7.56
+(I Like) The Way You Love Me;1;3.95
+100% Expendable;1;5.23
+Closing (2021 Remaster);1;5.60
+3 Goddamn Hags;2;13.68
+El Baile del Sapito;2;34.89
+The Grid;1;96.74

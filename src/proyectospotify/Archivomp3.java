@@ -127,6 +127,6 @@ public class Archivomp3 {
  @Override
 public String toString(){
 
-    return Nombre+" | "+Album +Duracion;
+    return Nombre;
 }
 }
