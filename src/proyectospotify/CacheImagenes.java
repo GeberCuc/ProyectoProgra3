@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 public class CacheImagenes{
 
     //elimina las imagenes de la ram al scrollear en listview
+   
     private static final HashMap<String,Image>cache=new HashMap<>();
     
     private static Image imgDefault=null;
@@ -95,6 +96,11 @@ public class CacheImagenes{
         cache.clear();
         System.gc();
 }
+    
+    public static int getCache(){
+            
+            return cache.size();
+    }
 }
 
 

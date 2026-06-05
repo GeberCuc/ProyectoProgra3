@@ -24,7 +24,7 @@
 
 <AnchorPane id="AnchorPane" prefHeight="750.0" prefWidth="1484.0" style="-fx-background-color: #282828;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyectospotify.PrincipalController">
    <children>
-      <BorderPane prefHeight="700.0" prefWidth="1200.0" stylesheets="@../Estilos/Menu.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <BorderPane prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: #181818;" stylesheets="@../Estilos/Menu.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
             <VBox fx:id="VLeft" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="200.0" spacing="20.0" style="-fx-background-color: #121212;;" BorderPane.alignment="CENTER">
                <children>
@@ -252,7 +252,7 @@
          <center>
             <StackPane BorderPane.alignment="CENTER">
                <children>
-                  <AnchorPane fx:id="PanelInicio" prefHeight="668.0" prefWidth="1284.0" style="-fx-background-color: #181818;">
+                  <AnchorPane fx:id="PanelInicio" prefHeight="668.0" prefWidth="1284.0" style="-fx-background-color: #181818;" visible="false">
                      <children>
                         <VBox layoutY="-1.0" prefHeight="700.0" prefWidth="1099.0" style="-fx-background-color: #181818;" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0">
                            <children>
@@ -262,21 +262,25 @@
                                        <children>
                                           <HBox prefHeight="44.0" prefWidth="1262.0" styleClass="BuscadorBox" stylesheets="@../Estilos/Buscador.css">
                                              <children>
-                                                <Button mnemonicParsing="false" onAction="#MostrarInicio" prefHeight="16.0" prefWidth="125.0" style="-fx-background-color: transparent;" styleClass="MenuBoton">
+                                                <Button mnemonicParsing="false" onAction="#MostrarInicio" prefHeight="16.0" prefWidth="125.0">
                                                    <graphic>
                                                       <ImageView fitHeight="23.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                                                          <image>
                                                             <Image url="@../IconosFX/Casita.png" />
                                                          </image></ImageView>
                                                    </graphic>
+                                                   <styleClass>
+                                                      <String fx:value="MenuBoton" />
+                                                      <String fx:value="MenuBotonActivo" />
+                                                   </styleClass>
                                                 </Button>
                                                 <ImageView fitHeight="21.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
                                                       <Image url="@../IconosFX/buscar.png" />
                                                    </image>
                                                 </ImageView>
-                                                <TextField prefHeight="31.0" prefWidth="606.0" styleClass="Buscardor" />
-                                                <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="114.0" style="-fx-background-color: transparent;" styleClass="MenuBoton" text="Usuario">
+                                                <TextField prefHeight="31.0" prefWidth="574.0" styleClass="Buscardor" />
+                                                <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="114.0" text="Usuario">
                                                    <graphic>
                                                       <ImageView fitHeight="21.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                                                          <image>
@@ -284,8 +288,12 @@
                                                          </image>
                                                       </ImageView>
                                                    </graphic>
+                                                   <styleClass>
+                                                      <String fx:value="MenuBoton" />
+                                                      <String fx:value="MenuBotonActivo" />
+                                                   </styleClass>
                                                 </Button>
-                                                <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="143.0" style="-fx-background-color: transparent;" styleClass="MenuBoton" text="Configuración">
+                                                <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="143.0" text="Configuración">
                                                    <graphic>
                                                       <ImageView fitHeight="19.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
                                                          <image>
@@ -293,10 +301,31 @@
                                                          </image>
                                                       </ImageView>
                                                    </graphic>
+                                                   <styleClass>
+                                                      <String fx:value="MenuBoton" />
+                                                      <String fx:value="MenuBotonActivo" />
+                                                   </styleClass>
                                                 </Button>
+                                                <VBox fx:id="contenedorES">
+                                                   <children>
+                                                      <Button fx:id="BtD" mnemonicParsing="false" onAction="#desplegable" prefHeight="30.0" prefWidth="128.0" text="Estadisticas">
+                                                         <graphic>
+                                                            <ImageView fitHeight="19.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../IconosFX/estadisticas.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                         <styleClass>
+                                                            <String fx:value="MenuBoton" />
+                                                            <String fx:value="MenuBotonActivo" />
+                                                         </styleClass>
+                                                      </Button>
+                                                   </children>
+                                                </VBox>
                                              </children>
                                           </HBox>
-                                          <Label prefHeight="52.0" prefWidth="1200.0" styleClass="Titulos" text="Recomendaciones" />
+                                          <Label prefHeight="52.0" prefWidth="1200.0" styleClass="Titulos" text="Recomendados" />
                                           <HBox fx:id="Recomendados" prefHeight="146.0" prefWidth="1270.0" spacing="15.0" />
                                           <Label layoutX="13.0" layoutY="10.0" prefHeight="52.0" prefWidth="1150.0" styleClass="Titulos" text="Artistas" />
                                           <HBox style="-fx-background-color: #181818;" stylesheets="@../Estilos/Tarjetas.css">
@@ -308,7 +337,7 @@
                                                 </ScrollPane>
                                              </children>
                                           </HBox>
-                                          <Label layoutX="13.0" layoutY="308.0" prefHeight="45.0" prefWidth="1150.0" styleClass="Titulos" text="Mas Escuchados" />
+                                          <Label layoutX="13.0" layoutY="308.0" prefHeight="45.0" prefWidth="1150.0" styleClass="Titulos" text="Más Escuchados" />
                                           <HBox style="-fx-background-color: #181818;">
                                              <children>
                                                 <ScrollPane fx:id="ScrollT" fitToHeight="true" style="-fx-background-color: #181818;" HBox.hgrow="ALWAYS">
@@ -318,12 +347,12 @@
                                                 </ScrollPane>
                                              </children>
                                           </HBox>
-                                          <Label styleClass="Titulos" text="Genero" />
+                                          <Label styleClass="Titulos" text="Género" />
                                           <HBox style="-fx-background-color: #181818;">
                                              <children>
-                                                <ScrollPane fx:id="ScrollGn" fitToHeight="true" style="-fx-background-color: #181818;" HBox.hgrow="ALWAYS">
+                                                <ScrollPane fx:id="ScrollG" fitToHeight="true" style="-fx-background-color: #181818;" HBox.hgrow="ALWAYS">
                                                    <content>
-                                                      <HBox fx:id="Gnr" prefHeight="170.0" prefWidth="1300.0" spacing="15.0" style="-fx-background-color: #181818;" />
+                                                      <HBox fx:id="ContenedorAL" prefHeight="170.0" prefWidth="1300.0" spacing="15.0" style="-fx-background-color: #181818;" />
                                                    </content>
                                                 </ScrollPane>
                                              </children>
@@ -349,7 +378,7 @@
                            <children>
                               <HBox prefHeight="33.0" prefWidth="1002.0" styleClass="BuscadorBox" stylesheets="@../Estilos/Buscador.css">
                                  <children>
-                                    <Button mnemonicParsing="false" onAction="#MostrarInicio" prefHeight="33.0" prefWidth="110.0" style="-fx-background-color: transparent;" styleClass="MenuBoton">
+                                    <Button mnemonicParsing="false" onAction="#MostrarInicio" prefHeight="33.0" prefWidth="110.0">
                                        <graphic>
                                           <ImageView fitHeight="23.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
@@ -357,6 +386,10 @@
                                              </image>
                                           </ImageView>
                                        </graphic>
+                                       <styleClass>
+                                          <String fx:value="MenuBoton" />
+                                          <String fx:value="MenuBotonActivo" />
+                                       </styleClass>
                                     </Button>
                                     <ImageView fitHeight="29.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
@@ -388,20 +421,28 @@
                            </children>
                         </VBox>
                      </children></AnchorPane>
-                  <AnchorPane fx:id="PanelBiblioteca" prefHeight="641.0" prefWidth="1332.0" style="-fx-background-color: #181818;" stylesheets="@../Estilos/toggle.css" visible="false">
+                  <AnchorPane fx:id="PanelBiblioteca" style="-fx-background-color: #181818;" stylesheets="@../Estilos/toggle.css">
                      <children>
-                        <VBox layoutX="1.0" layoutY="-6.0" spacing="3.0" stylesheets="@../Estilos/TItulos.css" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="0.7999999999999545" AnchorPane.rightAnchor="1.3999999999999773" AnchorPane.topAnchor="0.0">
+                        <VBox layoutX="1.0" layoutY="-6.0" spacing="3.0" style="-fx-background-color: #181818;" stylesheets="@../Estilos/TItulos.css" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="0.7999999999999545" AnchorPane.rightAnchor="1.3999999999999773" AnchorPane.topAnchor="0.0">
                            <children>
                               <HBox prefHeight="33.0" styleClass="BuscadorBox" stylesheets="@../Estilos/Buscador.css">
                                  <children>
-                                    <Button mnemonicParsing="false" onAction="#MostrarInicio" prefHeight="30.0" prefWidth="85.0" style="-fx-background-color: transparent;" styleClass="MenuBoton">
+                                    <Button mnemonicParsing="false" onAction="#MostrarInicio" prefHeight="30.0" prefWidth="85.0">
                                        <graphic>
                                           <ImageView fitHeight="24.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../IconosFX/Casita.png" />
                                              </image>
+                                             <styleClass>
+                                                <String fx:value="MenuBoton" />
+                                                <String fx:value="MenuBotonActivo" />
+                                             </styleClass>
                                           </ImageView>
                                        </graphic>
+                                       <styleClass>
+                                          <String fx:value="MenuBoton" />
+                                          <String fx:value="MenuBotonActivo" />
+                                       </styleClass>
                                     </Button>
                                     <Button fx:id="Agregar" mnemonicParsing="false" onAction="#recorreCanciones" prefHeight="30.0" prefWidth="114.0" styleClass="MenuBoton" text="Agregar">
                                        <graphic>
@@ -437,22 +478,24 @@
                                        <styleClass>
                                           <String fx:value="comboBox" />
                                           <String fx:value="combo-box-popup" />
+                                          <String fx:value="MenuBoton" />
+                                          <String fx:value="MenuBotonActivo" />
                                        </styleClass></ComboBox>
                                  </children>
                               </HBox>
                               <Label prefHeight="52.0" prefWidth="278.0" styleClass="Titulos" text="Tu biblioteca" />
-                              <VBox prefHeight="528.0" prefWidth="1320.0" spacing="5.0" stylesheets="@../Estilos/ListView.css" VBox.vgrow="ALWAYS">
+                              <VBox spacing="5.0" stylesheets="@../Estilos/ListView.css" VBox.vgrow="ALWAYS">
                                  <children>
-                                    <ListView fx:id="ListaVBIblioteca" prefHeight="363.0" prefWidth="1282.0" stylesheets="@../Estilos/Scroll.css" VBox.vgrow="ALWAYS">
+                                    <ListView fx:id="ListaVBIblioteca" prefHeight="394.0" prefWidth="1282.0" stylesheets="@../Estilos/Scroll.css" VBox.vgrow="ALWAYS">
                                        <styleClass>
                                           <String fx:value="ListaMusic" />
                                           <String fx:value="listaCeldas" />
                                           <String fx:value="scroll-bar" />
                                        </styleClass>
                                     </ListView>
-                                    <ScrollPane fx:id="ScrollG" prefHeight="155.0" prefWidth="1332.0" style="-fx-background-color: transparent;" styleClass="scroll-bar" stylesheets="@../Estilos/Scroll.css" VBox.vgrow="ALWAYS">
+                                    <ScrollPane fx:id="ScrollH" fitToHeight="true" prefWidth="1282.0" style="-fx-background-color: #181818;" styleClass="scroll-bar" stylesheets="@../Estilos/Scroll.css" VBox.vgrow="ALWAYS">
                                        <content>
-                                          <HBox fx:id="ContenedorAL" prefHeight="155.0" prefWidth="1332.0" spacing="20.0" style="-fx-background-color: #181818;" styleClass="scroll-bar">
+                                          <HBox fx:id="hisC" prefHeight="163.0" prefWidth="1332.0" spacing="20.0" style="-fx-background-color: #181818;" styleClass="scroll-bar">
                                              <stylesheets>
                                                 <URL value="@../Estilos/Tarjetas.css" />
                                                 <URL value="@../Estilos/ListView.css" />
@@ -473,7 +516,7 @@
                            <top>
                               <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="1000.0" styleClass="BuscadorBox" BorderPane.alignment="CENTER">
                                  <children>
-                                    <Button mnemonicParsing="false" onAction="#MostrarInicio" prefHeight="24.0" prefWidth="146.0" style="-fx-background-color: transparent;" styleClass="MenuBoton">
+                                    <Button mnemonicParsing="false" onAction="#MostrarInicio" prefHeight="24.0" prefWidth="146.0">
                                        <graphic>
                                           <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
@@ -481,6 +524,10 @@
                                              </image>
                                           </ImageView>
                                        </graphic>
+                                       <styleClass>
+                                          <String fx:value="MenuBoton" />
+                                          <String fx:value="MenuBotonActivo" />
+                                       </styleClass>
                                     </Button>
                                     <Label prefHeight="14.0" prefWidth="127.0" styleClass="Titulos" text="Playlist" />
                                     <Button fx:id="CrearPT" mnemonicParsing="false" onAction="#CrearPlaylist" prefHeight="30.0" prefWidth="150.0" styleClass="MenuBoton" text="Crear Playlist">
