@@ -76,10 +76,13 @@ public class ImportarFx {
  public String Info(Playlist play){
 
     if(play==null){
-
+    
         return "Canciones: 0     Duracion total: 00:00";
-        
-        
+    }
+    
+    if(play.getInicio()==null){
+      
+        return "Canciones: 0     Duracion total: 00:00";
     }
 
 
@@ -87,35 +90,63 @@ public class ImportarFx {
 
     informacion.append("Canciones: ").append(play.getSize()).append("     ");
 
+   
+
     int total=0;
+    int contadorNodos=0;
 
     NodoDoble Actual=play.getInicio();
+    
     while(Actual!=null){
-
+        contadorNodos++;
         Archivomp3 ar=Actual.getCancion();
         
-        try{
-
-            String[] partes=ar.getDuracion().split(":");
-
-            int minutos=Integer.parseInt(partes[0]);
-
-            int segundos=Integer.parseInt(partes[1]);
-            total+=(minutos*60)+segundos;
-
+        if(ar==null){
+          
+        } else {
             
-            
-        }catch(Exception e){
+            try{
+                String duracionTexto = ar.getDuracion().trim();
+                String[] partes=duracionTexto.split(":");
+                
+                int horas=0;
+                int minutos=0;
+                int segundos=0;
 
+                if(partes.length==3){
+                    horas=Integer.parseInt(partes[0].trim());
+                    minutos=Integer.parseInt(partes[1].trim());
+                    segundos=Integer.parseInt(partes[2].trim());
+                }else if(partes.length==2){
+                    minutos=Integer.parseInt(partes[0].trim());
+                    segundos=Integer.parseInt(partes[1].trim());
+                }
+                
+                total+=(horas*3600)+(minutos*60)+segundos;
+                
+            }catch(Exception e){
+               
+            }
         }
+        
         Actual=Actual.Siguiente;
     }
 
-    int minutosFinal=total/60;
+   
+
+    int horasFinal=total/3600;
+    int minutosFinal=(total%3600)/60;
     int segundosFinal=total%60;
-    informacion.append("Duracion total: ").append(minutosFinal).append(":").append(String.format("%02d", segundosFinal));
+    
+    informacion.append("Duracion total: ");
+    if(horasFinal>0){
+        informacion.append(horasFinal).append(":").append(String.format("%02d",minutosFinal)).append(":").append(String.format("%02d",segundosFinal));
+    }else{
+        informacion.append(String.format("%02d",minutosFinal)).append(":").append(String.format("%02d",segundosFinal));
+    }
 
     
     return informacion.toString();
 }
 }
+

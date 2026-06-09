@@ -94,7 +94,7 @@ public class CacheImagenes{
     public static void Limpiar(){
 
         cache.clear();
-        System.gc();
+        
 }
     
     public static int getCache(){

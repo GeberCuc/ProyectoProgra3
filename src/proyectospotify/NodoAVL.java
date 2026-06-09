@@ -59,7 +59,7 @@ public class NodoAVL {
         this.Der=null;
         this.Izq=null;
         this.altura=1;
-        this.repetido=1;
+        this.repetido=0;
         
     }
 }

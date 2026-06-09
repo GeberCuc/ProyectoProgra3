@@ -304,10 +304,7 @@ public class Playlist {
 
         
         NodoDoble Actual=Inicio;
-
         int Contador=1;
-
-        
         while(Contador<PosicionOrigen){
 
             Actual= Actual.getSiguiente();
@@ -318,10 +315,11 @@ public class Playlist {
         
         Archivomp3 CancionMover=Actual.getCancion();
 
+        if (PosicionOrigen<PosicionDestino) {
+        PosicionDestino--;
+        }
         
         EliminarCancion(CancionMover.getNombre());
-
-        
         InsertarPosicion(CancionMover,PosicionDestino);
 
         

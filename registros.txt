@@ -1,26 +1,26 @@
 Nombre;Reproducciones;Tiempo
-City Circuit;10;768.60
-We Are the Champions (Live Aid);22;1239.73
+City Circuit;13;856.58
+We Are the Champions (Live Aid);27;2081.39
 Don’t Stop Me Now (…revisited);14;600.87
 Who Wants to Live Forever;4;71.78
-Hammer to Fall (Live Aid);2;14.78
+Hammer to Fall (Live Aid);3;258.30
 Radio Ga Ga (Live Aid);1;8.52
-Somebody to Love;8;122.93
+Somebody to Love;10;143.97
 Bohemian Rhapsody;3;533.01
-Fat Bottomed Girls (live in Paris);6;782.12
+Fat Bottomed Girls (live in Paris);7;1059.92
 SOLITUDE;4;132.77
-5OUL ON D!SPLAY;15;796.00
-The Son of Flynn;4;211.40
-Solar Sailer;3;336.13
-Sunrise Prelude;2;173.51
+5OUL ON D!SPLAY;17;1031.23
+The Son of Flynn;8;375.11
+Solar Sailer;4;498.26
+Sunrise Prelude;3;344.78
 Rinzler;1;21.11
-Round One;2;140.30
-Flynn Lives;1;13.78
+Round One;4;340.36
+Flynn Lives;2;215.93
 The Game Has Changed;2;210.56
 Nocturne;4;121.10
-Rectifier;1;6.30
+Rectifier;2;140.35
 Encom Part I;2;463.36
-Derezzed (Ntebint);3;278.49
+Derezzed (Ntebint);4;284.92
 TRON Legacy (End Titles);2;143.40
 Crimson Cloud;2;40.59
 Crimson Cloud (Game Edit);2;13.76
@@ -32,23 +32,23 @@ Let's just see (Devil May Cry 5 SE Edit);1;9.84
 Beowulf Battle;1;121.45
 Peaceful Sleep;1;10.50
 Alien Manifestation;2;403.44
-A Beautiful Song;4;340.86
-The Grid (Alcala Remix);1;4.17
+A Beautiful Song;5;346.76
+The Grid (Alcala Remix);2;396.35
 The Temper Trap - Sweet Disposition (Official Video);1;6.26
 Significance - Nothing;3;158.69
 Beyond Defeat;1;20.19
 Sea of Simulation;2;163.44
-As Alive As You Need Me To Be;2;239.67
+As Alive As You Need Me To Be;3;263.10
 Abyssal Time;3;490.72
-Linkin Park - Unreleased Beat 1 (HQ Redone);2;124.30
-A Question Of Trust;3;242.01
+Linkin Park - Unreleased Beat 1 (HQ Redone);4;362.92
+A Question Of Trust;4;258.50
 Drain You Instrumental (2020 Fan Remaster);2;86.85
-Xero - Pictureboard (Mark Wakefield Fan Remaster) 2021 Edit;1;4.13
-Linkin Park - Unreleased Beat 3 (HQ Redone);2;141.52
-Shadow Over Me;5;943.49
-20th Century Fox Fanfare;6;91.61
-Under Pressure;1;244.48
-A Sword Shatters To Pieces;1;52.49
+Xero - Pictureboard (Mark Wakefield Fan Remaster) 2021 Edit;3;347.58
+Linkin Park - Unreleased Beat 3 (HQ Redone);3;274.87
+Shadow Over Me;9;1322.76
+20th Century Fox Fanfare;7;117.62
+Under Pressure;3;733.44
+A Sword Shatters To Pieces;2;61.14
 Wave Street;2;373.39
 The Blood Soaked Ground;2;145.80
 Pascal;1;98.96
@@ -56,14 +56,14 @@ Devil Trigger (Instrumental Edit);2;115.30
 America-A Horse With No Name (Extended);2;178.55
 Blissful Death;1;155.32
 Much Too Soon;1;71.41
-Longest Play - Disc 2;1;8.44
-Overture;3;129.21
+Longest Play - Disc 2;2;128.82
+Overture;6;177.34
 Mourning;1;2.83
-Forked Reality;2;115.07
+Forked Reality;6;283.19
 Lucky Fall;1;7.64
 Devil Trigger (Opening Remix);1;88.09
 Day To Live;5;541.98
-Linkin Park - Unreleased Beat 2 (HQ Redone);1;96.73
+Linkin Park - Unreleased Beat 2 (HQ Redone);2;206.94
 Dante's Dance Music;1;33.62
 WINDS;1;238.07
 Mysterious Stranger;2;168.72
@@ -71,22 +71,22 @@ Stupify (Nu Metal Mix);2;41.64
 El Baile del Sapito - Las Canciones Dela Granja - Canciones infantiles dela granja;18;660.99
 Breakneck Predator;1;20.42
 Gate to Hell;1;15.05
-Caballo Homosexual De Las Montañas;15;879.92
+Caballo Homosexual De Las Montañas;16;1145.69
 Target Identified;3;612.72
 Who Wants To Live Forever?;1;242.82
 Daemonize;2;442.23
-Out In The World;3;196.62
+Out In The World;5;271.90
 New Directive;2;44.16
-Nemesis;2;56.33
+Nemesis;3;66.46
 8va Curves;2;174.99
 Still Remains;1;114.58
 Building Better Worlds;5;536.11
 No Going Back;2;118.80
 Infiltrator;1;167.32
 What Have You Done?;1;134.10
-Init;2;255.90
+Init;6;353.00
 This Changes Everything;1;179.96
-Empathetic Response;1;116.99
+Empathetic Response;2;246.72
 Collapse;5;129.74
 I'd Also Like to Jump;1;210.29
 Sword Fight;1;169.35
@@ -95,7 +95,7 @@ Anarchy In The U.W. (DMC5 Remix Intro);1;39.36
 Lunatic Ray;1;242.86
 I'm Not Crying!;2;205.78
 The Demon's Face;1;41.71
-BATTLE-1 (VERGIL) from Devil May Cry 3 SE;2;245.62
+BATTLE-1 (VERGIL) from Devil May Cry 3 SE;3;336.41
 radiotire;2;533.22
 Behind The Mask;1;302.76
 Unbearable Pressure (Rush Percussion Ver.);1;93.42
@@ -104,12 +104,12 @@ Special Music Outro (Dante);1;13.93
 7 days reminiscence;2;9.96
 Wake your fury and wait in hell (Vergil Mission Start);3;159.00
 Linkin Park - Ashes (Concept);1;7.56
-(I Like) The Way You Love Me;1;3.95
+(I Like) The Way You Love Me;5;309.78
 100% Expendable;2;240.13
-Closing (2021 Remaster);1;5.60
+Closing (2021 Remaster);2;13.04
 3 Goddamn Hags;2;13.68
-El Baile del Sapito;4;236.64
-The Grid;3;103.20
+El Baile del Sapito;10;498.46
+The Grid;7;413.65
 Drive On Coins;2;310.82
 Widespread Illness;1;42.38
 Devil May Cry HR /HM Ver. (Devil May Cry 5 SE Edit);1;5.42
@@ -117,51 +117,51 @@ Unbearable Pressure;1;198.20
 Derezzed (Extended);2;322.30
 Perfect Timing;3;129.03
 Legacy (Piano Improvisation Ver.);1;88.74
-Arrival;1;120.49
+Arrival;2;240.98
 Reading My Eyes (2021 Remaster);1;179.27
 In The Image Of;2;29.23
-Drain You (2020 Fan Remaster);2;259.95
+Drain You (2020 Fan Remaster);4;526.53
 Piece of Cake;1;107.99
 Special Music Outro (V);1;3.08
 Devil Shocker;1;38.93
-Breaking News;1;254.75
+Breaking News;3;568.99
 Holiday;1;178.89
 Critical Moment;2;65.31
-Recognizer;1;157.72
+Recognizer;2;315.44
 Enjoy the Taste of Despair! (V Mission Start);1;114.67
 E3 2018 Announcement Trailer;1;154.59
-Reflections;1;161.30
+Reflections;2;322.60
 Faded Tone ”A”;1;95.40
 Demon's Throne;2;97.70
 Dark Colossus - Kaiju;1;364.46
 Interview;1;102.99
-The Show Must Go On;1;273.69
+The Show Must Go On;3;821.07
 The World is Screaming Ver.2;1;175.36
 Now I’m Here (live at the Hammersmith Odeon);3;797.97
 End of the Unknown;1;269.11
 Special Music Outro (Nero);1;11.74
 Ugh, Come On… (Nero Mission Start);1;6.51
 Father and Son;2;110.64
-Horizons in May;1;4.50
+Horizons in May;2;52.82
 Disgust;1;12.27
-Linkin Park - Unreleased Beat 6;1;6.80
+Linkin Park - Unreleased Beat 6;2;82.14
 Sunday;1;7.19
 (I Can't Make It) Another Day (Feat. Lenny Kravitz);1;235.28
-Wretched Weaponry: Quiet;1;35.07
-Armory;2;245.96
-David Guetta - Memories (Featuring Kid Cudiclean Version);1;2.37
+Wretched Weaponry: Quiet;2;38.43
+Armory;3;368.94
+David Guetta - Memories (Featuring Kid Cudiclean Version);2;10.74
 Under the Atmosphere;1;46.12
 Doing All Right (…revisited);4;322.91
-Keep Yourself Alive (live at The Rainbow);3;381.12
+Keep Yourself Alive (live at The Rainbow);4;399.50
 Crazy Little Thing Called Love;2;168.47
 Another Day in Paradise (2016 Remaster);1;6.06
 Liar Landscape;1;3.35
-Soul Song Original (2020 Fan Remaster);1;2.47
+Soul Song Original (2020 Fan Remaster);2;208.21
 Voice Of No Return - Normal;1;4.47
 Bury the Light (Game Edit);1;380.64
 Divinity Statue;2;77.26
 More Fear;1;4.88
-Unavoidable Despair;1;3.47
+Unavoidable Despair;2;21.44
 This, I Like (Devil May Cry Office);1;5.35
 Dead Tired;2;230.84
 Breaking the Icy Ground;2;41.46
@@ -169,10 +169,10 @@ Song of the Ancients - Atonement;1;233.23
 Love of My Life (live at Rock in Rio festival);1;10.16
 Heading for C@tastrophe;1;7.11
 Reckoning;1;6.02
-Fall;1;6.17
+Fall;2;88.78
 Killer Queen;2;250.09
 Outlands, Part II;1;14.71
-End of Line (Extended);1;346.05
+End of Line (Extended);3;697.67
 El Mono De Alambre;1;79.20
 Silent Siren;1;101.31
 Forest Kingdom;1;350.59
@@ -182,20 +182,105 @@ Subhuman;1;61.99
 Your Legacy;1;97.55
 Grilled Tandoori Smoke;1;118.01
 Farewell;1;50.02
-Out of Touch;1;249.60
+Out of Touch;4;998.40
 Roar, Roar, Roar!!;2;262.70
-Outlands;1;162.50
+Outlands;2;325.00
 Voltaic Black Knight (Introduction);1;44.08
-Take Control;1;212.19
+Take Control;2;215.26
 A Date With Corruption;1;36.42
 Bohemian Rhapsody (Live Aid);1;147.84
 Any Special Orders? (Tropical Devil Night Remix);1;8.96
 Undeniable Fate;1;4.73
-Encom Part II;1;3.58
-Gloss Of Speed;2;294.43
+Encom Part II;8;553.83
+Gloss Of Speed;3;298.43
 rain”Я”ain;1;124.85
 The Sound of the End;1;323.40
 Club Curacao (Menu);1;35.09
-Fort Greene Bossa (Menu);1;2.24
+Fort Greene Bossa (Menu);2;11.18
 Moon Over The Castle (GT5 Version);1;45.53
 One Blue Spaceshore;1;168.54
+Playing in 4D;1;19.13
+Horizon Seekers;1;2.86
+Maelstrom;2;115.16
+The New Black;1;78.09
+Blazing Muscle;1;131.32
+Emil's Shop;1;59.57
+GARAGE (Main Menu);1;3.62
+Hellish Gimmick;1;133.77
+Keep Your Head Up;2;13.37
+Hold My Hand (Feat. Akon);2;215.48
+Hollywood Tonight;1;271.13
+Best Of Joy;1;14.54
+Smoker's Lament;1;218.37
+Here Goes!!;1;91.40
+We Will Rock You (movie mix);3;387.27
+Introduction;1;56.03
+”00:00”;2;38.44
+Broken Heart;1;7.03
+Legacy (Instrumental Ver.);1;117.82
+Monster (Feat. 50 Cent);1;180.68
+Moon Over The Castle GT5 Version;1;2.70
+Eve;1;6.37
+5OUL ON D!SPLAYSURV1V3;1;8.71
+C.L.U.;3;468.51
+Main Trailer;1;5.28
+History of DMC;1;11.72
+Billie Jean;1;2.77
+Thriller;2;713.18
+Wanna Be Startin' Somethin';1;218.62
+The Girl Is Mine (with Paul McCartney);2;444.30
+Baby Be Mine;1;260.37
+Beat It;1;4.95
+(38-41) Super Mario Bros. 1,2,VS;1;3.31
+(39-41) Super Mario Bros. 1,2,VS;1;2.08
+Gusty Garden Galaxy;1;3.10
+Enter Bowser Jr.!;1;5.70
+Where Them Girls At (feat. Nicki Minaj & Flo Rida);4;482.42
+Play Hard (feat. Ne-Yo & Akon);4;620.32
+Given Up;11;1960.00
+Burn Out;1;193.65
+Brooklyn Bridge;1;46.96
+Came Back Haunted;3;256.34
+Faint;6;730.06
+In the End;3;499.29
+One Step Closer;3;422.61
+Numb;5;911.96
+Somewhere I Belong;11;1809.18
+The Emptiness Machine;10;1855.28
+I'm Good (Blue);5;703.48
+When Love Takes Over (feat. Kelly Rowland);7;988.61
+What I've Done;5;431.09
+Crawling;7;810.12
+04. DRUM GO DUM;3;232.63
+POP/STARS (Instrumental);1;191.10
+Pictureboard (Chester) 2021 Fan Remaster;1;14.08
+05. I'LL SHOW YOU;2;48.40
+MORE (feat. Lexie Liu, Seraphine) (Inst.);2;47.18
+I Don't Wanna Wait;26;2625.92
+Adagio For TRON;1;251.07
+Fuse (2021 Remaster);1;196.43
+Beat 23 (Joe Hahn);1;119.14
+Echoes;1;226.12
+Permanence;1;89.14
+Ay‐Oh (Live Aid);1;41.47
+Memories (feat. Kid Cudi);3;630.54
+End of Line;3;469.47
+Ghost In The Machine;2;179.92
+Beat 4 (Mike Shinoda);1;106.03
+Another One Bites the Dust;1;214.64
+03. VILLAIN;1;199.13
+Without You (feat. Usher);6;647.53
+I Know You Can Feel It;1;321.88
+Improvisation for Violin on a Main Theme ”Legacy”;1;10.83
+A-wa-wa-wa!;1;15.51
+Emil - Despair;1;25.25
+THE BADDEST (Inst.);1;9.64
+THE BADDEST;1;37.04
+Gatekeeper Unleashed;1;4.85
+Faint (Official Music Video) [4K UPGRADE]  Linkin Park;1;168.22
+Bleed It Out;4;495.62
+Gone Gone Gone;9;1275.83
+Sexy Bitch (feat. Akon);2;164.22
+Titanium (feat. Sia);5;859.31
+Fiends ft.007 (2021 Remaster);1;192.50
+02. MORE;1;20.54

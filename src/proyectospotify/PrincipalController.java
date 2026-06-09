@@ -15,12 +15,16 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.ResourceBundle;
 import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
+import javafx.animation.ParallelTransition;
 import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -83,6 +87,10 @@ Archivomp3 TOPUNO;
 String tm;
 EstadisticasTXT txt=new EstadisticasTXT();
 private Timeline Animacion;
+private ParallelTransition transicion;
+private TranslateTransition Mov;
+private FadeTransition Aparece;
+
 private double fase=0;
 private double VolumenI=0.5;
 private BooleanProperty CrearP=new SimpleBooleanProperty(false);
@@ -98,18 +106,30 @@ private Archivomp3 CancionActual;
 ImportarFx Import=new ImportarFx();
 private MetodoCola ColaReproduccion=new MetodoCola();
 private Playlist favoritos= new Playlist("Favoritos");
+boolean valido=false;
+private javafx.beans.value.ChangeListener<javafx.util.Duration> progresoListener;
 
 private MetodoPila Historial=new MetodoPila();
 private Archivomp3 ultimo=null;
 private double tim=0.0;
 private ObservableList<Playlist> playlists=FXCollections.observableArrayList();
 private ObservableList<Archivomp3>DatosBiblioteca=FXCollections.observableArrayList();
-
+private List<Karaoke>Versos;
 private javafx.collections.transformation.FilteredList<Archivomp3> BibliotecaCentral;
+private ObservableList<Archivomp3>DatosPlaylistActual=FXCollections.observableArrayList();
+//hashs
+ HashMap<String,ArrayList<Archivomp3>> Generos=new HashMap<>(); 
+ HashMap<String,ArrayList<Archivomp3>> Arti= new HashMap<>();
 
+ 
+
+@FXML
+private Circle Carga;
+ 
+ 
 //Vbox
 @FXML
-private VBox contenedorES;
+private HBox ContenedorK;
 
  //Paneles
 @FXML
@@ -124,6 +144,8 @@ private AnchorPane PanelPlaylist;
 private StackPane  PanePortada;
 @FXML
 private StackPane Stak;
+@FXML 
+private Pane PanelVersos;
 
 //TextFields
 
@@ -131,9 +153,12 @@ private StackPane Stak;
 private TextField BuscadorPB;
 @FXML
 private TextField BuscadorPB1;
-
+@FXML
+private TextField BusquedaInicio;
 
 //Labels
+@FXML 
+private Label LVersos;
 @FXML
 private Label Estado;
 @FXML
@@ -158,8 +183,12 @@ private Label AutorP;
 private Label TiempoAVL;
 @FXML
 private Label TiempoABB;
+@FXML
+private Label TiempoAVL1,TiempoABB1;
 @FXML 
 private Label TiempoF,TiempoR;
+@FXML
+private Label PlaylistANombre;
 
 
 //slider
@@ -204,14 +233,15 @@ private Button ReproducirP;
 @FXML
 private Button AniadirP;
 @FXML
-private Button EliminarE;
+private ToggleButton Activador;
 @FXML
 private Button CrearPT;
 @FXML
 private Button BtD;
 
 //ComboBox
-
+@FXML
+private ComboBox BoxBus;
 @FXML
 private ComboBox orden;
 
@@ -337,6 +367,8 @@ private HBox hisC;
      if(Buscado.isEmpty()){
      
          BibliotecaCentral.setPredicate(valido-> true);
+         TiempoAVL.setText("Tiempo AVL: 0 ns");
+         TiempoABB.setText("Tiempo ABB: 0 ns");
          return;
      }
       
@@ -363,21 +395,10 @@ private HBox hisC;
        
        
        
-       for(javafx.scene.Node nodo : ContenedorAL.getChildren()){
-        if(nodo instanceof VBox){
-            VBox tarjetaVieja=(VBox)nodo;
-            if(!tarjetaVieja.getChildren().isEmpty()&&tarjetaVieja.getChildren().get(0)instanceof ImageView){
-                ImageView iv=(ImageView)tarjetaVieja.getChildren().get(0);
-                iv.setImage(null);
-            }
-        }
-    }
+       limpiadito(ContenedorAL);
+      Generos.clear();
        
-       
-       ContenedorAL.getChildren().clear();
-       
-       
-       HashMap<String,ArrayList<Archivomp3>> Generos=new HashMap<>();   
+        
       ArrayList<Archivomp3>canciones=Import.getAVL().PostOrden(); 
       for(Archivomp3 can:canciones){
           
@@ -401,8 +422,71 @@ private HBox hisC;
       }
      
    }
+  
+   
+   
+   private void limpiadito(HBox Contenedor){
+       
+       
+        for(javafx.scene.Node nodo : Contenedor.getChildren()){
+        if(nodo instanceof VBox){
+            VBox tarjetaVieja=(VBox)nodo;
+            if(!tarjetaVieja.getChildren().isEmpty()&&tarjetaVieja.getChildren().get(0)instanceof ImageView){
+                ImageView iv=(ImageView)tarjetaVieja.getChildren().get(0);
+                iv.setImage(null);
+            }
+        }
+    } 
+    Contenedor.getChildren().clear();
+   }
+   
+  
+   
+   public void BusquedaGenero(){
+       Busquedas(Generos,ContenedorAL,"genero");
+   }
+   
+   public void BusquedaArtista(){
+       Busquedas(Arti,Artistas,"artistas");
+   }
+   
+   
+  @FXML
+  public void Busquedas(HashMap<String,ArrayList<Archivomp3>> cositas,HBox contenedor,String metodo){
+   String Busqueda=BusquedaInicio.getText().trim();
+   
+  limpiadito(contenedor);
+   
+   if(Busqueda.isEmpty()){
+       for(String cos:cositas.keySet()){
+           ArrayList<Archivomp3>contenido=cositas.get(cos);
+           // operador ternario god 
+           VBox jetica=metodo.equals("genero")?Crear(cos,contenido): TarjetaA(cos,contenido);
+           contenedor.getChildren().add(jetica);
+       }
+       return;
+   }
+   
+   
+   for(Map.Entry<String, ArrayList<Archivomp3>> calve:cositas.entrySet()){
+   
+       String Indice=calve.getKey().toLowerCase();
+       if(Indice.contains(Busqueda)){
+           ArrayList<Archivomp3> canciones=calve.getValue();
+           
+           if(canciones!=null){
+               VBox tar=metodo.equals("genero")?Crear(calve.getKey(),canciones):TarjetaA(calve.getKey(),canciones);
+               contenedor.getChildren().add(tar);
+           
+           }
+           
+       }
+       
+   }
    
     
+    
+}
    public VBox Crear(String genero,ArrayList<Archivomp3> canciones){
 
 
@@ -448,16 +532,8 @@ private HBox hisC;
    }
 
    public void RecomendaG(){
-       for(javafx.scene.Node nodo :Recomendados.getChildren()){
-        if(nodo instanceof VBox){
-            VBox tarjetaVieja=(VBox)nodo;
-            if(!tarjetaVieja.getChildren().isEmpty()&&tarjetaVieja.getChildren().get(0)instanceof ImageView){
-                ImageView iv=(ImageView)tarjetaVieja.getChildren().get(0);
-                iv.setImage(null);
-            }
-        }
-    }
-       Recomendados.getChildren().clear();
+       
+       limpiadito(Recomendados);
        
        Playlist Canciones=Import.getAVL().InOrden();
        
@@ -522,6 +598,28 @@ private HBox hisC;
    }
    
    
+   
+   private String TiempoTotal(double segundos){
+    
+       
+       int totalSegundos=(int)segundos;
+    
+    
+       int h=totalSegundos/3600;
+       int m=(totalSegundos%3600)/60;
+       int s=totalSegundos%60;
+       
+       if (h>0){
+           return String.format("%dh %02dm %02ds",h,m,s);
+       }else if(m>0){
+           
+           return String.format("%dm %02ds",m,s);
+       }else{
+           
+           return s+"s";
+       }
+}
+   
    public void BuscarTop(){
     
        
@@ -545,35 +643,31 @@ private HBox hisC;
                 continue;
             }
             
-            
-            
             String nombre=info[0];
             int reproduccion=Integer.parseInt(info[1]);
             double tiempoS=Double.parseDouble(info[2]); 
 
-            if(reproduccion > 2){
+            if(reproduccion >2){
                
                 long tiempoString=Math.round(tiempoS * 100);
                 String dataTiempo=String.format("%012d",tiempoString);
                 
-                TOP.add(dataTiempo+"-"+nombre+"-"+reproduccion);
+                TOP.add(dataTiempo+"ñ"+nombre+"ñ"+reproduccion);
             }
         }
 
-       
         TOP.sort(Comparator.reverseOrder());
 
         
         for (String fila :TOP){
             
-            String[] partes=fila.split("-",3); 
+            String[] partes=fila.split("ñ",3); 
             
             if(partes.length>=3){
                 String tiempoFormateado=partes[0];
                 String nombreLimpio=partes[1];
-                String reproducciones=partes[2];
+               
 
-                
                 double tiempoReal=Long.parseLong(tiempoFormateado)/100.0;
 
                 busqueda.add(nombreLimpio);   
@@ -581,57 +675,45 @@ private HBox hisC;
             }
         }
 
-     
-        if(!busqueda.isEmpty()){
-            String nombreTop1=busqueda.get(0);
-            double segundosTop1=TiempoRe.get(0);
-
-           
-            TOPUNO=Import.getAVL().Buscar(nombreTop1);
-
-            
-            int totalSegundosEnteros=(int) segundosTop1;
-            int horas=totalSegundosEnteros / 3600;
-            int minutos=(totalSegundosEnteros % 3600) / 60;
-            int segundosRestantes=totalSegundosEnteros % 60;
-
-            String TIempoLabel;
-            if(horas>0){
-                TIempoLabel=String.format("%dh %02dm %02ds",horas,minutos,segundosRestantes);
-                
-            } else if(minutos>0){
-                
-                TIempoLabel=String.format("%dm %02ds",minutos,segundosRestantes);
-            } else{
-                
-                TIempoLabel=segundosRestantes+"s";
-            }
-
-           
-            tm=TIempoLabel;
-        }
-
-       
-        for(javafx.scene.Node nodo : Top.getChildren()){
-            if(nodo instanceof VBox tarjeta){
-                if(!tarjeta.getChildren().isEmpty() && tarjeta.getChildren().get(0) instanceof ImageView iv){
-                    iv.setImage(null);
-                }
-            }
-        }
-
         
-        Top.getChildren().clear();
-        for(int i=0;i<Math.min(15,busqueda.size());i++){
+        TOPUNO=null;
+        double SegundosTop1=0;
+     
+        for(int i=0;i<busqueda.size();i++){
+            
+            Archivomp3 sies=Import.getAVL().Buscar(busqueda.get(i));
+            if(sies!=null){
+                TOPUNO=sies;
+                SegundosTop1=TiempoRe.get(i);
+                break;
+                
+            }
+        }
+        
+        
+        if(TOPUNO!=null){
+            
+            tm=TiempoTotal(SegundosTop1);
+        }else{
+            tm="Sin datos";
+        }
+        limpiadito(Top);
+        
+      
+        int tarjetasPintadas=0;
+        for(int i=0;i<busqueda.size()&&tarjetasPintadas<15;i++){
             Archivomp3 pista=Import.getAVL().Buscar(busqueda.get(i));
             if(pista!=null){
-                VBox t=TarjetaTop(pista);  
+               
+                String TiempoT=TiempoTotal(TiempoRe.get(i));
+                VBox t=TarjetaTop(pista,TiempoT);  
                 Top.getChildren().add(t);
+                tarjetasPintadas++;
             }
         }
          
-    } catch (IOException | NumberFormatException e){
-        System.out.println("Error procesando el TOP: "+e.getMessage());
+    } catch(IOException|NumberFormatException e){
+        
     }
        
 
@@ -640,7 +722,7 @@ private HBox hisC;
    
    
    
-   public VBox TarjetaTop(Archivomp3 pista){
+   public VBox TarjetaTop(Archivomp3 pista,String tiempoT){
        
        VBox jetica=new VBox();
        
@@ -662,12 +744,10 @@ private HBox hisC;
            
        }
        Label letrica=new Label(pista.getNombre());
-       Label letrica2=new Label(pista.getArtista());
+       Label letrica2=new Label(tiempoT);
        letrica.getStyleClass().addAll("letrita");
        letrica2.getStyleClass().addAll("letrita");
        jetica.getChildren().addAll(portada,letrica,letrica2);
-       
-       
        
        jetica.setOnMouseClicked(evento->{
         
@@ -675,34 +755,21 @@ private HBox hisC;
            
        });
        
-
-       return jetica;
-       
-       
+       return jetica; 
    }
    
    
    
    
    
+  
+   
+   
    public void ArtistasI(){
        
-       for(javafx.scene.Node nodo:Artistas.getChildren()){
-        if(nodo instanceof VBox){
-            VBox tarjetaVieja=(VBox)nodo;
-            if(!tarjetaVieja.getChildren().isEmpty()&&tarjetaVieja.getChildren().get(0)instanceof ImageView){
-                ImageView iv=(ImageView)tarjetaVieja.getChildren().get(0);
-                iv.setImage(null);
-            }
-        }
-    }
-       
-       
-       
-       
-       Artistas.getChildren().clear();
-       HashMap<String,ArrayList<Archivomp3>> Arti= new HashMap<>();
-       
+       limpiadito(Artistas);
+       Arti.clear();
+     
        ArrayList<Archivomp3> info=Import.getAVL().PostOrden();
        
        
@@ -797,10 +864,71 @@ public void CrearPlaylist(){
         }
     }
 }
+   private double Formateo(String duracuion){
+         
+         
+   if(duracuion==null||duracuion.trim().isEmpty()) {
+        return 0;
+    }
+    
+    try{
         
+        if(duracuion.contains(":")){
+            
+            String[] partes=duracuion.split(":");
+            
+            if(partes.length==3){
+                double horas=Double.parseDouble(partes[0]);
+                double minutos=Double.parseDouble(partes[1]);
+                double segundos=Double.parseDouble(partes[2]);
+                
+                return (horas*3600)+(minutos*60)+segundos;
+            }else{
+          
+                double minutos=Double.parseDouble(partes[0]);
+                double segundos=Double.parseDouble(partes[1]);
+                
+                return (minutos*60)+segundos;
+            }
+        }
+        
+      
+        return Double.parseDouble(duracuion);
+        
+    }catch(NumberFormatException e){
+       
+        return 0;
+    }
+    
+}   
     
     
 
+   public String  time(String tipo){
+         
+         String ti="Sin datos";
+    
+    ArrayList<Archivomp3> Duracion=Import.getAVL().InordeP();
+   if(!Duracion.isEmpty()){
+ 
+    Archivomp3 Mayor=Duracion.get(0);
+    
+    double top=Formateo(Mayor.getDuracion());
+    
+    for(Archivomp3 actual:Duracion){
+        double t=Formateo(actual.getDuracion());
+        
+        if(t>top){
+            Mayor=actual;
+            top=t;
+        }
+    }
+    
+    ti=tipo.equals("stats")?"Nombre: "+Mayor.getNombre()+" Duración: "+Mayor.getDuracion() :" Duración: "+Mayor.getDuracion();
+   }
+     return ti;    
+     }
+     
 
 @FXML
 public void desplegable() {
@@ -815,7 +943,7 @@ public void desplegable() {
     return;
    }
     
-   int R=Import.getAVL().Raiz.getRepetido();
+   int R=Import.getAVL().RepetidosTotal();
     VBox stats=new VBox(10);
     
     
@@ -829,6 +957,9 @@ public void desplegable() {
      tiempo.setText("Top 1: "+TOPUNO.getNombre()+", Tiempo: "+tm);
     }
     
+    String duracel=time("stats");
+   Label Largo=new Label(duracel);
+    Largo.setStyle("-fx-text-fill: white; -fx-font-weight: bold;");
     Label titulo=new Label("Estadísticas");
     titulo.setStyle("-fx-text-fill: white; -fx-font-weight: bold;");
     
@@ -847,19 +978,24 @@ public void desplegable() {
     "-fx-border-width: 1;"+
     "-fx-effect: dropshadow(gaussian, rgba(11,20,38,0.6), 12, 0.2, 0, 3);");
 
-    stats.getChildren().addAll(titulo,tiempo,repetidos);
+    stats.getChildren().addAll(titulo,tiempo,repetidos,Largo);
 
     popupStats.getContent().clear();
     popupStats.getContent().add(stats);
+    
+    popupStats.setAutoHide(true);
 
     Bounds b =BtD.localToScreen(BtD.getBoundsInLocal());
 
-    popupStats.show(BtD.getScene().getWindow(),b.getMinX()-30,b.getMaxY()+4);
+    popupStats.show(BtD.getScene().getWindow(),b.getMinX()-80,b.getMaxY()-2);
 }
   
 
 
     
+
+
+
     
 //busquedas artistas y genero por tablas hash 
 @FXML//pendiente 
@@ -890,21 +1026,29 @@ public void ImportarMusica(){
         
         if(!duplicado){
             playlists.add(NPlaylist);
-            
-        }
+            ActualizarBiblioteca();
+        
        
         
-        ActualizarBiblioteca();
+   
         
         GenerosM();
         RecomendaG();
         ArtistasI();
         BuscarTop();
+        BusquedaP();
         Alert alerta=new Alert(Alert.AlertType.INFORMATION);
        
         alerta.setHeaderText(null);
         alerta.setContentText("Carpeta "+Carpeta.getName()+" Cargada con exito");
         alerta.showAndWait();
+        }else{
+          
+            Alert alertaError=new Alert(Alert.AlertType.WARNING);
+            alertaError.setHeaderText(null);
+            alertaError.setContentText("La playlist '"+Carpeta.getName()+"' ya existe en la biblioteca.");
+            alertaError.showAndWait();
+        }
     }
 }
 
@@ -995,25 +1139,201 @@ public void TiempoT(Archivomp3 pista){
     
     
 }
+@FXML
+private void EliminarEnPlaylist(){
+    
+    boolean eliminado=false;
+    
+   if(PlaylistActual!=null){
+       
+       NodoDoble r=PlaylistActual.getInicio();
+       while(r!=null){
+           NodoDoble continua=r.getSiguiente();
+           if(r.getCancion().isEstado()){
+               if(Actual==r){
+                   Actual=continua;
+               }
+               
+               r.getCancion().setEstado(false);
+               DatosPlaylistActual.remove(r.getCancion());
+               PlaylistActual.EliminarCancion(r.getCancion().getNombre());
+               eliminado=true;
+           }
+           r=continua;
+       }
+   }
+
+   if(eliminado){
+       
+       Estado.setText("Eliminado Correctamente");
+       chek();
+   }else{
+       
+       Estado.setText("Seleccione una Canción");
+   }
+       
+       
+   
+}
+
+private void Portada(){
+   
+   limpiadito(ContenedorK);
+  
+    if(valido&&CancionActual!=null){
+        VBox tarjetaPortada=new VBox();
+        tarjetaPortada.getStyleClass().add("tarjeta-portada");
+        
+        Image img=CacheImagenes.ObtenerImagen(CancionActual.getImagen());
+        ImageView port=new ImageView(img);
+        
+        port.setFitWidth(180);  
+        port.setFitHeight(180);
+        port.setPreserveRatio(true);
+        port.setSmooth(true);      
+        
+        javafx.scene.shape.Rectangle clip=new javafx.scene.shape.Rectangle(180,180);
+        clip.setArcWidth(15);
+        clip.setArcHeight(15);
+        port.setClip(clip);
+
+        Label nom=new Label(CancionActual.getNombre());
+        nom.getStyleClass().add("texto-portada");
+        
+        tarjetaPortada.getChildren().addAll(port,nom);
+        ContenedorK.setAlignment(javafx.geometry.Pos.CENTER);
+      
+        ContenedorK.getChildren().add(tarjetaPortada);
+    }
+}
+
+@FXML
+private void KaraokeVerso(){ 
+    valido=!valido;
+   boolean Sevesignodeinterrogacion=PanelVersos.isVisible();
+    
+    PanelVersos.setVisible(!Sevesignodeinterrogacion);
+    PanelVersos.setManaged(!Sevesignodeinterrogacion);
+   
+    
+    if(!Sevesignodeinterrogacion){
+        if(Versos==null||Versos.isEmpty()){
+            LVersos.setText("[Buscando letra o instrumental...]");
+        }else{
+            LVersos.setText("[Cargando letra...] ");
+        }
+    }
+    Portada();
+}
+
+
+private List<Karaoke>cargarLetra(File archivoLrc){
+   
+   List<Karaoke>listaLetras=new ArrayList<>();
+    if(archivoLrc==null||!archivoLrc.exists()){
+        System.out.println("El archivo LRC no existe o es nulo.");
+        return listaLetras;
+    }
+
+    try(BufferedReader leer=new BufferedReader(new FileReader(archivoLrc))){
+        String linea;
+        while ((linea=leer.readLine())!=null){
+            linea=linea.trim();
+            
+            if(linea.startsWith("[")&&linea.contains("]")){
+                int fin=linea.indexOf("]");
+                String tiempoStr=linea.substring(1,fin);
+                String verso=linea.substring(fin+1).trim();
+                
+                if(tiempoStr.matches("\\d+.*")){ 
+                    String[] partes=tiempoStr.split(":");
+                    if(partes.length>=2){
+                        double minutos=Double.parseDouble(partes[0]);
+                        
+                        
+                        String segundosStr=partes[1].replace(',','.');
+                        double segundos=Double.parseDouble(segundosStr);
+                        
+                        double tiempoTotalSegundos=(minutos* 60)+segundos;
+                        
+                        listaLetras.add(new Karaoke(tiempoTotalSegundos,verso));
+                    }
+                }
+            }
+        }
+    }catch(Exception e){
+      
+    }
+    return listaLetras;
+}
 
 
  @FXML
  public void ReproducirCancion(Archivomp3 Cancion){
 
-    
-     
+ 
     try{
            Archivomp3 yaquefuncione=CancionActual;
         if(reproductor!=null){
+            
+               reproductor.stop();
+               if(progresoListener!=null){
+                   
+                   reproductor.currentTimeProperty().removeListener(progresoListener);
+               }
+               
                
                TiempoT(yaquefuncione);
-            reproductor.setOnEndOfMedia(null);
-            reproductor.stop();
-            
-            reproductor.dispose();
+               reproductor.setOnEndOfMedia(null);
+               reproductor.setOnReady(null);
+               
+               this.reproductor.dispose();
+               this.Versos=null;
+               this.reproductor=null;
+               
         }
         CancionActual=Cancion;
-
+        
+      
+        String rutaLrc=Cancion.getAudio().replaceAll("(?i)\\.mp3$", ".lrc");
+        File archivoLrc=new File(rutaLrc);
+        
+        if (!archivoLrc.exists()) {
+            
+            Carga.setFill(javafx.scene.paint.Color.web("#ffb86c")); 
+            
+            new Thread(()->{
+                
+                boolean exito = Descargarlrc.descargarLrcAutomatico(Cancion);
+                
+                Platform.runLater(()->{
+            if(exito){
+                this.Versos = cargarLetra(archivoLrc);
+                
+                
+                Carga.setFill(javafx.scene.paint.Color.web("#50fa7b"));
+                
+                if(PanelVersos.isVisible() && Versos != null && !Versos.isEmpty()){
+                    LVersos.setText("Letra sincronizada con éxito");
+                }
+            }else{
+                Carga.setFill(javafx.scene.paint.Color.web("#ff5555"));
+                
+                if(PanelVersos.isVisible()){
+                    LVersos.setText("No se encontró letra disponible");
+                }
+            }
+        });
+    }).start();
+        }else{
+            this.Versos = cargarLetra(archivoLrc);
+            
+            Carga.setFill(javafx.scene.paint.Color.web("#50fa7b")); 
+            
+        }
+      
+        
+        
         Media Musica=new Media(new File(Cancion.getAudio()).toURI().toString());
 
    
@@ -1021,6 +1341,10 @@ public void TiempoT(Archivomp3 pista){
             
 
 
+         if(PlaylistActual!=null){
+             PlaylistANombre.setText("Reproduciendo Playlist: "+PlaylistActual.getNombre());
+         
+         }
         reproductor.setOnReady(()->{
 
            reproductor.setVolume(VolumenI);
@@ -1047,24 +1371,48 @@ public void TiempoT(Archivomp3 pista){
         
         
         
-        reproductor.currentTimeProperty().addListener((espiado, antes,actual)->{
-            
+        progresoListener=(espiado,antes,actual)->{
             if(!Progreso.isValueChanging()){
-                
-                
                 double Tactual=actual.toSeconds();
-                
                 Progreso.setValue(Tactual);
+                
+                if(Versos!=null&&!Versos.isEmpty()){
+                    String versoActual="";
+                    
+                    for(Karaoke linea:Versos){
+                       
+                        if(Tactual>=linea.getTiempoSegundos()){
+                            versoActual=linea.getVerso();
+                        }else{
+                           
+                            break; 
+                        }
+                    }
+                    
+                    
+                    if (PanelVersos.isVisible()&&!versoActual.isEmpty()&&!versoActual.equals(LVersos.getText())){
+                        String finalVerso=versoActual;
+                      
+                        
+                        Platform.runLater(()->{
+                            transicion.stop();
+                            
+                            LVersos.setText(finalVerso);
+                            LVersos.setTranslateY(25);
+                            LVersos.setOpacity(0.0);
+                            transicion.play();
+                        });
+                    }
+                }
                 
                 int minutosA=(int)Tactual/60;
                 int segundosA=(int)Tactual%60;
-                
-                TiempoF.setText(String.format("%d:%02d",minutosA,segundosA));
-        }    
-        });
+                TiempoF.setText(String.format("%d:%02d", minutosA, segundosA));
+            }    
+        };
         
        
-        
+        reproductor.currentTimeProperty().addListener(progresoListener);
     
        
         
@@ -1084,6 +1432,8 @@ public void TiempoT(Archivomp3 pista){
                        
                        this.Imgbotm.setImage(ImgCancion);
                        
+                       
+                       
                        Can.setText("Nombre: "+Cancion.getNombre());
                        Art.setText("Artista: "+Cancion.getArtista());
                        Alb.setText("Album: "+Cancion.getAlbum());
@@ -1102,8 +1452,7 @@ public void TiempoT(Archivomp3 pista){
                        Imgbotm.setClip(yaquequedeno);
 
                        AnimacionS(Stak,Cancion);
-                   } 
-                   catch (Exception e){
+                   }catch (Exception e){
                    }
 
         
@@ -1209,6 +1558,8 @@ public void ReproducirPlaylist(){
         return;
     }
 
+   
+    
     modoCola=true;
 
     ColaReproduccion=new MetodoCola();
@@ -1260,6 +1611,8 @@ public void Aleatorio(){
     for(int i=0;i<aleatorio;i++){
         if(actual!=null){
             actual=actual.Anterior;
+        }else{
+            break;
         }
         
     }
@@ -1283,16 +1636,11 @@ public void Aleatorio(){
 
 
  public void HistT(){
-       for(javafx.scene.Node nodo :hisC.getChildren()){
-        if(nodo instanceof VBox){
-            VBox tarjetaVieja=(VBox)nodo;
-            if(!tarjetaVieja.getChildren().isEmpty()&&tarjetaVieja.getChildren().get(0)instanceof ImageView){
-                ImageView iv=(ImageView)tarjetaVieja.getChildren().get(0);
-                iv.setImage(null);
-            }
-        }
-    }
-       hisC.getChildren().clear();
+       
+     
+     limpiadito(hisC);        
+               
+     
        
           MetodoPila pla=new MetodoPila();
         ArrayList<Archivomp3> lista=new ArrayList<>();
@@ -1501,7 +1849,7 @@ public void Siguiente(){
             ReproducirCancion(SiguienteC);
                  
             Platform.runLater(()->ListaCanciones.getSelectionModel().select(SiguienteC));
-            System.gc();
+          
 
           
         }
@@ -1562,7 +1910,7 @@ public void ActualizarBiblioteca(){
         while(nodo!=null){
 
             Archivomp3 p=nodo.getCancion();
-            if(Import.getAVL().Buscar(p.getAudio())==null){
+            if(Import.getAVL().Buscar(p.getNombre())==null){
                 Import.getAVL().Insertar(p);
             }
              nodo=nodo.Siguiente;
@@ -1577,12 +1925,16 @@ public void ActualizarBiblioteca(){
 @FXML
 public void BusquedaP(){
     
-    String Buscado=BuscadorPB.getText().trim();
+    String Buscado=BuscadorPB.getText().trim().toLowerCase();
     
     if(Buscado.isEmpty()){
         ListBusquedaParcial.getItems().setAll(Import.getAVL().PreOrden());
+        TiempoAVL1.setText("Tiempo AVL: 0 ns");
+        TiempoABB1.setText("Tiempo ABB: 0 ns");
        return; 
     }
+    long tiempoavl=Import.getAVL().TiempoParcial(Buscado);
+    long tiempoabb=Import.getABB().TiempoParcial(Buscado);
     
     Playlist ResultadosV=Import.getAVL().BusquedaParcial(Buscado);
     
@@ -1593,10 +1945,16 @@ public void BusquedaP(){
         
         ListBusquedaParcial.getItems().add(nod.getCancion());
         nod=nod.Siguiente;
-        
-
     }
     
+    if(ResultadosV.getInicio()!=null){
+        TiempoAVL1.setText("Encontrado AVL: "+tiempoavl+" ns");
+        TiempoABB1.setText("Encontrado ABB: "+tiempoabb+" ns");
+    } else {
+        
+        TiempoAVL1.setText("No encontrado AVL: "+tiempoavl+" ns");
+        TiempoABB1.setText("No encontrado ABB: "+ tiempoabb+" ns");
+    }
     ListBusquedaParcial.refresh();
 }
 
@@ -1630,7 +1988,7 @@ public void recorreCanciones(){
     ListaCanciones.getItems().clear();
     NodoDoble todoNodo=PlaylistActual.getInicio();
     while(todoNodo!=null){
-         ListaCanciones.getItems().add(todoNodo.getCancion());
+         DatosPlaylistActual.add(todoNodo.getCancion());
          todoNodo=todoNodo.Siguiente;
     }
    
@@ -1645,8 +2003,65 @@ public void recorreCanciones(){
     }
 }
 
-
+private void EventoBuscador(TextField Bus,Runnable Buscador){
+    
+  Bus.setOnKeyPressed(evento->{
+        
+        if(evento.getCode()==KeyCode.ENTER){
+            Buscador.run();
+        }
+        
+    });
+    
+    Bus.textProperty().addListener((espiado,antes,actual)->{
+        
+        if(actual.trim().isEmpty()){
+        Buscador.run();
+        
+        }
+    });
+    
+}
      
+
+private void EventoScroll(ScrollPane horizontal){
+    
+    horizontal.setOnScroll(evento->{
+        
+     double desplazamiento=evento.getDeltaY();
+     double valor=horizontal.getHvalue();
+     
+     double velocidad=0.05;
+     
+        if(desplazamiento<0){
+            horizontal.setHvalue(valor+velocidad);
+        }else if(desplazamiento>0){
+            horizontal.setHvalue(valor-velocidad);
+        }
+        evento.consume();
+    });
+    
+}
+
+private void SinVertical(ScrollPane si){
+     
+ si.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+ si.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+ si.setFitToHeight(true);    
+ }
+private void actualizar(){
+    if(PlaylistActual!=null){
+        DatosPlaylistActual.clear(); 
+
+        
+        NodoDoble actual=PlaylistActual.getInicio();
+        while(actual!=null){
+            DatosPlaylistActual.add(actual.getCancion());
+            actual=actual.getSiguiente();
+            
+        }
+    }
+}
 public void chek(){
        
   CrearP.set(!CrearP.get());
@@ -1667,30 +2082,38 @@ public void chek(){
      BibliotecaCentral= new javafx.collections.transformation.FilteredList<>(DatosBiblioteca, valido->true);
      ListaVBIblioteca.setItems(BibliotecaCentral);
      
+     ListaCanciones.setItems(DatosPlaylistActual);
+     
      Icono.setImage(PlayImagen);
      Icono.setFitWidth(30);
      Icono.setFitHeight(23);
      Play.setGraphic(Icono);
      
-     orden.getItems().addAll("A-Z","Fecha de publicacion","Invertido");
+     Mov=new TranslateTransition(Duration.millis(220),LVersos);
+     Mov.setFromY(25);
+     Mov.setToY(0);
+
+     Aparece=new FadeTransition(Duration.millis(200),LVersos);
+     Aparece.setFromValue(0.0);
+     Aparece.setToValue(1.0);
+
+     transicion=new ParallelTransition(Mov,Aparece);
+
      
-     orden.getSelectionModel().selectFirst();
      
-     ListaPlaylist.getSelectionModel().selectedItemProperty().addListener((obs,anterior,actual)->{
+     ListaPlaylist.getSelectionModel().selectedItemProperty().addListener((obs,antes,actual)->{
+        if(actual!=null){
+            PlaylistActual=actual;
+            
+            DatosPlaylistActual.clear(); 
+            NodoDoble nodo=actual.getInicio();
 
-    if(actual!=null){
-
-        PlaylistActual=actual;
-        
-        ListaCanciones.getItems().clear();
-        NodoDoble nodo=actual.getInicio();
-
-        while(nodo!=null){
-        ListaCanciones.getItems().add(nodo.getCancion());
-        nodo=nodo.Siguiente;
+            while(nodo!=null){
+                DatosPlaylistActual.add(nodo.getCancion());
+                nodo=nodo.getSiguiente();
+            }
         }
-    }
-});
+     });
   
    ListaVBIblioteca.setOnMouseClicked(evento ->{
    
@@ -1876,9 +2299,21 @@ public void chek(){
    
    
 
-ListaVBIblioteca.setCellFactory(parametros->new CancionCell(CrearP,()-> Favoritos()));
-ListaCanciones.setCellFactory(parametro->new CancionCell(CrearP,()->Favoritos()));
-ListBusquedaParcial.setCellFactory(Parametros->new CancionCell(CrearP,()->Favoritos()));
+ListaVBIblioteca.setCellFactory(parametros->new CancionCell(CrearP,()-> Favoritos(),(origen,destino)->false));
+ListBusquedaParcial.setCellFactory(Parametros->new CancionCell(CrearP,()->Favoritos(),(origen,destino)->false));
+ListaCanciones.setCellFactory(parametro->new CancionCell(CrearP,()->Favoritos(),(origen,destino)->{
+
+if(PlaylistActual!=null){
+    boolean movido=PlaylistActual.MoverCancion(origen, destino);
+    if(movido){
+        actualizar();
+        ListaCanciones.getSelectionModel().select(destino-1);
+        return true;
+    }
+}
+return false;
+}));
+
   
    
    Progreso.setOnMousePressed(e->{
@@ -1925,28 +2360,37 @@ Volumen.setValue(50);
     
 
  
- BuscadorPB1.setOnKeyPressed(eventito->{
-     
-     if(eventito.getCode()==KeyCode.ENTER){
-        
-         Buscar();
-     }
-     
-     
-     
- });
+ EventoBuscador(BuscadorPB1,this::Buscar);
+ EventoBuscador(BuscadorPB,this::BusquedaP);
  
- BuscadorPB.setOnKeyPressed(eventito->{
-     
-     if(eventito.getCode()==KeyCode.ENTER){
-        
-         BusquedaP();
-     }
  
- });
+ BoxBus.getItems().addAll("Generos","Artistas");
+ BoxBus.getSelectionModel().selectFirst();
+ EventoBuscador(BusquedaInicio,()->{
+    
+     String op=BoxBus.getValue().toString();
+     
+     if(op!=null){
+         if(op.equals("Generos")){
+             BusquedaGenero();
+         }else if(op.equals("Artistas")){
+             BusquedaArtista();
+         }
+         
+     }
 
+     
+     
+ });
  
- orden.valueProperty().addListener((espiado,antes,nuevo)->{
+ 
+ 
+ 
+
+
+orden.getItems().addAll("A-Z","Fecha de publicacion","Invertido");
+orden.getSelectionModel().selectFirst(); 
+orden.valueProperty().addListener((espiado,antes,nuevo)->{
         
        if(nuevo==null||Import.getAVL()==null){
            return;
@@ -1989,84 +2433,18 @@ Volumen.setValue(50);
      
  });
  
- 
- ScrollG.setOnScroll(evento->{
-     
-    double scroil=evento.getDeltaY();
-    double hoz=ScrollG.getHvalue();
-    
-    double velocidad=0.1;
-    
-    if(scroil<0){
-        ScrollG.setHvalue(hoz+velocidad);
-    }else if(scroil>0){
-        ScrollG.setHvalue(hoz-velocidad);
-    }
-    
-    evento.consume();
- });
- 
 
  
- ScrollA.setOnScroll(eventito->{
-     
-     double y=eventito.getDeltaY();
-     double ho=ScrollA.getHvalue();
-     
-     double vel=0.1;
-     
-     if(y<0){
-         
-         ScrollA.setHvalue(ho+vel);
-     }else if(y>0){
-         ScrollA.setHvalue(ho-vel);
-     }
-     eventito.consume();
- });
- 
- 
-     ScrollT.setOnScroll(eventito->{
-     
-     double y=eventito.getDeltaY();
-     double ho=ScrollT.getHvalue();
-     
-     double vel=0.1;
-     
-     if(y<0){
-         
-         ScrollT.setHvalue(ho+vel);
-     }else if(y>0){
-         ScrollT.setHvalue(ho-vel);
-     }
-     eventito.consume();
- });
-     
-     
-      ScrollH.setOnScroll(eventito->{
-     
-     double y=eventito.getDeltaY();
-     double ho=ScrollH.getHvalue();
-     
-     double vel=0.1;
-     
-     if(y<0){
-         
-         ScrollH.setHvalue(ho+vel);
-     }else if(y>0){
-         ScrollH.setHvalue(ho-vel);
-     }
-     eventito.consume();
- });
  
  
  
- ScrollT.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
- ScrollT.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
- ScrollT.setFitToHeight(true);
- 
- ScrollG.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
- ScrollG.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
- ScrollG.setFitToHeight(true);
+ EventoScroll(ScrollG);
+ EventoScroll(ScrollA);
+ EventoScroll(ScrollT);
+ EventoScroll(ScrollH);
+
+ SinVertical(ScrollG);
+ SinVertical(ScrollT);
 }
     
 }

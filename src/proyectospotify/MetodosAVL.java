@@ -141,7 +141,21 @@ public class MetodosAVL {
         return Actual;
     }
     
+
+public int RepetidosTotal(){
     
+    
+    return  Repetidos(Raiz);
+    
+}
+
+private int Repetidos(NodoAVL actual) {
+    if(actual==null){
+        return 0;
+    }
+    
+    return actual.getRepetido()+Repetidos(actual.Izq)+Repetidos(actual.Der);
+}
     
     public Playlist BusquedaParcial(String Buscado){
         
@@ -167,7 +181,7 @@ public class MetodosAVL {
         String Coincidencia=Actual.Cancion.getNombre().toLowerCase();
         
         
-        if(Coincidencia.contains(Buscado)){
+        if(Coincidencia.contains(Buscado.toLowerCase())){
             
             Resultado.InsertarFin(Actual.Cancion);
         }
@@ -225,6 +239,18 @@ public class MetodosAVL {
         
     }
     
+    public long TiempoParcial(String Nombre){
+        
+        long InicioT=System.nanoTime();
+
+        BusquedaParcial(Nombre);
+
+        long FinT=System.nanoTime();
+
+        return FinT -InicioT;
+        
+    }
+    
     
     
     
@@ -258,7 +284,7 @@ public class MetodosAVL {
          return EliminarP(Actual.Der,Nombre);
             
         }else{
-            if(Actual.repetido>1){
+            if(Actual.repetido>0){
             Actual.repetido--;
             return Actual;
             }

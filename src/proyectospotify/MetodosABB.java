@@ -44,6 +44,39 @@ public class MetodosABB {
     
     
     
+    
+    
+    
+  
+public long TiempoParcial(String Nombre){
+    long InicioT=System.nanoTime();
+
+
+    buscarParcialSoloTiempo(raiz,Nombre.toLowerCase());
+
+    long FinT=System.nanoTime();
+    return FinT-InicioT;
+}
+
+
+private void buscarParcialSoloTiempo(NodoABB nodo,String textoBuscado){
+    if(nodo==null){
+        return;
+    }
+    buscarParcialSoloTiempo(nodo.Izq,textoBuscado);
+
+    String nombreCancion=nodo.Cancion.getNombre().toLowerCase(); 
+    if (nombreCancion.contains(textoBuscado)){
+       
+        int coincidencia=1; 
+    }
+   
+    buscarParcialSoloTiempo(nodo.Der, textoBuscado);
+}
+    
+
+
+
     public Archivomp3 Buscar(String Buscado){ 
         return BuscarP(raiz,Buscado); 
     }

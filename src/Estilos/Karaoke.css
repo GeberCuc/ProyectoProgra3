@@ -1,0 +1,66 @@
+.panel-karaoke {
+    -fx-background-color: linear-gradient(to bottom, rgba(19, 19, 26, 0.85), rgba(10, 10, 15, 0.9)); 
+    -fx-background-radius: 12px;
+    
+    -fx-border-color: linear-gradient(to right, #1a73e8, #7c4dff); 
+    -fx-border-width: 1px;
+    -fx-border-radius: 12px;
+    
+   
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.4), 10, 0.0, 0, 4);
+    
+    -fx-alignment: center;
+    
+    -fx-padding: 15px 25px; 
+}
+
+.label-letra {
+    -fx-font-family: "Segoe UI", "Helvetica Neue", sans-serif; 
+  
+    -fx-font-size: 20px; 
+    -fx-font-weight: 600;
+    
+ 
+    -fx-text-fill: #f1f3f4; 
+    -fx-wrap-text: true;  
+    -fx-text-alignment: center;
+    
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 4, 0.0, 0, 1);
+    
+}
+.tarjeta-portada {
+   -fx-alignment: center;
+    -fx-spacing: 15px;
+    -fx-padding: 20px;
+    
+   
+    -fx-background-color: rgba(30, 30, 45, 0.4); 
+    -fx-background-radius: 16px;
+    
+  
+    -fx-border-color: rgba(124, 77, 255, 0.3); 
+    -fx-border-width: 1px;
+    -fx-border-radius: 16px;
+    
+
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 10, 0.0, 0, 4);
+}
+
+.texto-portada {
+    
+   -fx-font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+    -fx-font-size: 18px; 
+    -fx-font-weight: 700;
+    -fx-text-fill: #ffffff; 
+    
+  
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+    
+   
+    -fx-max-width: 220px;  
+    -fx-wrap-text: true;
+    
+   
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 5, 0.0, 0, 2);
+}

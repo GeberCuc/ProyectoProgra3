@@ -11,12 +11,16 @@ import java.io.FileOutputStream;
 public class CargarCanciones{
     
     int i=0;
+    private static final String RUTA_IMAGEN_DEFECTO="/resources/imagenes/disco-vinilo.png";
     public CargarCanciones(){}
     
     
- public String Canciones(String Ruta, MetodosABB Arbol,MetodosAVL ArbolAvl,Playlist Play){
+    
+
+    
+    
+ public String Canciones(String Ruta,MetodosABB Arbol,MetodosAVL ArbolAvl,Playlist Play){
     i=0;
-    StringBuilder mensaje=new StringBuilder();
 
     try{
         File Carpeta=new File(Ruta);
@@ -44,22 +48,20 @@ public class CargarCanciones{
             carpetaImagenes.mkdir();
         }
 
-        Subcarpetas(Carpeta,carpetaImagenes,Arbol, ArbolAvl,Play, mensaje);
+        Subcarpetas(Carpeta,carpetaImagenes,Arbol, ArbolAvl,Play);
         
-        mensaje.append("Canciones Cargadas: ").append(i).append("\n");
+        return "Canciones Cargadas: " + i;
 
     } catch(Exception e){
         return "Error: " + e.getMessage();
     }
-
-    return mensaje.length()==0 ? "No se hallaron archivos mp3":mensaje.toString();
 }
 
  
  
  
- 
-private void Subcarpetas(File carpeta,File CarpetaImagenes,MetodosABB arbolabb,MetodosAVL arbolavl, Playlist play,StringBuilder mensaje){
+private void Subcarpetas(File carpeta,File CarpetaImagenes,MetodosABB arbolabb,MetodosAVL arbolavl, Playlist play){
+   
     File[] Archivos=carpeta.listFiles();
 
     if(Archivos==null){
@@ -69,18 +71,23 @@ private void Subcarpetas(File carpeta,File CarpetaImagenes,MetodosABB arbolabb,M
     for(File archivo :Archivos){
         
         if(archivo.isDirectory()){
-            Subcarpetas(archivo,CarpetaImagenes,arbolabb,arbolavl,play,mensaje);
+            Subcarpetas(archivo,CarpetaImagenes,arbolabb,arbolavl,play);
         } 
       
         else if(archivo.isFile() && archivo.getName().toLowerCase().endsWith(".mp3")){
+            
+            Mp3File mp3=null;
+            byte[] Imagenbyte=null;
+            
             try{
-                Mp3File mp3=new Mp3File(archivo.getAbsolutePath());
+                
+                mp3=new Mp3File(archivo.getAbsolutePath());
 
                 String nombre=archivo.getName().replace(".mp3","");
                 String artista="Desconocido";
                 String album="Desconocido";
                 String genero="Desconocido";
-                String rutaImagen="/resources/imagenes/disco-vinilo.png";
+                String rutaImagen=RUTA_IMAGEN_DEFECTO;
                 int anio=0;
 
   
@@ -90,16 +97,12 @@ private void Subcarpetas(File carpeta,File CarpetaImagenes,MetodosABB arbolabb,M
                         nombre=data.getTitle();
                     }
                     if(data.getArtist()!=null) {
-                        
                         artista=data.getArtist();
                     }
                     if(data.getAlbum()!=null){
-                        
                         album=data.getAlbum();
-                    
                     }
                     if(data.getGenreDescription()!=null){
-                        
                         genero=data.getGenreDescription();
                     }
 
@@ -111,11 +114,9 @@ private void Subcarpetas(File carpeta,File CarpetaImagenes,MetodosABB arbolabb,M
                         }
                     }
 
-                    byte[] Imagenbyte=data.getAlbumImage();
+                    Imagenbyte=data.getAlbumImage();
                     
-                
-                    if(Imagenbyte!=null){
-                        
+                    if(Imagenbyte!=null && Imagenbyte.length > 0){
                         String rutaE=data.getAlbumImageMimeType();
                         String extencion=".jpg";
                         if(rutaE!=null){
@@ -141,20 +142,31 @@ private void Subcarpetas(File carpeta,File CarpetaImagenes,MetodosABB arbolabb,M
                     if(datos.getTitle()!=null){
                         nombre=datos.getTitle();
                     }
-                    
                     if(datos.getArtist()!=null){
-                        
                         artista=datos.getArtist();
                     }
                     if(datos.getAlbum()!=null){
-                        
                         album=datos.getAlbum();
                     }
                 }
 
               
                 long Segundos=mp3.getLengthInSeconds();
-                String duracion=String.format("%d:%02d",Segundos/60,Segundos%60);
+                if(Segundos<=0){
+                    Segundos=0;
+                }
+                
+                String duracion;
+                long horas=Segundos/3600;
+                long minutos=(Segundos%3600)/60;
+                long segs=Segundos%60;
+
+                if(horas>0){
+                    duracion=String.format("%d:%02d:%02d",horas,minutos,segs);
+                }else{
+                    duracion=String.format("%d:%02d",minutos,segs);
+                }
+
                 String tam=String.format("%.2f MB",archivo.length()/(1024.0*1024.0));
 
                 Archivomp3 nuevo=new Archivomp3(nombre,artista,album,genero,rutaImagen,archivo.getAbsolutePath(),duracion,tam,anio);
@@ -165,12 +177,13 @@ private void Subcarpetas(File carpeta,File CarpetaImagenes,MetodosABB arbolabb,M
 
                 i++;
 
-               
             }catch(Exception e){ 
-                mensaje.append("Error en: ").append(archivo.getName()).append(" - ").append(e.getMessage()).append("\n");
+                System.out.println("Error en: "+archivo.getName()+" - "+e.getMessage());
+            }finally{
+                mp3=null;
+                Imagenbyte=null;
             }
         }
     }
 }
- 
 }

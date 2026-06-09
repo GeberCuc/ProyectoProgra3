@@ -12,6 +12,7 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -21,8 +22,9 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
 
-<AnchorPane id="AnchorPane" prefHeight="750.0" prefWidth="1484.0" style="-fx-background-color: #282828;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyectospotify.PrincipalController">
+<AnchorPane id="AnchorPane" prefHeight="750.0" prefWidth="1484.0" style="-fx-background-color: #282828;" stylesheets="@../Estilos/circulo.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="proyectospotify.PrincipalController">
    <children>
       <BorderPane prefHeight="700.0" prefWidth="1200.0" style="-fx-background-color: #181818;" stylesheets="@../Estilos/Menu.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <left>
@@ -267,7 +269,8 @@
                                                       <ImageView fitHeight="23.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                                                          <image>
                                                             <Image url="@../IconosFX/Casita.png" />
-                                                         </image></ImageView>
+                                                         </image>
+                                                      </ImageView>
                                                    </graphic>
                                                    <styleClass>
                                                       <String fx:value="MenuBoton" />
@@ -279,7 +282,15 @@
                                                       <Image url="@../IconosFX/buscar.png" />
                                                    </image>
                                                 </ImageView>
-                                                <TextField prefHeight="31.0" prefWidth="574.0" styleClass="Buscardor" />
+                                                <TextField fx:id="BusquedaInicio" prefHeight="31.0" prefWidth="472.0" styleClass="Buscardor" />
+                                                <ComboBox fx:id="BoxBus" prefHeight="30.0" prefWidth="129.0" stylesheets="@../Estilos/ComboBox.css">
+                                                   <styleClass>
+                                                      <String fx:value="MenuBoton" />
+                                                      <String fx:value="MenuBotonActivo" />
+                                                      <String fx:value="combo-box-popup" />
+                                                      <String fx:value="comboBox" />
+                                                   </styleClass>
+                                                </ComboBox>
                                                 <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="114.0" text="Usuario">
                                                    <graphic>
                                                       <ImageView fitHeight="21.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
@@ -401,6 +412,8 @@
                                           <Insets top="5.0" />
                                        </HBox.margin>
                                     </TextField>
+                                    <Label fx:id="TiempoAVL1" prefHeight="18.0" prefWidth="186.0" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Tiempo:" />
+                                    <Label fx:id="TiempoABB1" prefHeight="18.0" prefWidth="186.0" style="-fx-background-color: transparent; -fx-text-fill: white;" text="Tiempo:" />
                                  </children>
                                  <VBox.margin>
                                     <Insets top="9.0" />
@@ -421,7 +434,7 @@
                            </children>
                         </VBox>
                      </children></AnchorPane>
-                  <AnchorPane fx:id="PanelBiblioteca" style="-fx-background-color: #181818;" stylesheets="@../Estilos/toggle.css">
+                  <AnchorPane fx:id="PanelBiblioteca" style="-fx-background-color: #181818;" stylesheets="@../Estilos/toggle.css" visible="false">
                      <children>
                         <VBox layoutX="1.0" layoutY="-6.0" spacing="3.0" style="-fx-background-color: #181818;" stylesheets="@../Estilos/TItulos.css" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="0.7999999999999545" AnchorPane.rightAnchor="1.3999999999999773" AnchorPane.topAnchor="0.0">
                            <children>
@@ -510,7 +523,7 @@
                            </padding>
                         </VBox>
                      </children></AnchorPane>
-                  <AnchorPane fx:id="PanelPlaylist" style="-fx-background-color: #181818;" stylesheets="@../Estilos/toggle.css" visible="false">
+                  <AnchorPane fx:id="PanelPlaylist" style="-fx-background-color: #181818;" stylesheets="@../Estilos/toggle.css">
                      <children>
                         <BorderPane layoutX="-1.0" prefHeight="590.0" prefWidth="1005.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.1999999999999318" AnchorPane.topAnchor="0.0">
                            <top>
@@ -529,8 +542,8 @@
                                           <String fx:value="MenuBotonActivo" />
                                        </styleClass>
                                     </Button>
-                                    <Label prefHeight="14.0" prefWidth="127.0" styleClass="Titulos" text="Playlist" />
-                                    <Button fx:id="CrearPT" mnemonicParsing="false" onAction="#CrearPlaylist" prefHeight="30.0" prefWidth="150.0" styleClass="MenuBoton" text="Crear Playlist">
+                                    <Label prefHeight="52.0" prefWidth="111.0" styleClass="Titulos" text="Playlist" />
+                                    <Button fx:id="CrearPT" mnemonicParsing="false" onAction="#CrearPlaylist" prefHeight="30.0" prefWidth="138.0" styleClass="MenuBoton" text="Crear Playlist">
                                        <graphic>
                                           <ImageView fitHeight="20.0" fitWidth="33.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
@@ -539,7 +552,7 @@
                                           </ImageView>
                                        </graphic>
                                     </Button>
-                                    <Button fx:id="ImportarCanciones" mnemonicParsing="false" onAction="#ImportarMusica" prefHeight="38.0" prefWidth="141.0" styleClass="MenuBoton" text="Importar">
+                                    <Button fx:id="ImportarCanciones" mnemonicParsing="false" onAction="#ImportarMusica" prefHeight="38.0" prefWidth="132.0" styleClass="MenuBoton" text="Importar">
                                        <graphic>
                                           <ImageView fitHeight="28.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
@@ -549,6 +562,7 @@
                                        </graphic>
                                     </Button>
                                     <Label fx:id="Estado" prefHeight="52.0" prefWidth="553.0" styleClass="Titulos" text="Estado:" />
+                                    <Circle fx:id="Carga" fill="DODGERBLUE" radius="10.0" stroke="#2b2a2a" strokeType="INSIDE" />
                                  </children>
                                  <stylesheets>
                                     <URL value="@../Estilos/TItulos.css" />
@@ -572,7 +586,7 @@
                                     <Label prefHeight="134.0" prefWidth="159.0" styleClass="Titulos" text="Tus playlist" />
                                     <HBox prefHeight="48.0" prefWidth="306.0" spacing="15.0">
                                        <children>
-                                          <Button fx:id="ReproducirP" mnemonicParsing="false" onAction="#ReproducirPlaylist" prefHeight="29.0" prefWidth="52.0" styleClass="MenuBoton">
+                                          <Button fx:id="ReproducirP" mnemonicParsing="false" onAction="#ReproducirPlaylist" prefHeight="29.0" prefWidth="50.0">
                                              <graphic>
                                                 <ImageView fitHeight="18.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
@@ -580,17 +594,12 @@
                                                    </image>
                                                 </ImageView>
                                              </graphic>
+                                             <styleClass>
+                                                <String fx:value="MenuBoton" />
+                                                <String fx:value="MenuBotonActivo" />
+                                             </styleClass>
                                           </Button>
-                                          <Button fx:id="AniadirP" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="58.0" styleClass="MenuBoton">
-                                             <graphic>
-                                                <ImageView fitHeight="18.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../IconosFX/playlist_add.png" />
-                                                   </image>
-                                                </ImageView>
-                                             </graphic>
-                                          </Button>
-                                          <Button fx:id="EliminarE" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="58.0" styleClass="MenuBoton">
+                                          <Button fx:id="EliminarE" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#chek" prefHeight="29.0" prefWidth="50.0">
                                              <graphic>
                                                 <ImageView fitHeight="18.0" fitWidth="49.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
@@ -598,7 +607,37 @@
                                                    </image>
                                                 </ImageView>
                                              </graphic>
+                                             <styleClass>
+                                                <String fx:value="MenuBoton" />
+                                                <String fx:value="MenuBotonActivo" />
+                                             </styleClass>
                                           </Button>
+                                          <Button mnemonicParsing="false" onAction="#EliminarEnPlaylist">
+                                             <graphic>
+                                                <ImageView fitHeight="18.0" fitWidth="49.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../IconosFX/check.png" />
+                                                   </image>
+                                                </ImageView>
+                                             </graphic>
+                                             <styleClass>
+                                                <String fx:value="MenuBoton" />
+                                                <String fx:value="MenuBotonActivo" />
+                                             </styleClass>
+                                          </Button>
+                                          <ToggleButton fx:id="Activador" mnemonicParsing="false" onAction="#KaraokeVerso" prefHeight="26.0" prefWidth="34.0">
+                                             <graphic>
+                                                <ImageView fitHeight="18.0" fitWidth="49.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../IconosFX/music_note.png" />
+                                                   </image>
+                                                </ImageView>
+                                             </graphic>
+                                             <styleClass>
+                                                <String fx:value="MenuBoton" />
+                                                <String fx:value="MenuBotonActivo" />
+                                             </styleClass>
+                                          </ToggleButton>
                                        </children>
                                     </HBox>
                                     <ListView fx:id="ListaPlaylist" prefHeight="384.0" prefWidth="306.0" stylesheets="@../Estilos/Scroll.css" VBox.vgrow="ALWAYS">
@@ -622,29 +661,48 @@
                               <Insets top="3.0" />
                            </padding>
                            <center>
-                              <VBox BorderPane.alignment="CENTER">
+                              <StackPane>
                                  <children>
-                                    <Label styleClass="Titulos" text="Aca ira el nombre de la playlist, ahorita que lo programe" />
-                                    <HBox prefHeight="81.0" prefWidth="840.0" stylesheets="@../Estilos/Separador.css">
+                                    <VBox fx:id="PanelVersos">
                                        <children>
-                                          <ImageView fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
-                                          <Separator orientation="VERTICAL" prefHeight="100.0" prefWidth="42.0">
+                                          <Label fx:id="PlaylistANombre" styleClass="Titulos" />
+                                          <HBox prefHeight="81.0" prefWidth="840.0" stylesheets="@../Estilos/Separador.css">
+                                             <children>
+                                                <ImageView fitHeight="100.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
+                                                <Separator orientation="VERTICAL" prefHeight="100.0" prefWidth="42.0">
+                                                   <styleClass>
+                                                      <String fx:value="separador" />
+                                                      <String fx:value="line" />
+                                                   </styleClass>
+                                                </Separator>
+                                                <Label fx:id="CantidadM" prefHeight="52.0" prefWidth="772.0" styleClass="Titulos" text="Canciones:" />
+                                             </children>
+                                          </HBox>
+                                          <ListView fx:id="ListaCanciones" stylesheets="@../Estilos/Scroll.css" VBox.vgrow="ALWAYS">
                                              <styleClass>
-                                                <String fx:value="separador" />
-                                                <String fx:value="line" />
-                                             </styleClass></Separator>
-                                          <Label fx:id="CantidadM" prefHeight="52.0" prefWidth="772.0" styleClass="Titulos" text="Canciones:" />
+                                                <String fx:value="ListaMusic" />
+                                                <String fx:value="listaCeldas" />
+                                                <String fx:value="scroll-bar" />
+                                             </styleClass>
+                                          </ListView>
                                        </children>
-                                    </HBox>
-                                    <ListView fx:id="ListaCanciones" stylesheets="@../Estilos/Scroll.css" VBox.vgrow="ALWAYS">
-                                       <styleClass>
-                                          <String fx:value="ListaMusic" />
-                                          <String fx:value="listaCeldas" />
-                                          <String fx:value="scroll-bar" />
-                                       </styleClass>
-                                    </ListView>
+                                    </VBox>
+                                    <Pane fx:id="PanelVersos" prefHeight="200.0" prefWidth="200.0" styleClass="panel-karaoke" stylesheets="@../Estilos/Karaoke.css" visible="false">
+                                       <children>
+                                          <VBox prefHeight="593.0" prefWidth="978.0" spacing="15.0">
+                                             <children>
+                                                <HBox fx:id="ContenedorK" prefHeight="570.0" prefWidth="978.0">
+                                                   <padding>
+                                                      <Insets top="15.0" />
+                                                   </padding>
+                                                </HBox>
+                                                <Label fx:id="LVersos" alignment="TOP_CENTER" prefHeight="595.0" prefWidth="978.0" styleClass="label-letra" text="Hola?" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </Pane>
                                  </children>
-                              </VBox>
+                              </StackPane>
                            </center>
                         </BorderPane>
                      </children></AnchorPane>
