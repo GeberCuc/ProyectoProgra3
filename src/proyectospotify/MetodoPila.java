@@ -19,7 +19,11 @@ public class MetodoPila {
         
     }
     
-    
+    /*
+    Insertar un nuevo elemnto al tope de la pila 
+    el nuevo nodo pasa a ser la cabeza 
+    recibe como parametro un mp3
+    */
     public void Push(Archivomp3 Dato){
         
         NodoPila nuevo= new NodoPila(Dato);

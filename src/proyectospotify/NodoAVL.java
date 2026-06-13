@@ -46,14 +46,17 @@ public class NodoAVL {
         this.repetido = repetido;
     }
     
-
+    //Variable mp3
     Archivomp3 Cancion;
+    //punteros de dirección
     NodoAVL Izq,Der;
+    //Altura del nodo en el arbol
     int altura;
+    //repetidos
     int repetido;
 
 
-    
+    //Constructor para inicializar las variables 
     public NodoAVL(Archivomp3 Cancion){
         this.Cancion=Cancion;
         this.Der=null;

@@ -1,0 +1,8 @@
+digraph AVL {
+    bgcolor="#181818";
+    nodesep="0.5";
+    ranksep="0.5";
+    node [shape=ellipse, style=filled, fillcolor="#1ED760", fontcolor=white, fontname="Arial", color="red", fontsize=10];
+    edge [color="red", arrowhead=vee];
+    "Árbol Vacío" [shape=none, fontcolor=white];
+}

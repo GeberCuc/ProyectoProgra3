@@ -56,7 +56,11 @@ public class Playlist {
     public boolean vacio(){
         return Inicio==null;
     }
-
+    
+    /*
+    Método para insertar al final en la lista doble
+    recibiendo como paremetro el mp3
+    */
     
     public boolean InsertarFin(Archivomp3 Cancion){
 
@@ -90,7 +94,9 @@ public class Playlist {
     }
 
     
-    
+    /*
+    Método que permite insertar al inicio de la lista,
+    */
     public boolean InsertarInicio(Archivomp3 Cancion){
 
         try{
@@ -126,7 +132,9 @@ public class Playlist {
     
     
 
-    
+    /*
+    insertar en la posicion deseada por el usuario, no se uso
+    */
     public boolean InsertarPosicion( Archivomp3 Cancion,int Posicion){
 
 
@@ -184,7 +192,12 @@ public class Playlist {
         }
     }
 
+    /*
     
+    Método para eliminar dentro de la playlist
+    recibe como parametro el archivo mp3 
+    
+    */
     
     public boolean EliminarCancion(String NombreCancion){
 
@@ -258,7 +271,9 @@ public class Playlist {
     
     
 
-    
+    /*
+    Buscar canción dentro de la lista
+    */
     public Archivomp3 BuscarCancion(String NombreCancion){
         NodoDoble Actual=Inicio;
 
@@ -280,7 +295,10 @@ public class Playlist {
 
     
     
- 
+ /*
+    Permite arrastrar una cancion de un sitio a otro, mediante la obtencion de su posición actual y si posicion final
+    
+    */
     
     public boolean MoverCancion(int PosicionOrigen,int PosicionDestino){
 
@@ -327,7 +345,7 @@ public class Playlist {
     }
 
     
-    
+    //Buscar el mp3 completo
     
     public NodoDoble BuscarCancion(Archivomp3 buscado){
         
@@ -348,7 +366,7 @@ public class Playlist {
 
     
     
-
+//tiempo de busqueda
     public long TiempoBusqueda(String NombreCancion){
 
         

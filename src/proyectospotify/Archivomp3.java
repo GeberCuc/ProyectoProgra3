@@ -108,7 +108,10 @@ public class Archivomp3 {
     
     private boolean Estado;
 
-  
+  /*
+    Clase encargada de iniicializar un objeto con sus respectivos metadatps para cada canción 
+    
+    */
     private boolean Fav;
     public Archivomp3(String Nombre,String Artista,String Album ,String Genero,String Imagen ,String Audio,String Duracion,String Tamaño,int Año){
         

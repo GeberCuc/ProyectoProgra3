@@ -3,8 +3,10 @@ package proyectospotify;
 
 
 
-
-
+/*
+era para las playlist pero fue remplazado por un observlist
+*/
+/*
 public class NodoPlaylist {
 
     public NodoPlaylist getSiguiente() {
@@ -36,3 +38,4 @@ public class NodoPlaylist {
     }
     
 }
+*/

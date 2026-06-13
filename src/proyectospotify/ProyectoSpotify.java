@@ -6,27 +6,28 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class ProyectoSpotify extends Application {
 
     @Override
-    public void start(Stage stage)throws Exception {
+    public void start(Stage stage)throws Exception{
         
 
-        Font fuente = Font.loadFont(getClass().getResourceAsStream("/resources/Montserrat-Regular.ttf"), 13);
+        Font fuente=Font.loadFont(getClass().getResourceAsStream("/resources/Montserrat-Regular.ttf"), 13);
    
-        FXMLLoader loader=new FXMLLoader(
-                getClass().getResource("Principal.fxml")
-        );
+        FXMLLoader loader=new FXMLLoader(getClass().getResource("Principal.fxml"));
 
         Parent root=loader.load();
         Scene scene=new Scene(root);
-
+        
+        Image icono=new Image(getClass().getResourceAsStream("/IconosFX/musica.png"));
+        stage.getIcons().add(icono);
         stage.setTitle("Selenio");
         
-       scene.getStylesheets().add(getClass().getResource("/Estilos/fuente.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/Estilos/fuente.css").toExternalForm());
         stage.setScene(scene);
         stage.show();
     }

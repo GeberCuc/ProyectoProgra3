@@ -1,6 +1,8 @@
 
 package proyectospotify;
 
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 
@@ -17,7 +19,6 @@ public class MetodosAVL {
     private int Niveles(NodoAVL Nivel){
         
         if(Nivel==null){
-            
             return 0;
         }
         return Nivel.altura;
@@ -92,16 +93,12 @@ public class MetodosAVL {
         }
         
             if(Cancion.getNombre().compareToIgnoreCase(Actual.Cancion.getNombre())<0){
-                    
-                
-                Actual.Izq=InsertarP(Actual.Izq,Cancion);
-                    
+                Actual.Izq=InsertarP(Actual.Izq,Cancion);     
                 }else if(Cancion.getNombre().compareToIgnoreCase(Actual.Cancion.getNombre())>0){
                     
                     Actual.Der=InsertarP(Actual.Der,Cancion);
                     
                 }else{
-                     
                     Actual.repetido++;
                     
                     return Actual;
@@ -111,7 +108,6 @@ public class MetodosAVL {
             Actual.altura=1+Math.max(Niveles(Actual.Izq), Niveles(Actual.Der));
             
             int FactorB=Balance(Actual);
-            
             if(FactorB>1&&Actual.Izq!=null){
         
         if(Cancion.getNombre().compareToIgnoreCase(Actual.Izq.Cancion.getNombre())<0){
@@ -256,12 +252,12 @@ private int Repetidos(NodoAVL actual) {
     
     private NodoAVL Menor(NodoAVL Actual){
         
-        NodoAVL Comparador=Actual.Izq;
+  
         while(Actual.Izq!=null){
             
-            Comparador=Actual.Izq;
+            Actual=Actual.Izq;
         }
-        return Comparador;
+        return Actual;
     }
     
     
@@ -271,17 +267,17 @@ private int Repetidos(NodoAVL actual) {
         
     }
     
-    public NodoAVL EliminarP(NodoAVL Actual,String Nombre){
+    private NodoAVL EliminarP(NodoAVL Actual,String Nombre){
         
         if(Actual==null) return null;
         
         
         if(Nombre.compareToIgnoreCase(Actual.Cancion.getNombre())<0){
             
-            return EliminarP(Actual.Izq,Nombre);
+            Actual.Izq=EliminarP(Actual.Izq,Nombre);
         }else if(Nombre.compareToIgnoreCase(Actual.Cancion.getNombre())>0){
             
-         return EliminarP(Actual.Der,Nombre);
+         Actual.Der=EliminarP(Actual.Der,Nombre);
             
         }else{
             if(Actual.repetido>0){
@@ -293,7 +289,7 @@ private int Repetidos(NodoAVL actual) {
                
                 NodoAVL aux;
                 
-                if(Actual.Izq==null){
+                if(Actual.Izq!=null){
                     aux=Actual.Izq;
                 }else{
                     
@@ -305,8 +301,7 @@ private int Repetidos(NodoAVL actual) {
                     Actual=null;
                     
                 }else{
-                    
-                    Actual=aux.Izq;
+                    Actual=aux;
                 }
                 
             }else{
@@ -346,14 +341,7 @@ private int Repetidos(NodoAVL actual) {
                 return RotacionD(Actual);
                 
             }
-            
-  
-            
             if(FactorB<-1&&Balance(Actual.Der)<=0){
-                
-                
-                Actual.Izq=RotacionI(Actual.Izq);
-                
                 return RotacionI(Actual);
             }
             
@@ -361,7 +349,6 @@ private int Repetidos(NodoAVL actual) {
             if(FactorB<-1&&Balance(Actual.Der)>0){
                 
                 Actual.Der=RotacionD(Actual.Der);
-                
                 return RotacionI(Actual);
                 
             }
@@ -385,7 +372,7 @@ private int Repetidos(NodoAVL actual) {
     
     public ArrayList<Archivomp3> InordeP(){
         
-         ArrayList<Archivomp3> lista=new ArrayList<>();
+         ArrayList<Archivomp3>lista=new ArrayList<>();
          InordenP(Raiz,lista);
          
          return lista;
@@ -413,7 +400,7 @@ private int Repetidos(NodoAVL actual) {
      
     }
     
-    //pendiente
+  
     public ArrayList<Archivomp3> PreOrden(){
     
     ArrayList<Archivomp3> lista=new ArrayList<>();
@@ -424,7 +411,7 @@ private int Repetidos(NodoAVL actual) {
 
 
 
-//pendiente
+
 
 private void PreOrdenP(NodoAVL Actual,ArrayList<Archivomp3>lista){
     if(Actual!=null){
@@ -450,13 +437,98 @@ public ArrayList<Archivomp3>PostOrden(){
 
 
 
-private void PostOrdenP(NodoAVL Actual, ArrayList<Archivomp3> lista){
-    if(Actual != null){
-        PostOrdenP(Actual.Izq, lista);
+private void PostOrdenP(NodoAVL Actual,ArrayList<Archivomp3>lista){
+    if(Actual!=null){
+        PostOrdenP(Actual.Izq,lista);
         PostOrdenP(Actual.Der, lista);
         lista.add(Actual.Cancion);
         
     }
 }
+
+public int size() {
+    return Suma(Raiz);
+}
+
+
+private int Suma(NodoAVL actual){
     
+    if(actual==null){
+        return 0;
+    }
+
+    return 1+Suma(actual.Izq)+Suma(actual.Der);
+}
+
+public void DibujarArbol(String archivo) {
+    try (FileWriter Escritura = new FileWriter(archivo); PrintWriter escribo = new PrintWriter(Escritura)) {
+        
+        escribo.println("digraph AVL {");
+        escribo.println("    bgcolor=\"#181818\";");
+        // Quitamos el DPI alto. SVG es vectorial por defecto.
+        escribo.println("    nodesep=\"0.5\";");
+        escribo.println("    ranksep=\"0.5\";");
+        escribo.println("    node [shape=ellipse, style=filled, fillcolor=\"#1ED760\", fontcolor=white, fontname=\"Arial\", color=\"red\", fontsize=10];");
+        escribo.println("    edge [color=\"red\", arrowhead=vee];");
+
+        if (Raiz == null) {
+            escribo.println("    \"Árbol Vacío\" [shape=none, fontcolor=white];");
+        } else {
+            Graphiz(Raiz, escribo);
+        }
+
+        escribo.println("}");
+        
+    } catch (Exception e) {
+        e.printStackTrace();
+        System.out.println("ERRORD: " + e);
+    }
+}
+
+
+  private void Graphiz(NodoAVL actual,PrintWriter escribir){
+
+   if(actual==null){
+        System.out.println("vacio");
+        return;
+    }
+
+    String nombre=actual.Cancion.getNombre().replace("\"","\\\"");
+
+    
+    escribir.println("    \""+nombre+"\" "+ "[shape=ellipse, label=\""+nombre+"\\nTamaño: "+actual.Cancion.getTamaño()+" | Repe: "+actual.repetido+"\"];");
+    
+    if(actual.Izq!=null){
+
+        String hijoIzq=actual.Izq.Cancion.getNombre().replace("\"","\\\"");
+
+        escribir.println("    \""+nombre+"\" -> \""+hijoIzq+"\";");
+        
+        Graphiz(actual.Izq, escribir);
+
+    }
+    else{
+
+        String invisible="nullI_"+Math.abs(nombre.hashCode());
+        escribir.println("    "+invisible+" [shape=point, style=invis];");
+        escribir.println("    \""+nombre+"\" -> "+invisible+" [style=invis];");
+    }
+    
+    if(actual.Der!=null){
+
+        String hijoDer=actual.Der.Cancion.getNombre().replace("\"", "\\\"");
+        
+        escribir.println("    \""+nombre+"\" -> \""+hijoDer + "\";");
+        Graphiz(actual.Der,escribir);
+
+    }else{ 
+        
+        
+        String invisible="nullD_"+Math.abs(nombre.hashCode());
+        escribir.println("    "+invisible+" [shape=point, style=invis];");
+        escribir.println("    \""+nombre+"\" -> "+invisible+" [style=invis];");
+    }
+  
+}
+  
 }

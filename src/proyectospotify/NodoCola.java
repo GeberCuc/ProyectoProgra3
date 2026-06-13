@@ -26,7 +26,7 @@ public class NodoCola {
   
     
     
-    
+    //Nodo para el metodoCola
     
     public NodoCola( Archivomp3 Cancion){
         this.Cancion=Cancion;

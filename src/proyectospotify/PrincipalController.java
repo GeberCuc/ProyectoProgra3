@@ -1,16 +1,14 @@
 
 package proyectospotify;
-
+//<editor-fold defaultstate="collapsed" desc="imports">
 import java.io.BufferedReader;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.image.Image;
-
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -19,10 +17,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.ResourceBundle;
-import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.ParallelTransition;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
@@ -30,13 +28,13 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -45,11 +43,9 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -59,46 +55,56 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.web.WebView;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Popup;
+import javafx.stage.Stage;
 import javafx.util.Duration;
-import static javafx.util.Duration.minutes;
-
-
-
-
-
+//</editor-fold>
 
 
 public class PrincipalController implements Initializable {
     
 
-//imagens
+//<editor-fold defaultstate="collapsed" desc="Imagenes">
 private Image PlayImagen=new Image("/IconosFX/play.png");
 private Image PauseImagen=new Image("/IconosFX/pause.png");
 private ImageView Icono=new ImageView();
 @FXML
-private ImageView Imgbotm;  
+private ImageView Imgbotm; 
+//</editor-fold>
 
-//globales
+
+ 
+//<editor-fold defaultstate="collapsed" desc="GLOBALES">
+//popup
 @FXML
+boolean mod=false;
 private Popup popupStats=new Popup();
-Archivomp3 TOPUNO;
-String tm;
-EstadisticasTXT txt=new EstadisticasTXT();
+//animaciones
 private Timeline Animacion;
 private ParallelTransition transicion;
 private TranslateTransition Mov;
 private FadeTransition Aparece;
-
+private PauseTransition pausaClics=new PauseTransition(Duration.millis(300));
+String tm;
+private int conteoClics=0;
 private double fase=0;
 private double VolumenI=0.5;
+
+//booleanos
 private BooleanProperty CrearP=new SimpleBooleanProperty(false);
-private boolean EliminadoB=false;
 private boolean reproduciendo=false;
 private boolean modoCola=false;
 private boolean modoCircular=false;
 private boolean modoAleatorio=false;
+boolean valido=false;
+
+//Instancias de metodos
+Archivomp3 TOPUNO;
+EstadisticasTXT txt=new EstadisticasTXT();
 private NodoDoble Actual=null;
 private Playlist PlaylistActual;
 private MediaPlayer reproductor;
@@ -106,32 +112,32 @@ private Archivomp3 CancionActual;
 ImportarFx Import=new ImportarFx();
 private MetodoCola ColaReproduccion=new MetodoCola();
 private Playlist favoritos= new Playlist("Favoritos");
-boolean valido=false;
-private javafx.beans.value.ChangeListener<javafx.util.Duration> progresoListener;
-
 private MetodoPila Historial=new MetodoPila();
 private Archivomp3 ultimo=null;
-private double tim=0.0;
+
+//Duracion Slider, cambio de detector de evento 
+private javafx.beans.value.ChangeListener<javafx.util.Duration> progresoListener;
+
+
+//Listas observables y filtro  
 private ObservableList<Playlist> playlists=FXCollections.observableArrayList();
 private ObservableList<Archivomp3>DatosBiblioteca=FXCollections.observableArrayList();
 private List<Karaoke>Versos;
 private javafx.collections.transformation.FilteredList<Archivomp3> BibliotecaCentral;
 private ObservableList<Archivomp3>DatosPlaylistActual=FXCollections.observableArrayList();
+
 //hashs
- HashMap<String,ArrayList<Archivomp3>> Generos=new HashMap<>(); 
- HashMap<String,ArrayList<Archivomp3>> Arti= new HashMap<>();
-
+ HashMap<String,ArrayList<Archivomp3>>Generos=new HashMap<>(); 
+ HashMap<String,ArrayList<Archivomp3>>Arti= new HashMap<>();
+//</editor-fold>
  
-
+ 
+//<editor-fold defaultstate="collapsed" desc="Variables Graficos">
+//circle
 @FXML
-private Circle Carga;
- 
- 
-//Vbox
-@FXML
-private HBox ContenedorK;
+private Circle Carga,morido,morido1;
 
- //Paneles
+//Paneles
 @FXML
 private AnchorPane PanelInicio;
 @FXML
@@ -148,7 +154,6 @@ private StackPane Stak;
 private Pane PanelVersos;
 
 //TextFields
-
 @FXML
 private TextField BuscadorPB;
 @FXML
@@ -176,10 +181,6 @@ private Label TxtV;
 @FXML
 private Label CantidadM ;
 @FXML
-private Label DuracionP ;
-@FXML
-private Label AutorP;
-@FXML
 private Label TiempoAVL;
 @FXML
 private Label TiempoABB;
@@ -206,7 +207,6 @@ private ListView<Archivomp3> ListaCanciones;
 private ListView<Archivomp3>ListaVBIblioteca;
 @FXML
 private ListView<Archivomp3>ListBusquedaParcial;
-
 @FXML
 private ListView<Archivomp3>Listahistorial;
 
@@ -223,19 +223,6 @@ private ScrollPane ScrollH;
 //Botones
 @FXML
 private Button Play;
-
-@FXML
-private Button Siguiente;
-@FXML
-private Button Anterior;
-@FXML
-private Button ReproducirP;
-@FXML
-private Button AniadirP;
-@FXML
-private ToggleButton Activador;
-@FXML
-private Button CrearPT;
 @FXML
 private Button BtD;
 
@@ -256,9 +243,12 @@ private HBox Artistas;
 private HBox Top;
 @FXML
 private HBox hisC;
+@FXML
+private HBox ContenedorK;
+//</editor-fold>
 
 
-
+//<editor-fold defaultstate="collapsed" desc="Visualización">
  @FXML
     public void MostrarInicio(){
 
@@ -274,8 +264,6 @@ private HBox hisC;
 
         PanelPlaylist.setVisible(false);
         PanelPlaylist.setManaged(false);
-        
-        
     }
 
 
@@ -327,17 +315,151 @@ private HBox hisC;
         PanelPlaylist.setVisible(true);
         PanelPlaylist.setManaged(true);
     }
+//</editor-fold>
+  
+    
+//<editor-fold defaultstate="collapsed" desc="Graphviz">
+    @FXML
+    public void mostrarArbolABB(){
+   try{
+        String dot="ArbolABB.dot";
+        String svg="ArbolABB.actual.svg";
 
+        Import.getABB().ABBGrap(dot);
+        dotApng(dot,svg);
+
+        File imagenArchivo=new File(svg);
+        if(!imagenArchivo.exists()){
+            return;
+        }
+
+        WebView webView=new WebView();
+        webView.getEngine().load(imagenArchivo.toURI().toString());
+        webView.getStyleClass().add("fx-background-color #282828");
+        webView.setOnScroll(evento->{
+            if(evento.isControlDown()){
+                evento.consume();
+                double factor=webView.getZoom();
+                if(evento.getDeltaY()>0){
+                    factor*=1.15;
+                }else{
+                    factor/=1.15;
+                }
+                if(factor<0.1){
+                    factor=0.1;
+                }
+                if(factor>10.0){
+                    factor=10.0;
+                }
+                webView.setZoom(factor);
+            }
+        });
+
+        Scene escena=new Scene(webView,1000,700);
+        Stage ventana=new Stage();
+        ventana.setTitle("Árbol Binario");
+        ventana.initModality(Modality.APPLICATION_MODAL);
+        ventana.setScene(escena);
+        
+        ventana.setOnCloseRequest(e -> {
+            webView.getEngine().load("about:blank");
+        });
+        
+        ventana.show();
+
+    }catch(Exception e){
+        
+    }
+}
+    
+public void dotApng(String dot,String Png){
+    try{
+        String directorioTrabajo=System.getProperty("user.dir");
+        File dotExecutable=new File(directorioTrabajo+File.separator+"graphviz"+File.separator + "bin"+File.separator+"dot.exe");
+
+        if(!dotExecutable.exists()){
+            System.out.println("CRÍTICO: No se encontró Graphviz portable en: "+dotExecutable.getAbsolutePath());
+            return;
+        }
+        ProcessBuilder pb=new ProcessBuilder(dotExecutable.getAbsolutePath(),"-Tsvg", dot, "-o", Png);
+        pb.redirectErrorStream(true);
+        Process proceso=pb.start();
+
+        proceso.waitFor();
+        proceso.getInputStream().close(); 
+        proceso.getOutputStream().close();
+        proceso.getErrorStream().close();
+        
+    }catch(Exception e){
+        System.out.println("ERRORT: " + e);
+        e.printStackTrace();
+    }
+}  
+   
+@FXML
+public void mostrarArbolAVL(){
+    try{
+        String dot="Arbol.dot";
+        String svg="Arbol.actual.svg";
+
+        Import.getAVL().DibujarArbol(dot);
+        dotApng(dot, svg);
+
+        File imagenArchivo=new File(svg);
+        if(!imagenArchivo.exists()){
+            return;
+        }
+
+        WebView webView=new WebView();
+        webView.getEngine().load(imagenArchivo.toURI().toString());
+
+        webView.setOnScroll(evento->{
+            if(evento.isControlDown()){
+                evento.consume();
+                
+                double factor=webView.getZoom();
+                if(evento.getDeltaY()>0){
+                    factor*=1.15;
+                }else{
+                    factor/=1.15;
+                }
+                if(factor<0.1){
+                    factor=0.1;
+                }
+                if(factor>10.0){
+                    factor=10.0;
+                }
+                webView.setZoom(factor);
+            }
+        });
+
+        Scene escena=new Scene(webView, 1000, 700);
+        Stage ventana=new Stage();
+        ventana.setTitle("Estructura del Árbol AVL");
+        ventana.initModality(Modality.APPLICATION_MODAL);
+        ventana.setScene(escena);
+
+        ventana.setOnCloseRequest(e -> {
+            webView.getEngine().load("about:blank");
+        });
+
+        ventana.show();
+
+    }catch(Exception e){
+        System.out.println("ERRORP: " + e);
+    }
+}
     
     
-    
-    
-   public void Favoritos(){
+//</editor-fold>
+
+
+//<editor-fold defaultstate="collapsed" desc="Favoritos">
+   
+ public void Favoritos(){
        
      favoritos.Vaciar();
-//pendiente
     Playlist canciones=Import.getAVL().InOrden();
-
     NodoDoble nodito=canciones.getInicio();
     
     while(nodito!=null){
@@ -355,10 +477,193 @@ private HBox hisC;
        ListaPlaylist.refresh();
        
    }
+ 
+//</editor-fold>
+
+ 
+//<editor-fold defaultstate="collapsed" desc="Importaciones">
+
+@FXML 
+public void ImportarMusica(){
+
     
+    DirectoryChooser Selector=new DirectoryChooser();
+
+    
+    Selector.setTitle("Seleccionar Carpeta");
+    File Carpeta=Selector.showDialog(null);
+
+    
+    
+    if(Carpeta!=null){
+        
+        Playlist NPlaylist=Import.Importar(Carpeta.getAbsolutePath(),Carpeta.getName());
+        boolean duplicado=false;
+        
+        
+        for(Playlist p: playlists){
+            
+            if(p.getNombre().equalsIgnoreCase(NPlaylist.getNombre())){
+                duplicado=true;
+                break;
+            }
+        }
+        
+        if(!duplicado){
+            playlists.add(NPlaylist);
+            ActualizarBiblioteca();
+        
+       
+        
+   
+        
+        GenerosM();
+        RecomendaG();
+        ArtistasI();
+        BuscarTop();
+        BusquedaP();
+        Alert alerta=new Alert(Alert.AlertType.INFORMATION);
+       
+        alerta.setHeaderText(null);
+        alerta.setContentText("Carpeta "+Carpeta.getName()+" Cargada con exito");
+        alerta.showAndWait();
+        }else{
+          
+            Alert alertaError=new Alert(Alert.AlertType.WARNING);
+            alertaError.setHeaderText(null);
+            alertaError.setContentText("La playlist '"+Carpeta.getName()+"' ya existe en la biblioteca.");
+            alertaError.showAndWait();
+        }
+    }
+}
+
+
+
+public void ActualizarBiblioteca(){
   
+
+    for(Playlist lista:ListaPlaylist.getItems()){
+
+        NodoDoble nodo=lista.getInicio();
+        while(nodo!=null){
+
+            Archivomp3 p=nodo.getCancion();
+            if(Import.getAVL().Buscar(p.getNombre())==null){
+                Import.getAVL().Insertar(p);
+            }
+             nodo=nodo.Siguiente;
+        }
+    }
+
+    DatosBiblioteca.setAll( Import.getAVL().InordeP());         
+    
+}
+
+
+
+
+@FXML
+public void recorreCanciones(){
+
+    if(PlaylistActual==null){
+
+        Estado.setText("Seleccione una playlist primero");
+        
+        return;
+    }
+
+    boolean agregado=false;
+
+    for(Archivomp3 cancion:DatosBiblioteca){
+
+        if(cancion.isEstado()){
+            if(PlaylistActual.BuscarCancion(cancion)==null){
+
+                PlaylistActual.InsertarFin(cancion);
+                agregado=true;
+            }
+            
+            cancion.setEstado(false);
+        }
+    }
+
+    ListaVBIblioteca.refresh();
+    
+    ListaCanciones.getItems().clear();
+    NodoDoble todoNodo=PlaylistActual.getInicio();
+    while(todoNodo!=null){
+         DatosPlaylistActual.add(todoNodo.getCancion());
+         todoNodo=todoNodo.Siguiente;
+    }
    
+    if(agregado){
+
+        Estado.setText("Canciones agregadas a "+PlaylistActual.getNombre());
+        chek();
+
+    }else{
+
+        Estado.setText("No selecciono canciones");
+    }
+}
+public void CrearPlaylist(){
+
+    
+    TextInputDialog dialogo=new TextInputDialog();
+    
+    
+    dialogo.setTitle("Nueva Playlist");
+    dialogo.setHeaderText(null);
+    
+    
+    dialogo.setContentText("Nombre:" );
+
+    
+    Optional<String>resultado=dialogo.showAndWait();
+
+    if(resultado.isPresent()){
+        
+        String nom=resultado.get();
+
+        if(!nom.isEmpty()){
+            
+            
+            Playlist nuevo=new Playlist(nom);
+            playlists.add(nuevo);
+        }
+    }
+}
+
+@FXML
+   private void ImportarCifrados(){
+       FileChooser TXT = new FileChooser();
+    TXT.setTitle("Importar Playlist");
+    TXT.getExtensionFilters().add(new FileChooser.ExtensionFilter("Playlist cifrada (*.txt)", "*.txt"));
+
+    File archivo=TXT.showOpenDialog((Stage) ListaPlaylist.getScene().getWindow());
+
+    if(archivo!=null){
+        String nombreConExtension = archivo.getName(); 
+        String nombreLimpio = nombreConExtension.substring(0, nombreConExtension.lastIndexOf("."));
+        
+        Playlist Importado=Cifrado.importarPlaylist(Import.getAVL(), archivo.getAbsolutePath());
+        if(Importado!=null){
+        Importado.setNombre(nombreLimpio);
+        ListaPlaylist.getItems().add(Importado);
+        }else{
+            Estado.setText("Canciones no disponibles");
+            return;
+        }
+        Estado.setText("Playlist '"+nombreLimpio+"' importado con éxito");
+        
+        
+    }
+}
+//</editor-fold>
+
    
+//<editor-fold defaultstate="collapsed" desc="Busquedas">
+  //Buscar
    @FXML
    public void Buscar(){
        
@@ -366,7 +671,7 @@ private HBox hisC;
     
      if(Buscado.isEmpty()){
      
-         BibliotecaCentral.setPredicate(valido-> true);
+         BibliotecaCentral.setPredicate(valid-> true);
          TiempoAVL.setText("Tiempo AVL: 0 ns");
          TiempoABB.setText("Tiempo ABB: 0 ns");
          return;
@@ -374,260 +679,29 @@ private HBox hisC;
       
      Archivomp3 Resultado=Import.getAVL().Buscar(Buscado);
      
-      long tiempo=Import.getAVL().Tiempo(Buscado);
+      long tiempoAVL=Import.getAVL().Tiempo(Buscado);
       long tiempoABB=Import.getABB().tiempo(Buscado);
  
        if(Resultado!=null){
            BibliotecaCentral.setPredicate(Cancion-> Cancion.getAudio().equals(Resultado.getAudio()));
-           TiempoAVL.setText("Encontrado AVL: "+tiempo+" ns");
+           TiempoAVL.setText("Encontrado AVL: "+tiempoAVL+" ns");
            TiempoABB.setText("Encontrado ABB: "+tiempoABB+" ns");
        }else{
            
            BibliotecaCentral.setPredicate(Cancion->false);
-           TiempoAVL.setText("No encontrado AVL: "+tiempo+" ns");
+           TiempoAVL.setText("No encontrado AVL: "+tiempoAVL+" ns");
            TiempoABB.setText("No encontrado ABB: "+tiempoABB+" ns");
        }
      
    }
-        
-   @FXML
-   public void GenerosM(){
-       
-       
-       
-       limpiadito(ContenedorAL);
-      Generos.clear();
-       
-        
-      ArrayList<Archivomp3>canciones=Import.getAVL().PostOrden(); 
-      for(Archivomp3 can:canciones){
-          
-          String genero=can.getGenero();
-           if(genero==null||genero.isEmpty()){
-               
-           genero="Desconocido";
-           }
-       if(!Generos.containsKey(genero)){
-           Generos.put(genero,new ArrayList<>());
-       }
-      Generos.get(genero).add(can);    
-      }
-      for(String genero:Generos.keySet()){
-          
-          ArrayList<Archivomp3> lista=Generos.get(genero);
-          
-          VBox tarjetas=Crear(genero,lista);
-          
-          ContenedorAL.getChildren().add(tarjetas);
-      }
-     
-   }
-  
-   
-   
-   private void limpiadito(HBox Contenedor){
-       
-       
-        for(javafx.scene.Node nodo : Contenedor.getChildren()){
-        if(nodo instanceof VBox){
-            VBox tarjetaVieja=(VBox)nodo;
-            if(!tarjetaVieja.getChildren().isEmpty()&&tarjetaVieja.getChildren().get(0)instanceof ImageView){
-                ImageView iv=(ImageView)tarjetaVieja.getChildren().get(0);
-                iv.setImage(null);
-            }
-        }
-    } 
-    Contenedor.getChildren().clear();
-   }
-   
-  
-   
-   public void BusquedaGenero(){
-       Busquedas(Generos,ContenedorAL,"genero");
-   }
-   
-   public void BusquedaArtista(){
-       Busquedas(Arti,Artistas,"artistas");
-   }
-   
-   
-  @FXML
-  public void Busquedas(HashMap<String,ArrayList<Archivomp3>> cositas,HBox contenedor,String metodo){
-   String Busqueda=BusquedaInicio.getText().trim();
-   
-  limpiadito(contenedor);
-   
-   if(Busqueda.isEmpty()){
-       for(String cos:cositas.keySet()){
-           ArrayList<Archivomp3>contenido=cositas.get(cos);
-           // operador ternario god 
-           VBox jetica=metodo.equals("genero")?Crear(cos,contenido): TarjetaA(cos,contenido);
-           contenedor.getChildren().add(jetica);
-       }
-       return;
-   }
-   
-   
-   for(Map.Entry<String, ArrayList<Archivomp3>> calve:cositas.entrySet()){
-   
-       String Indice=calve.getKey().toLowerCase();
-       if(Indice.contains(Busqueda)){
-           ArrayList<Archivomp3> canciones=calve.getValue();
-           
-           if(canciones!=null){
-               VBox tar=metodo.equals("genero")?Crear(calve.getKey(),canciones):TarjetaA(calve.getKey(),canciones);
-               contenedor.getChildren().add(tar);
-           
-           }
-           
-       }
-       
-   }
-   
-    
-    
-}
-   public VBox Crear(String genero,ArrayList<Archivomp3> canciones){
-
-
-       VBox tarjeta=new VBox(10);
-       
-       tarjeta.getStyleClass().addAll("music");
-       
-       ImageView imagen=new ImageView();
-       
-       imagen.setFitHeight(85);
-       imagen.setFitWidth(85);
-       
-       
-       if(!canciones.isEmpty()){
-           
-           imagen.setImage(CacheImagenes.ObtenerImagen(canciones.get(0).getImagen()));
-           
-       }
-       Label generoT=new Label(genero);
-       Label Cantidad= new Label(canciones.size()+" Canciones");
-       
-       generoT.getStyleClass().add("letrita");
-       Cantidad.getStyleClass().add("letrita");
-       
-       tarjeta.getChildren().addAll(imagen,generoT,Cantidad);
-
-       tarjeta.setOnMouseClicked(eventito->{
-           
-           
-           ListaCanciones.getItems().setAll(canciones);
-           PlaylistActual=new Playlist(genero);
-           
-           for(Archivomp3 musica:canciones){
-               
-               PlaylistActual.InsertarFin(musica);
-               
-           }
-           
-           MostrarPlaylis();
-           
-       });
-   return tarjeta; 
-   }
-
-   public void RecomendaG(){
-       
-       limpiadito(Recomendados);
-       
-       Playlist Canciones=Import.getAVL().InOrden();
-       
-       if(Canciones.vacio()){
-           return;
-       }
-       
-       NodoDoble si=Canciones.getInicio();
-       int tam=0;
-       while(si!=null&&tam<10){
-           
-           Archivomp3 Musica=si.getCancion();
-           
-           VBox tarjeta=TarjetaR(Musica);
-           
-           Recomendados.getChildren().add(tarjeta);
-           
-           si=si.Siguiente;
-           tam++;
-       }
-       
-   }
-   
-   public VBox TarjetaR(Archivomp3 Cancion){
-       
-       VBox tarjetica= new VBox(12);
-       
-      
-       tarjetica.getStyleClass().addAll("music");
-        
-       tarjetica.setPrefWidth(80);
-       tarjetica.setPrefHeight(180);
-       
-       ImageView portada= new ImageView();
-       
-       portada.setFitHeight(100);
-       portada.setFitWidth(100);
-       
-       
-       if(Cancion.getImagen()!=null){
-           
-           portada.setImage(CacheImagenes.ObtenerImagen(Cancion.getImagen()));
-           
-       }
-       Label letrica=new Label(Cancion.getNombre());
-       Label letrica2=new Label(Cancion.getArtista());
-       letrica.getStyleClass().addAll("letrita");
-       letrica2.getStyleClass().addAll("letrita");
-       tarjetica.getChildren().addAll(portada,letrica,letrica2);
-       
-       
-       
-       tarjetica.setOnMouseClicked(evento->{
-           
-           
-           ReproducirCancion(Cancion);
-           
-       });
-       
-
-       return tarjetica;
-   }
-   
-   
-   
-   private String TiempoTotal(double segundos){
-    
-       
-       int totalSegundos=(int)segundos;
-    
-    
-       int h=totalSegundos/3600;
-       int m=(totalSegundos%3600)/60;
-       int s=totalSegundos%60;
-       
-       if (h>0){
-           return String.format("%dh %02dm %02ds",h,m,s);
-       }else if(m>0){
-           
-           return String.format("%dm %02ds",m,s);
-       }else{
-           
-           return s+"s";
-       }
-}
-   
-   public void BuscarTop(){
+    public void BuscarTop(){
     
        
     List<String> busqueda=new ArrayList<>();
     List<String> TOP=new ArrayList<>();
     List<Double> TiempoRe=new ArrayList<>(); 
 
-    try(BufferedReader leer=new BufferedReader(new FileReader("C:/Users/dxnie/OneDrive/Desktop/ProyectoSpotify/registros.txt"))){
+    try(BufferedReader leer=new BufferedReader(new FileReader("registros.txt"))){
         
         leer.readLine();
         String linea;
@@ -701,7 +775,7 @@ private HBox hisC;
         
       
         int tarjetasPintadas=0;
-        for(int i=0;i<busqueda.size()&&tarjetasPintadas<15;i++){
+        for(int i=0;i<busqueda.size()&&tarjetasPintadas<20;i++){
             Archivomp3 pista=Import.getAVL().Buscar(busqueda.get(i));
             if(pista!=null){
                
@@ -719,9 +793,235 @@ private HBox hisC;
 
 
    }
+       public void BusquedaGenero(){
+       Busquedas(Generos,ContenedorAL,"genero");
+   }
+   
+   public void BusquedaArtista(){
+       Busquedas(Arti,Artistas,"artistas");
+   }
    
    
+  @FXML
+  public void Busquedas(HashMap<String,ArrayList<Archivomp3>> cositas,HBox contenedor,String metodo){
+   String Busqueda=BusquedaInicio.getText().trim();
    
+  limpiadito(contenedor);
+   
+   if(Busqueda.isEmpty()){
+       for(String cos:cositas.keySet()){
+           ArrayList<Archivomp3>contenido=cositas.get(cos);
+           // operador ternario god 
+           VBox jetica=metodo.equals("genero")?Crear(cos,contenido): TarjetaA(cos,contenido);
+           contenedor.getChildren().add(jetica);
+       }
+       return;
+   }
+   
+   
+   for(Map.Entry<String, ArrayList<Archivomp3>> calve:cositas.entrySet()){
+   
+       String Indice=calve.getKey().toLowerCase();
+       if(Indice.contains(Busqueda)){
+           ArrayList<Archivomp3> canciones=calve.getValue();
+           
+           if(canciones!=null){
+               VBox tar=metodo.equals("genero")?Crear(calve.getKey(),canciones):TarjetaA(calve.getKey(),canciones);
+               contenedor.getChildren().add(tar);
+           
+           }
+           
+       }
+       
+   }
+   
+    
+    
+}
+  @FXML
+public void BusquedaP(){
+    
+    String Buscado=BuscadorPB.getText().trim().toLowerCase();
+    
+    if(Buscado.isEmpty()){
+        ListBusquedaParcial.getItems().setAll(Import.getAVL().PreOrden());
+        TiempoAVL1.setText("Tiempo AVL: 0 ns");
+        TiempoABB1.setText("Tiempo ABB: 0 ns");
+       return; 
+    }
+    long tiempoavl=Import.getAVL().TiempoParcial(Buscado);
+    long tiempoabb=Import.getABB().TiempoParcial(Buscado);
+    
+    Playlist ResultadosV=Import.getAVL().BusquedaParcial(Buscado);
+    
+    ListBusquedaParcial.getItems().clear();
+    
+    NodoDoble nod=ResultadosV.getInicio();
+    while(nod!=null){
+        
+        ListBusquedaParcial.getItems().add(nod.getCancion());
+        nod=nod.Siguiente;
+    }
+    
+    if(ResultadosV.getInicio()!=null){
+        TiempoAVL1.setText("Encontrado AVL: "+tiempoavl+" ns");
+        TiempoABB1.setText("Encontrado ABB: "+tiempoabb+" ns");
+    } else {
+        
+        TiempoAVL1.setText("No encontrado AVL: "+tiempoavl+" ns");
+        TiempoABB1.setText("No encontrado ABB: "+ tiempoabb+" ns");
+    }
+    ListBusquedaParcial.refresh();
+}
+   
+  //</editor-fold>  
+ 
+   
+//<editor-fold defaultstate="collapsed" desc="Tarjetas">
+  @FXML
+   public VBox Crear(String genero,ArrayList<Archivomp3> canciones){
+
+
+       VBox tarjeta=new VBox(10);
+       
+       tarjeta.getStyleClass().addAll("music");
+       
+       ImageView imagen=new ImageView();
+       
+       imagen.setFitHeight(85);
+       imagen.setFitWidth(85);
+       
+       
+       if(!canciones.isEmpty()){
+           
+           imagen.setImage(CacheImagenes.ObtenerImagen(canciones.get(0).getImagen()));
+           
+       }
+       Label generoT=new Label(genero);
+       Label Cantidad= new Label(canciones.size()+" Canciones");
+       
+       generoT.getStyleClass().add("letrita");
+       Cantidad.getStyleClass().add("letrita");
+       
+       tarjeta.getChildren().addAll(imagen,generoT,Cantidad);
+
+       tarjeta.setOnMouseClicked(eventito->{
+           
+           
+           ListaCanciones.getItems().setAll(canciones);
+           PlaylistActual=new Playlist(genero);
+           
+           for(Archivomp3 musica:canciones){
+               
+               PlaylistActual.InsertarFin(musica);
+               
+           }
+           
+           MostrarPlaylis();
+           
+       });
+   return tarjeta; 
+   }
+   
+
+   public void RecomendaG(){
+       
+       limpiadito(Recomendados);
+       
+       Playlist Canciones=Import.getAVL().InOrden();
+       
+       if(Canciones.vacio()){
+           return;
+       }
+       
+       NodoDoble si=Canciones.getInicio();
+       int tam=0;
+       while(si!=null&&tam<10){
+           
+           Archivomp3 Musica=si.getCancion();
+           
+           VBox tarjeta=TarjetaR(Musica);
+           
+           Recomendados.getChildren().add(tarjeta);
+           
+           si=si.Siguiente;
+           tam++;
+       }
+       
+   }
+   
+   
+   public VBox TarjetaR(Archivomp3 Cancion){
+       
+       VBox tarjetica= new VBox(12);
+       
+      
+       tarjetica.getStyleClass().addAll("music");
+        
+       tarjetica.setPrefWidth(80);
+       tarjetica.setPrefHeight(180);
+       
+       ImageView portada= new ImageView();
+       
+       portada.setFitHeight(100);
+       portada.setFitWidth(100);
+       
+       
+       if(Cancion.getImagen()!=null){
+           
+           portada.setImage(CacheImagenes.ObtenerImagen(Cancion.getImagen()));
+           
+       }
+       Label letrica=new Label(Cancion.getNombre());
+       Label letrica2=new Label(Cancion.getArtista());
+       letrica.getStyleClass().addAll("letrita");
+       letrica2.getStyleClass().addAll("letrita");
+       tarjetica.getChildren().addAll(portada,letrica,letrica2);
+       
+       
+       
+       tarjetica.setOnMouseClicked(evento->{
+           
+           
+           ReproducirCancion(Cancion);
+           
+       });
+       
+
+       return tarjetica;
+   }
+   
+   public void GenerosM(){
+       
+       
+       
+       limpiadito(ContenedorAL);
+      Generos.clear();
+       
+        
+      ArrayList<Archivomp3>canciones=Import.getAVL().PostOrden();
+      for(Archivomp3 can:canciones){
+          
+          String genero=can.getGenero();
+           if(genero==null||genero.isEmpty()){
+               
+           genero="Desconocido";
+           }
+       if(!Generos.containsKey(genero)){
+           Generos.put(genero,new ArrayList<>());
+       }
+      Generos.get(genero).add(can);    
+      }
+      for(String genero:Generos.keySet()){
+          
+          ArrayList<Archivomp3> lista=Generos.get(genero);
+          
+          VBox tarjetas=Crear(genero,lista);
+          
+          ContenedorAL.getChildren().add(tarjetas);
+      }
+     
+   }
    public VBox TarjetaTop(Archivomp3 pista,String tiempoT){
        
        VBox jetica=new VBox();
@@ -834,77 +1134,152 @@ private HBox hisC;
        
        return tarjeta;
    }
+  
+
    
-    
+   //</editor-fold> 
+   
+  
+//<editor-fold defaultstate="collapsed" desc="Eliminaciones">
+
  @FXML
-public void CrearPlaylist(){
-
-    
-    TextInputDialog dialogo=new TextInputDialog();
-    
-    
-    dialogo.setTitle("Nueva Playlist");
-    dialogo.setHeaderText(null);
-    
-    
-    dialogo.setContentText("Nombre:" );
-
-    
-    Optional<String>resultado=dialogo.showAndWait();
-
-    if(resultado.isPresent()){
-        
-        String nom=resultado.get();
-
-        if(!nom.isEmpty()){
-            
-            
-            Playlist nuevo=new Playlist(nom);
-            playlists.add(nuevo);
-        }
-    }
-}
-   private double Formateo(String duracuion){
-         
-         
-   if(duracuion==null||duracuion.trim().isEmpty()) {
-        return 0;
-    }
-    
-    try{
-        
-        if(duracuion.contains(":")){
-            
-            String[] partes=duracuion.split(":");
-            
-            if(partes.length==3){
-                double horas=Double.parseDouble(partes[0]);
-                double minutos=Double.parseDouble(partes[1]);
-                double segundos=Double.parseDouble(partes[2]);
-                
-                return (horas*3600)+(minutos*60)+segundos;
-            }else{
-          
-                double minutos=Double.parseDouble(partes[0]);
-                double segundos=Double.parseDouble(partes[1]);
-                
-                return (minutos*60)+segundos;
-            }
-        }
-        
+   private void eliminarPlay(){
+      Playlist tieso=ListaPlaylist.getSelectionModel().getSelectedItem();
       
-        return Double.parseDouble(duracuion);
+      
+      if(tieso!=null){
+      
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmar eliminación");
+        alert.setHeaderText("¿Estás seguro de eliminar esta playlist?");
+        alert.setContentText("Se eliminará la playlist: "+tieso.getNombre());
         
-    }catch(NumberFormatException e){
-       
-        return 0;
+        Optional<ButtonType> resultado=alert.showAndWait();
+        if(resultado.isPresent()&&resultado.get()==ButtonType.OK){
+        
+            playlists.remove(tieso);
+            DatosPlaylistActual.clear();
+            ListaPlaylist.getSelectionModel().clearSelection();
+            Estado.setText("Playlist eliminada por el usuario.");
+        }else{
+            
+           Estado.setText("Eliminación cancelada.");
+        }
+    } else {
+        Estado.setText("No hay ninguna playlist seleccionada.");
+    }
+   
+ }
+
+   
+   public void EliminarAVlyABB(){
+    
+  boolean elim=false;
+    
+ 
+    ArrayList<Archivomp3>sision=Import.getAVL().InordeP(); 
+    ArrayList<Archivomp3>tiesos=new ArrayList<>();
+    
+    for(Archivomp3 averquehhonda:sision){
+        if(averquehhonda.isEstado()){
+            tiesos.add(averquehhonda);
+        }   
+    }
+    if (!tiesos.isEmpty()) {
+        elim=true;
+        
+        for(Archivomp3 mp3:tiesos) {
+           
+            Import.getAVL().Eliminar(mp3.getNombre());
+            Import.getABB().Eliminar(mp3.getNombre());
+            mp3.setEstado(false); 
+        }
+        DatosBiblioteca.removeAll(tiesos);
+    }
+    if(elim){
+        morido.setFill(javafx.scene.paint.Color.web("#50fa7b"));
+        morido1.setFill(javafx.scene.paint.Color.web("#50fa7b"));
+        
+        chek();
+        
+    }else{
+        
+        morido.setFill(javafx.scene.paint.Color.web("#ff381f"));
+        morido1.setFill(javafx.scene.paint.Color.web("#ff381f"));
     }
     
-}   
-    
-    
+   
+    ListBusquedaParcial.refresh();
+    ListaVBIblioteca.refresh();
+   
 
-   public String  time(String tipo){
+}
+
+
+@FXML
+private void EliminarEnPlaylist(){
+    
+    boolean eliminado=false;
+    
+   if(PlaylistActual!=null){
+       
+       NodoDoble r=PlaylistActual.getInicio();
+       while(r!=null){
+           NodoDoble continua=r.getSiguiente();
+           if(r.getCancion().isEstado()){
+               if(Actual==r){
+                   Actual=continua;
+               }
+               
+               r.getCancion().setEstado(false);
+               DatosPlaylistActual.remove(r.getCancion());
+               PlaylistActual.EliminarCancion(r.getCancion().getNombre());
+               eliminado=true;
+           }
+           r=continua;
+       }
+   }
+
+   if(eliminado){
+       
+       Estado.setText("Eliminado Correctamente");
+       chek();
+   }else{
+       
+       Estado.setText("Seleccione una Canción");
+   }
+       
+       
+   
+}
+
+//</editor-fold>
+
+
+//<editor-fold defaultstate="collapsed" desc="Tiempo">
+
+private String TiempoTotal(double segundos){
+    
+       
+       int totalSegundos=(int)segundos;
+    
+    
+       int h=totalSegundos/3600;
+       int m=(totalSegundos%3600)/60;
+       int s=totalSegundos%60;
+       
+       if (h>0){
+           return String.format("%dh %02dm %02ds",h,m,s);
+       }else if(m>0){
+           
+           return String.format("%dm %02ds",m,s);
+       }else{
+           
+           return s+"s";
+       }
+}
+
+public String  time(String tipo){
          
          String ti="Sin datos";
     
@@ -928,12 +1303,17 @@ public void CrearPlaylist(){
    }
      return ti;    
      }
+
+public void TiempoT(Archivomp3 pista,double segundosEscuchados) {
+    if(pista!=null&&segundosEscuchados>2.0){
      
-
+        txt.Registro(pista.getNombre(),segundosEscuchados);
+    }
+}
 @FXML
-public void desplegable() {
+public void desplegable(){
 
-   if (popupStats.isShowing()) {
+   if(popupStats.isShowing()){
         popupStats.hide();
         return;
     }
@@ -944,6 +1324,7 @@ public void desplegable() {
    }
     
    int R=Import.getAVL().RepetidosTotal();
+   int t=Import.getAVL().size();
     VBox stats=new VBox(10);
     
     
@@ -962,8 +1343,8 @@ public void desplegable() {
     Largo.setStyle("-fx-text-fill: white; -fx-font-weight: bold;");
     Label titulo=new Label("Estadísticas");
     titulo.setStyle("-fx-text-fill: white; -fx-font-weight: bold;");
-    
-   
+    Label tam=new Label("Canciónes:"+t);
+    tam.setStyle("-fx-text-fill: white; -fx-font-weight: bold;");
     tiempo.setStyle("-fx-text-fill: white;");
     
     Label repetidos=new Label("Repetidos: "+R);
@@ -978,7 +1359,7 @@ public void desplegable() {
     "-fx-border-width: 1;"+
     "-fx-effect: dropshadow(gaussian, rgba(11,20,38,0.6), 12, 0.2, 0, 3);");
 
-    stats.getChildren().addAll(titulo,tiempo,repetidos,Largo);
+    stats.getChildren().addAll(titulo,tiempo,repetidos,Largo,tam);
 
     popupStats.getContent().clear();
     popupStats.getContent().add(stats);
@@ -989,72 +1370,11 @@ public void desplegable() {
 
     popupStats.show(BtD.getScene().getWindow(),b.getMinX()-80,b.getMaxY()-2);
 }
-  
+
+//</editor-fold>
 
 
-    
-
-
-
-    
-//busquedas artistas y genero por tablas hash 
-@FXML//pendiente 
-public void ImportarMusica(){
-
-    
-    DirectoryChooser Selector=new DirectoryChooser();
-
-    
-    Selector.setTitle("Seleccionar Carpeta");
-    File Carpeta=Selector.showDialog(null);
-
-    
-    
-    if(Carpeta!=null){
-        
-        Playlist NPlaylist=Import.Importar(Carpeta.getAbsolutePath(),Carpeta.getName());
-        boolean duplicado=false;
-        
-        
-        for(Playlist p: playlists){
-            
-            if(p.getNombre().equalsIgnoreCase(NPlaylist.getNombre())){
-                duplicado=true;
-                break;
-            }
-        }
-        
-        if(!duplicado){
-            playlists.add(NPlaylist);
-            ActualizarBiblioteca();
-        
-       
-        
-   
-        
-        GenerosM();
-        RecomendaG();
-        ArtistasI();
-        BuscarTop();
-        BusquedaP();
-        Alert alerta=new Alert(Alert.AlertType.INFORMATION);
-       
-        alerta.setHeaderText(null);
-        alerta.setContentText("Carpeta "+Carpeta.getName()+" Cargada con exito");
-        alerta.showAndWait();
-        }else{
-          
-            Alert alertaError=new Alert(Alert.AlertType.WARNING);
-            alertaError.setHeaderText(null);
-            alertaError.setContentText("La playlist '"+Carpeta.getName()+"' ya existe en la biblioteca.");
-            alertaError.showAndWait();
-        }
-    }
-}
-
-
-
-
+//<editor-fold defaultstate="collapsed" desc="Animaciones">
 
 private void AnimacionS(StackPane H,Archivomp3 si){
   
@@ -1119,68 +1439,18 @@ final Color color;
 
 
 
+//</editor-fold>
 
 
+//<editor-fold defaultstate="collapsed" desc="Karaoke">
 
-
-public void TiempoT(Archivomp3 pista){
-    if(reproductor!=null&&pista!=null){
-        
-        
-        double tiempoA=reproductor.getCurrentTime().toSeconds();
-        double tiempoE=tiempoA-tim;
-        if(tiempoE>2.0){
-         
-            txt.Registro(pista.getNombre(),tiempoE);
-            
-        }
-        tim=tiempoA;
-    }
-    
-    
-}
 @FXML
-private void EliminarEnPlaylist(){
-    
-    boolean eliminado=false;
-    
-   if(PlaylistActual!=null){
-       
-       NodoDoble r=PlaylistActual.getInicio();
-       while(r!=null){
-           NodoDoble continua=r.getSiguiente();
-           if(r.getCancion().isEstado()){
-               if(Actual==r){
-                   Actual=continua;
-               }
-               
-               r.getCancion().setEstado(false);
-               DatosPlaylistActual.remove(r.getCancion());
-               PlaylistActual.EliminarCancion(r.getCancion().getNombre());
-               eliminado=true;
-           }
-           r=continua;
-       }
-   }
-
-   if(eliminado){
-       
-       Estado.setText("Eliminado Correctamente");
-       chek();
-   }else{
-       
-       Estado.setText("Seleccione una Canción");
-   }
-       
-       
-   
-}
-
 private void Portada(){
    
    limpiadito(ContenedorK);
   
     if(valido&&CancionActual!=null){
+        
         VBox tarjetaPortada=new VBox();
         tarjetaPortada.getStyleClass().add("tarjeta-portada");
         
@@ -1198,9 +1468,11 @@ private void Portada(){
         port.setClip(clip);
 
         Label nom=new Label(CancionActual.getNombre());
+        Label art=new Label(CancionActual.getArtista());
         nom.getStyleClass().add("texto-portada");
+        art.getStyleClass().add("texto-portada");
         
-        tarjetaPortada.getChildren().addAll(port,nom);
+        tarjetaPortada.getChildren().addAll(port,nom,art);
         ContenedorK.setAlignment(javafx.geometry.Pos.CENTER);
       
         ContenedorK.getChildren().add(tarjetaPortada);
@@ -1218,9 +1490,9 @@ private void KaraokeVerso(){
     
     if(!Sevesignodeinterrogacion){
         if(Versos==null||Versos.isEmpty()){
-            LVersos.setText("[Buscando letra o instrumental...]");
+            LVersos.setText("Buscando recursos...");
         }else{
-            LVersos.setText("[Cargando letra...] ");
+            LVersos.setText("Cargando letra... ");
         }
     }
     Portada();
@@ -1231,7 +1503,7 @@ private List<Karaoke>cargarLetra(File archivoLrc){
    
    List<Karaoke>listaLetras=new ArrayList<>();
     if(archivoLrc==null||!archivoLrc.exists()){
-        System.out.println("El archivo LRC no existe o es nulo.");
+        
         return listaLetras;
     }
 
@@ -1267,8 +1539,12 @@ private List<Karaoke>cargarLetra(File archivoLrc){
     return listaLetras;
 }
 
+//</editor-fold>
+ 
 
- @FXML
+//<editor-fold defaultstate="collapsed" desc="Reproducción">
+
+@FXML
  public void ReproducirCancion(Archivomp3 Cancion){
 
  
@@ -1276,6 +1552,9 @@ private List<Karaoke>cargarLetra(File archivoLrc){
            Archivomp3 yaquefuncione=CancionActual;
         if(reproductor!=null){
             
+            double segundosEscuchados=reproductor.getCurrentTime().toSeconds();
+               TiempoT(yaquefuncione,segundosEscuchados);
+               
                reproductor.stop();
                if(progresoListener!=null){
                    
@@ -1283,7 +1562,7 @@ private List<Karaoke>cargarLetra(File archivoLrc){
                }
                
                
-               TiempoT(yaquefuncione);
+               
                reproductor.setOnEndOfMedia(null);
                reproductor.setOnReady(null);
                
@@ -1304,16 +1583,16 @@ private List<Karaoke>cargarLetra(File archivoLrc){
             
             new Thread(()->{
                 
-                boolean exito = Descargarlrc.descargarLrcAutomatico(Cancion);
+                boolean exito=Descargarlrc.descargarLrcAutomatico(Cancion);
                 
                 Platform.runLater(()->{
             if(exito){
-                this.Versos = cargarLetra(archivoLrc);
+                this.Versos=cargarLetra(archivoLrc);
                 
                 
                 Carga.setFill(javafx.scene.paint.Color.web("#50fa7b"));
                 
-                if(PanelVersos.isVisible() && Versos != null && !Versos.isEmpty()){
+                if(PanelVersos.isVisible()&&Versos!=null&&!Versos.isEmpty()){
                     LVersos.setText("Letra sincronizada con éxito");
                 }
             }else{
@@ -1331,10 +1610,17 @@ private List<Karaoke>cargarLetra(File archivoLrc){
             Carga.setFill(javafx.scene.paint.Color.web("#50fa7b")); 
             
         }
-      
         
+        String rutaLimpia=Cancion.getAudio();
         
-        Media Musica=new Media(new File(Cancion.getAudio()).toURI().toString());
+        if(rutaLimpia.startsWith("file:")){
+            rutaLimpia=rutaLimpia.substring(5);
+        }
+        
+        rutaLimpia = rutaLimpia.replace("\\", "/");
+        File archivoMusica=new File(rutaLimpia);
+        
+        Media Musica=new Media(archivoMusica.toURI().toURL().toExternalForm());
 
    
         reproductor=new MediaPlayer(Musica);
@@ -1356,8 +1642,7 @@ private List<Karaoke>cargarLetra(File archivoLrc){
             
             reproductor.play();
              
-            tim=0.0;
-            
+           
             int minutos=(int)total/60;
             int segundos=(int)total%60;
             
@@ -1452,6 +1737,7 @@ private List<Karaoke>cargarLetra(File archivoLrc){
                        Imgbotm.setClip(yaquequedeno);
 
                        AnimacionS(Stak,Cancion);
+                       Portada();
                    }catch (Exception e){
                    }
 
@@ -1461,7 +1747,9 @@ private List<Karaoke>cargarLetra(File archivoLrc){
              
       
             reproductor.setOnEndOfMedia(()->{
-                TiempoT(CancionActual);
+               
+                double segundosEscuchados=reproductor.getCurrentTime().toSeconds();
+                TiempoT(yaquefuncione,segundosEscuchados);
                 if(modoCola){
                     
                     AvanzarCola();
@@ -1482,8 +1770,47 @@ private List<Karaoke>cargarLetra(File archivoLrc){
         System.out.println(e);
     }
 }
+@FXML
+public void ReproducirPlaylist(){
 
- 
+    
+    if(PlaylistActual==null){
+
+        return;
+    }
+
+   
+    
+    modoCola=true;
+
+    ColaReproduccion=new MetodoCola();
+
+  
+    NodoDoble nodito=PlaylistActual.getInicio();
+        while(nodito!=null){
+        ColaReproduccion.Entrante(nodito.getCancion());
+        nodito=nodito.Siguiente;
+        
+        }
+
+    Archivomp3 primera=ColaReproduccion.Salida();
+    if(primera!=null){
+
+        ReproducirCancion(primera);
+    }
+}
+
+
+//</editor-fold>
+
+
+//<editor-fold defaultstate="collapsed" desc="Métodos del reproductor">
+
+
+
+
+
+
  @FXML
  public void AvanzarCola(){
     
@@ -1521,7 +1848,7 @@ public void Play(){
 
             }else{
                 
-                tim=reproductor.getCurrentTime().toSeconds();
+                
                 reproductor.play();
                 AnimacionS(Stak,CancionActual);
             }
@@ -1531,7 +1858,10 @@ public void Play(){
 
         }else{
 
-              TiempoT(CancionActual);
+            double tiempoActual=reproductor.getCurrentTime().toSeconds();
+            TiempoT(CancionActual,tiempoActual);
+            
+            
             reproductor.pause();
             if(Animacion!=null){
                 Animacion.pause();
@@ -1548,36 +1878,6 @@ public void Play(){
 }
 
 
-
-@FXML
-public void ReproducirPlaylist(){
-
-    
-    if(PlaylistActual==null){
-
-        return;
-    }
-
-   
-    
-    modoCola=true;
-
-    ColaReproduccion=new MetodoCola();
-
-  
-    NodoDoble nodito=PlaylistActual.getInicio();
-        while(nodito!=null){
-        ColaReproduccion.Entrante(nodito.getCancion());
-        nodito=nodito.Siguiente;
-        
-        }
-
-    Archivomp3 primera=ColaReproduccion.Salida();
-    if(primera!=null){
-
-        ReproducirCancion(primera);
-    }
-}
 @FXML
 public void averquepsa(){
     modoAleatorio=!modoAleatorio;
@@ -1635,118 +1935,6 @@ public void Aleatorio(){
 
 
 
- public void HistT(){
-       
-     
-     limpiadito(hisC);        
-               
-     
-       
-          MetodoPila pla=new MetodoPila();
-        ArrayList<Archivomp3> lista=new ArrayList<>();
-       
-      while(!Historial.vacio()){
-            
-            Archivomp3 cancion=Historial.Pop();
-            lista.add(cancion);
-            pla.Push(cancion);
-        }
-        while(!pla.vacio()){
-            Historial.Push(pla.Pop());
-            
-        }
-        for(int i=0;i<lista.size();i++){
-            if(lista.get(i)!=null){
-            
-            VBox Tarjeta=TarjetaH(lista.get(i));
-            hisC.getChildren().add(Tarjeta);
-            }
-        }
-      
-       
-   }
-   
-   public VBox TarjetaH(Archivomp3 Cancion){
-       
-       VBox tarjetica= new VBox(12);
-       
-      
-       tarjetica.getStyleClass().addAll("music");
-        
-       tarjetica.setPrefWidth(80);
-       tarjetica.setPrefHeight(80);
-       
-       ImageView portada= new ImageView();
-       
-       portada.setFitHeight(75);
-       portada.setFitWidth(75);
-       
-       
-       if(Cancion.getImagen()!=null){
-           
-           portada.setImage(CacheImagenes.ObtenerImagen(Cancion.getImagen()));
-           
-       }
-       Label letrica=new Label(Cancion.getNombre());
-       Label letrica2=new Label(Cancion.getArtista());
-       letrica.getStyleClass().addAll("letrita");
-       letrica2.getStyleClass().addAll("letrita");
-       tarjetica.getChildren().addAll(portada,letrica,letrica2);
-       
-       
-       
-       tarjetica.setOnMouseClicked(evento->{
-           
-           
-           ReproducirCancion(Cancion);
-           
-       });
-       
-
-       return tarjetica;
-   }
-
-
-
-
-
-
-
-
-
-
-@FXML
-public void Histtt(){
-    try{
-        if(Historial==null||Historial.vacio()){
-            Listahistorial.getItems().clear();
-            return;
-        }
-        MetodoPila pla=new MetodoPila();
-        ArrayList<Archivomp3> lista=new ArrayList<>();
-        
-        while(!Historial.vacio()){
-            
-            Archivomp3 cancion=Historial.Pop();
-            lista.add(cancion);
-            pla.Push(cancion);
-        }
-        while(!pla.vacio()){
-            Historial.Push(pla.Pop());
-            
-        }
-        Platform.runLater(()->{
-            Listahistorial.getItems().setAll(lista);
-            Listahistorial.refresh();
-        });
-        
-    }catch(Exception e){
-        
-    }
-    
-    
-}
-
 
 @FXML
 public void repito(){
@@ -1781,8 +1969,8 @@ public void Stop(){
     
  if(reproductor!=null){
 
-     
-          TiempoT(CancionActual);
+        double tiempoActual=reproductor.getCurrentTime().toSeconds();
+        TiempoT(CancionActual,tiempoActual);
         reproductor.stop();
 
         reproductor.setOnEndOfMedia(null);
@@ -1828,7 +2016,9 @@ public void Siguiente(){
             Actual=PlaylistActual.getInicio();
         }else{
             Actual=Actual.getSiguiente();
-        
+            
+            
+            
             if(Actual==null){
                 if(modoCircular){
                     Actual=PlaylistActual.getInicio();
@@ -1900,110 +2090,96 @@ public void Anterior(){
     }
 }
 
-
-public void ActualizarBiblioteca(){
-  
-
-    for(Playlist lista:ListaPlaylist.getItems()){
-
-        NodoDoble nodo=lista.getInicio();
-        while(nodo!=null){
-
-            Archivomp3 p=nodo.getCancion();
-            if(Import.getAVL().Buscar(p.getNombre())==null){
-                Import.getAVL().Insertar(p);
-            }
-             nodo=nodo.Siguiente;
-        }
-    }
-
-    DatosBiblioteca.setAll( Import.getAVL().InordeP());         
-    
-}
+//</editor-fold>
 
 
+//<editor-fold defaultstate="collapsed" desc="Exportar">
 @FXML
-public void BusquedaP(){
-    
-    String Buscado=BuscadorPB.getText().trim().toLowerCase();
-    
-    if(Buscado.isEmpty()){
-        ListBusquedaParcial.getItems().setAll(Import.getAVL().PreOrden());
-        TiempoAVL1.setText("Tiempo AVL: 0 ns");
-        TiempoABB1.setText("Tiempo ABB: 0 ns");
-       return; 
-    }
-    long tiempoavl=Import.getAVL().TiempoParcial(Buscado);
-    long tiempoabb=Import.getABB().TiempoParcial(Buscado);
-    
-    Playlist ResultadosV=Import.getAVL().BusquedaParcial(Buscado);
-    
-    ListBusquedaParcial.getItems().clear();
-    
-    NodoDoble nod=ResultadosV.getInicio();
-    while(nod!=null){
-        
-        ListBusquedaParcial.getItems().add(nod.getCancion());
-        nod=nod.Siguiente;
-    }
-    
-    if(ResultadosV.getInicio()!=null){
-        TiempoAVL1.setText("Encontrado AVL: "+tiempoavl+" ns");
-        TiempoABB1.setText("Encontrado ABB: "+tiempoabb+" ns");
-    } else {
-        
-        TiempoAVL1.setText("No encontrado AVL: "+tiempoavl+" ns");
-        TiempoABB1.setText("No encontrado ABB: "+ tiempoabb+" ns");
-    }
-    ListBusquedaParcial.refresh();
-}
+   private void Exportar(){
+       
+       
+Playlist seleccionada=ListaPlaylist.getSelectionModel().getSelectedItem();
 
-@FXML
-public void recorreCanciones(){
-
-    if(PlaylistActual==null){
-
-        Estado.setText("Seleccione una playlist primero");
-        
+    if(seleccionada==null){
+        Estado.setText("Seleccione una playlist");
         return;
     }
 
-    boolean agregado=false;
+    FileChooser TXT=new FileChooser();
+    TXT.setTitle("Guardar Playlist");
+    TXT.getExtensionFilters().add(new FileChooser.ExtensionFilter("Playlist cifrada (*.txt)","*.txt"));
 
-    for(Archivomp3 cancion:DatosBiblioteca){
+    File archivo=TXT.showSaveDialog((Stage) ListaPlaylist.getScene().getWindow());
 
-        if(cancion.isEstado()){
-            if(PlaylistActual.BuscarCancion(cancion)==null){
+    if(archivo!=null){
 
-                PlaylistActual.InsertarFin(cancion);
-                agregado=true;
-            }
-            
-            cancion.setEstado(false);
-        }
+        Cifrado.exportarPlaylist(seleccionada,archivo.getAbsolutePath());
+        Estado.setText("Playlist exportada");
     }
-
-    ListaVBIblioteca.refresh();
     
-    ListaCanciones.getItems().clear();
-    NodoDoble todoNodo=PlaylistActual.getInicio();
-    while(todoNodo!=null){
-         DatosPlaylistActual.add(todoNodo.getCancion());
-         todoNodo=todoNodo.Siguiente;
-    }
+   }
+
+//</editor-fold>
+
+  
+//<editor-fold defaultstate="collapsed" desc="Métodos Auxiliares">
    
-    if(agregado){
-
-        Estado.setText("Canciones agregadas a "+PlaylistActual.getNombre());
-        chek();
-
-    }else{
-
-        Estado.setText("No selecciono canciones");
+   private void limpiadito(HBox Contenedor){
+    
+        for(javafx.scene.Node nodo : Contenedor.getChildren()){
+        if(nodo instanceof VBox){
+            VBox tarjetaVieja=(VBox)nodo;
+            if(!tarjetaVieja.getChildren().isEmpty()&&tarjetaVieja.getChildren().get(0)instanceof ImageView){
+                ImageView iv=(ImageView)tarjetaVieja.getChildren().get(0);
+                iv.setImage(null);
+            }
+        }
+    } 
+    Contenedor.getChildren().clear();
+   }
+   
+   
+   @FXML
+ private double Formateo(String duracuion){
+         
+         
+   if(duracuion==null||duracuion.trim().isEmpty()){
+        return 0;
     }
+    
+    try{
+        
+        if(duracuion.contains(":")){
+            
+            String[] partes=duracuion.split(":");
+            
+            if(partes.length==3){
+                double horas=Double.parseDouble(partes[0]);
+                double minutos=Double.parseDouble(partes[1]);
+                double segundos=Double.parseDouble(partes[2]);
+                
+                return (horas*3600)+(minutos*60)+segundos;
+            }else{
+          
+                double minutos=Double.parseDouble(partes[0]);
+                double segundos=Double.parseDouble(partes[1]);
+                
+                return (minutos*60)+segundos;
+            }
+        }
+        
+      
+        return Double.parseDouble(duracuion);
+        
+    }catch(NumberFormatException e){
+       
+        return 0;
+    }
+    
 }
-
-private void EventoBuscador(TextField Bus,Runnable Buscador){
+ 
+ 
+ private void EventoBuscador(TextField Bus,Runnable Buscador){
     
   Bus.setOnKeyPressed(evento->{
         
@@ -2070,37 +2246,153 @@ public void chek(){
    ListaCanciones.refresh();
    ListaVBIblioteca.refresh();
    }
+   
+  //</editor-fold>
+   
+   
+   
+//<editor-fold defaultstate="collapsed" desc="Historial">
+
+@FXML
+public void Histtt(){
+    try{
+        if(Historial==null||Historial.vacio()){
+            Listahistorial.getItems().clear();
+            return;
+        }
+        MetodoPila pla=new MetodoPila();
+        ArrayList<Archivomp3> lista=new ArrayList<>();
+        
+        while(!Historial.vacio()){
+            
+            Archivomp3 cancion=Historial.Pop();
+            lista.add(cancion);
+            pla.Push(cancion);
+        }
+        while(!pla.vacio()){
+            Historial.Push(pla.Pop());
+            
+        }
+        Platform.runLater(()->{
+            Listahistorial.getItems().setAll(lista);
+            Listahistorial.refresh();
+        });
+        
+    }catch(Exception e){
+        
+    }
+    
+    
+}
+
+   public void HistT(){
+       
+     
+     limpiadito(hisC);        
+               
+     
+       
+          MetodoPila pla=new MetodoPila();
+        ArrayList<Archivomp3> lista=new ArrayList<>();
+       
+      while(!Historial.vacio()){
+            
+            Archivomp3 cancion=Historial.Pop();
+            lista.add(cancion);
+            pla.Push(cancion);
+        }
+        while(!pla.vacio()){
+            Historial.Push(pla.Pop());
+            
+        }
+        for(int i=0;i<lista.size();i++){
+            if(lista.get(i)!=null){
+            
+            VBox Tarjeta=TarjetaH(lista.get(i));
+            hisC.getChildren().add(Tarjeta);
+            }
+        }
+      
+       
+   }
+   
+   public VBox TarjetaH(Archivomp3 Cancion){
+       
+       VBox tarjetica= new VBox(12);
+       
+      
+       tarjetica.getStyleClass().addAll("music");
+        
+       tarjetica.setPrefWidth(80);
+       tarjetica.setPrefHeight(80);
+       
+       ImageView portada= new ImageView();
+       
+       portada.setFitHeight(75);
+       portada.setFitWidth(75);
+       
+       
+       if(Cancion.getImagen()!=null){
+           
+           portada.setImage(CacheImagenes.ObtenerImagen(Cancion.getImagen()));
+           
+       }
+       Label letrica=new Label(Cancion.getNombre());
+       Label letrica2=new Label(Cancion.getArtista());
+       letrica.getStyleClass().addAll("letrita");
+       letrica2.getStyleClass().addAll("letrita");
+       tarjetica.getChildren().addAll(portada,letrica,letrica2);
+       
+       
+       
+       tarjetica.setOnMouseClicked(evento->{
+           
+           
+           ReproducirCancion(Cancion);
+           
+       });
+       
+
+       return tarjetica;
+   }
+
+//</editor-fold>
 
 @FXML
 @Override
     public void initialize(URL url, ResourceBundle rb) {
         
-      
+    //Iniciamos con el menu ya cargado
      MostrarInicio();
+     
+     //Vinculamos los datos a las listView
      ListaPlaylist.setItems(playlists);
-     
-     BibliotecaCentral= new javafx.collections.transformation.FilteredList<>(DatosBiblioteca, valido->true);
+     BibliotecaCentral= new javafx.collections.transformation.FilteredList<>(DatosBiblioteca, valid->true);
      ListaVBIblioteca.setItems(BibliotecaCentral);
-     
      ListaCanciones.setItems(DatosPlaylistActual);
      
+    
+    //configuracion de boton play 
      Icono.setImage(PlayImagen);
      Icono.setFitWidth(30);
      Icono.setFitHeight(23);
      Play.setGraphic(Icono);
      
+     //Configuracion de la animación de desplazamiento del label 
      Mov=new TranslateTransition(Duration.millis(220),LVersos);
      Mov.setFromY(25);
      Mov.setToY(0);
 
+     //Configuracion de la desaparacion del label
      Aparece=new FadeTransition(Duration.millis(200),LVersos);
      Aparece.setFromValue(0.0);
      Aparece.setToValue(1.0);
-
+     
+     //Juntar las animaciónes para dar el efecto de aparición y desaparición
      transicion=new ParallelTransition(Mov,Aparece);
 
      
-     
+     //listener (chismoso), avisa cuando en la UI se selecciona una playlist
      ListaPlaylist.getSelectionModel().selectedItemProperty().addListener((obs,antes,actual)->{
         if(actual!=null){
             PlaylistActual=actual;
@@ -2115,16 +2407,15 @@ public void chek(){
         }
      });
   
+    //listener detecta el doble clic y reproduce la cancion seleccionada
    ListaVBIblioteca.setOnMouseClicked(evento ->{
    
-   if(evento.getClickCount()==2){
-       
+   if(evento.getClickCount()==2){ 
        modoCola=false;
        
        Archivomp3 c=ListaVBIblioteca.getSelectionModel().getSelectedItem();
        
-       if(c!=null){
-           
+       if(c!=null){  
          if(PlaylistActual!=null){
              
              Actual=PlaylistActual.BuscarCancion(c);
@@ -2139,6 +2430,8 @@ public void chek(){
    });
    
    
+   
+   //lo mismo de arriba
    ListaCanciones.setOnMouseClicked(event->{
 
     if(event.getClickCount()==2){
@@ -2157,7 +2450,7 @@ public void chek(){
         }
     }
 });
-   
+   //tambien igual pensandolo bien debi ponerlo en un solo metodo
    ListBusquedaParcial.setOnMouseClicked(evento->{
            
            if(evento.getClickCount()==2){
@@ -2182,27 +2475,29 @@ public void chek(){
            
            });
    
-   
+   /*
+   Encargado de darle el aspecto bonito a las celdas
+   crea un varios componentes visuale que luego lo añade al
+   contenedor (HBox)
+   */
   ListaPlaylist.setCellFactory(parametros->{
        
       
       return new ListCell<Playlist>(){
              
-             private CheckBox Eliminado =new CheckBox();
+             
              private TextField Editar= new TextField();
              private Label Nombre=new Label();
              private ImageView Imagen=new ImageView();
              
-             private HBox Contenedor=new HBox(Eliminado,Imagen,Editar,Nombre);
-             
-             
+             private HBox Contenedor=new HBox(Imagen,Editar,Nombre);
              
              
              {
                  
                  
-                 Eliminado.setVisible(EliminadoB);
-                 setManaged(EliminadoB);
+                 
+                 
                  
                  
                  Imagen.setFitWidth(20);
@@ -2219,16 +2514,13 @@ public void chek(){
                  Editar.setVisible(false);
                  Editar.setManaged(false);
                  
-                 
-                 Nombre.setOnMouseClicked(e ->{
+                 //detecta el doble clic y permite la edicion del textfield
+                 Nombre.setOnMouseClicked(e->{
                      
-                     if(e.getClickCount() == 2 &&
-                             getItem() != null){
+                     if(e.getClickCount()==1&&getItem()!=null){
                          
                          
-                         Editar.setText(
-                                 getItem().getNombre()
-                         );
+                         Editar.setText(getItem().getNombre());
                          
                          
                          Nombre.setVisible(false);
@@ -2241,24 +2533,21 @@ public void chek(){
                      }
                  });
                  
-                 
-                 Editar.setOnAction(e ->{
+          
+                 //confirma la edicion del textfield y lo guarada si detecta un clic fuera del field
+                 Editar.focusedProperty().addListener((obser,antes,actual)->{
                      
-                     if(getItem()!=null){
-                         
+                     if(!actual&&getItem()!=null){  
                          
                          getItem().setNombre(Editar.getText());
-                         
-                         
                          Nombre.setText(Editar.getText());
-                         
                          
                          Editar.setVisible(false);
                          Editar.setManaged(false);
-                         
                          Nombre.setVisible(true);
                          Nombre.setManaged(true);
                      }
+                 
                  });
              }
              
@@ -2283,53 +2572,76 @@ public void chek(){
    
    
    
+ /*
+  Controla los clics sobre los elemntos de la lista para realizar determina acción 
+  
+  */
+ ListaPlaylist.setOnMouseClicked(evento->{
+ 
+  conteoClics++; 
+   pausaClics.setOnFinished(e->{
+     
+        int fin=conteoClics;
+        conteoClics=0; 
+        Platform.runLater(()->{
+            switch(fin){
+                case 2->eliminarPlay();
+                case 3->Exportar();
+               
+            }
+        });
+    });
+
+    pausaClics.playFromStart();
+});
    
    
+ //actualiza los datos dependiendo de la lista seleccionada 
    ListaPlaylist.getSelectionModel().selectedItemProperty().addListener((espiado,antes,actual)->{
 
     if(actual!=null){
         Playlist seleccionada=ListaPlaylist.getSelectionModel().getSelectedItem();
 
         String inf=Import.Info(seleccionada);
-
             CantidadM.setText(inf);    
     }
 });
    
    
    
-
+//Llamamos a nuestra clase CancioCell el booleano al final desactiva el arrastre en ambas listas
 ListaVBIblioteca.setCellFactory(parametros->new CancionCell(CrearP,()-> Favoritos(),(origen,destino)->false));
 ListBusquedaParcial.setCellFactory(Parametros->new CancionCell(CrearP,()->Favoritos(),(origen,destino)->false));
-ListaCanciones.setCellFactory(parametro->new CancionCell(CrearP,()->Favoritos(),(origen,destino)->{
 
+//Activamos el arrastre
+ListaCanciones.setCellFactory(parametro->new CancionCell(CrearP,()->Favoritos(),(origen,destino)->{
+//verificamos que halla una seleccion 
 if(PlaylistActual!=null){
-    boolean movido=PlaylistActual.MoverCancion(origen, destino);
+    //Llamamos al método encargado del arrastre 
+    boolean movido=PlaylistActual.MoverCancion(origen,destino);
     if(movido){
+        //actualizamos la UI
         actualizar();
         ListaCanciones.getSelectionModel().select(destino-1);
-        return true;
+        return true;//éxito
     }
-}
-return false;
+}return false;//error
 }));
 
   
-   
-   Progreso.setOnMousePressed(e->{
+//Evento para detectar el movimiento del slider y sincronizarlo con el tiempo de la canción   
+Progreso.setOnMousePressed(e->{
 
     if(reproductor!=null){
-
-          TiempoT(CancionActual);
+        
+        double tiempoAntesDelSalto = reproductor.getCurrentTime().toSeconds();
+        TiempoT(CancionActual, tiempoAntesDelSalto);
+        
         reproductor.seek(Duration.seconds(Progreso.getValue() ));
     }
 });
     
-   
-   
-   
-   
-   
+ //evento para detectar el arrastre del slider y sincronizar la canción
 Progreso.setOnMouseDragged(a->{
 
     if(reproductor!=null){
@@ -2339,15 +2651,24 @@ Progreso.setOnMouseDragged(a->{
     }
 });
 
+Progreso.setOnMouseReleased(e->{
+    if(reproductor!=null){
+        // Hacemos un unico salto exacto al valor donde se suelta
+        double segundoDestino=Progreso.getValue();
+        reproductor.seek(Duration.seconds(segundoDestino));
+    }
+});
 
+//seteo del volumen inicial
 Volumen.setMin(0);
 Volumen.setMax(100);
 Volumen.setValue(50);
- TxtV.setText(String.format("Volumen: 50"));
+TxtV.setText(String.format("Volumen: 50"));
 
+//Detecta el valor actual del slider y setea el volumen al igual el label
  Volumen.valueProperty().addListener((espiado,antes,actual)->{
            
-   TxtV.setText(String.format("Volumen: %d",actual.intValue()));
+TxtV.setText(String.format("Volumen: %d",actual.intValue()));
 
     
     VolumenI=actual.doubleValue()/100;
@@ -2359,13 +2680,17 @@ Volumen.setValue(50);
 });
     
 
+ /* Llamamos al método modularizado que permite detectar al precionar enter 
+ o cuando field queda vacío para volver a su estado original 
  
- EventoBuscador(BuscadorPB1,this::Buscar);
+ */ 
+EventoBuscador(BuscadorPB1,this::Buscar);
  EventoBuscador(BuscadorPB,this::BusquedaP);
  
- 
+ //configuracion de combobox
  BoxBus.getItems().addAll("Generos","Artistas");
  BoxBus.getSelectionModel().selectFirst();
+ //Ejecuta la busqueda dependiendo de la selección en el combobox
  EventoBuscador(BusquedaInicio,()->{
     
      String op=BoxBus.getValue().toString();
@@ -2388,8 +2713,10 @@ Volumen.setValue(50);
  
 
 
-orden.getItems().addAll("A-Z","Fecha de publicacion","Invertido");
+orden.getItems().addAll("A-Z","Orden de inserción","Orden invertido");
 orden.getSelectionModel().selectFirst(); 
+
+//espia la selección para ejecutar el recorrido determinado
 orden.valueProperty().addListener((espiado,antes,nuevo)->{
         
        if(nuevo==null||Import.getAVL()==null){
@@ -2403,12 +2730,12 @@ orden.valueProperty().addListener((espiado,antes,nuevo)->{
             case "A-Z" ->{ DatosBiblioteca.setAll(Import.getAVL().InordeP());
             
             }
-            case "Fecha de publicacion" ->{
+            case "Orden de inserción" ->{
                DatosBiblioteca.setAll(Import.getAVL().PreOrden());
                 
              }
                 
-            case "Invertido" ->{
+            case "Orden invertido" ->{
                DatosBiblioteca.setAll(Import.getAVL().PostOrden());
                
              }
@@ -2416,9 +2743,7 @@ orden.valueProperty().addListener((espiado,antes,nuevo)->{
         
     });
  
- 
- 
- 
+//detecta el doble click y reproduce una canción
  Listahistorial.setOnMouseClicked(eventop->{
      
      if(eventop.getClickCount()==2){
@@ -2433,16 +2758,12 @@ orden.valueProperty().addListener((espiado,antes,nuevo)->{
      
  });
  
-
- 
- 
- 
- 
+ //llamamos a al método aux para el desplazamiento horizontal
  EventoScroll(ScrollG);
  EventoScroll(ScrollA);
  EventoScroll(ScrollT);
  EventoScroll(ScrollH);
-
+//Desactiva el deplazamiento vertical
  SinVertical(ScrollG);
  SinVertical(ScrollT);
 }

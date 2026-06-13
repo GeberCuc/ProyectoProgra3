@@ -11,7 +11,12 @@ public class Karaoke {
     public String getVerso() {
         return verso;
     }
-    //2 horas buscando el error y habia paso mal el parametro el error estaba entre la compu y la silla 
+
+/*
+    Clase encargada de obtener el tiempo de cada cancion y su respectivo
+    texto sincronizado
+    recibe como parametro el tiempo y el texto a mostrar en ese lapso de tiempo 
+    */    
     private double tiempoSegundos;
     private String verso;
     

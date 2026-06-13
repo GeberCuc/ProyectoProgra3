@@ -20,8 +20,7 @@ public class NodoPila {
         this.Siguiente = Siguiente;
     }
 
-    
-    
+    //nodo para el metodopila 
 private Archivomp3 Cancion;    
 NodoPila Siguiente;
 

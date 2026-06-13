@@ -14,7 +14,10 @@ public class MetodoCola {
     
     
     
-    
+    /*
+    Encola una cancion al final de la estructura.
+    recibe como parametro un mp3
+    */
     
     public void Entrante(Archivomp3 Dato){
         
@@ -33,7 +36,9 @@ public class MetodoCola {
          size++;
     }
     
-    
+    /*
+    Desencola y retorna la cancion que esta enfrente de la cola
+    */
     public Archivomp3 Salida(){
         
        if(Salida==null){

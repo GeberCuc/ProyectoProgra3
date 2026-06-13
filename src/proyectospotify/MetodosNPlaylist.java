@@ -1,7 +1,7 @@
 
 package proyectospotify;
 
-
+/*
 public class MetodosNPlaylist {
 
     public NodoPlaylist getInicio() {
@@ -58,3 +58,4 @@ public class MetodosNPlaylist {
 }
 
 
+*/

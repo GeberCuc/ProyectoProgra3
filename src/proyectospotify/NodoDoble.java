@@ -32,7 +32,7 @@ public class NodoDoble {
     private Archivomp3 Cancion;
    NodoDoble Siguiente,Anterior;
    
-   
+   //Nodo para la lista doble 
    public NodoDoble(Archivomp3 Cancion){
        this.Cancion=Cancion;
        this.Siguiente=null;

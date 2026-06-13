@@ -41,11 +41,15 @@ public class ImportarFx {
  
  
    
-    
+    /*
+    Encargadode la gestión de importacion de audio, procesamiento estadistico de
+    las listas de reproducción y junta las operaciones de los árboles 
+    */
     
     
     public ImportarFx(){
-        
+    
+        //inicializamos las estructuras y el cargador de archivos
         ABB= new MetodosABB();
         AVL=new MetodosAVL();
         Cargador= new CargarCanciones();
@@ -53,7 +57,12 @@ public class ImportarFx {
     }
     
    
-    //pendiente 
+    /*
+    Importa las cancioes desde el disco creando un playlist nueva con ayuda de la clase Cargarcanciones 
+    al mismo tiempo carga canciones en los arboles 
+    recibe como parametro la ruta que es la direccion de la carpeta en disco, el nombre de la playlis
+    y retorna una lista doblemente enlazada
+    */
    public Playlist Importar(String Ruta,String NombrePlaylist){
 
        
@@ -72,7 +81,11 @@ public class ImportarFx {
    
    
    
-   
+   /*
+   procesa y analiza los datos de una playlist recorriendo la lista 
+   sumando su duracion total, recibe como parametro la playlis y  retorna un string 
+   formateado.
+   */
  public String Info(Playlist play){
 
     if(play==null){
